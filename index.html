@@ -178,6 +178,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .big-sub{font-size:13px;color:var(--tm);margin-bottom:14px;}
 .bio-c{color:#3B6D11;}.nach-c{color:#0F6E56;}
 .status-aktiv{color:#3B6D11;font-weight:600;}.status-bestellt{color:#185FA5;font-weight:600;}.status-inaktiv{color:var(--tm);}
+
+.scan-capture-btn{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:#fff;border:3px solid rgba(255,255,255,0.6);color:#8B2E4A;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.scan-capture-btn:active{transform:translateX(-50%) scale(0.92);}
 </style>
 </head>
 <body>
@@ -185,7 +188,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v1.1</span>
+      <span class="version-badge">v1.2</span>
     </div>
     <div class="search-row">
       <input type="text" id="searchInput" placeholder="Wein suchen…" oninput="renderList()">
@@ -208,22 +211,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
     <div class="fp-row">
-      <div class="fp-lbl">Status</div>
-      <div class="chip-row" id="fc-status">
-        <span class="chip on" onclick="toggleChip(this,'status','')">Alle</span>
-        <span class="chip" onclick="toggleChip(this,'status','Aktiv')">✅ Aktiv</span>
-        <span class="chip" onclick="toggleChip(this,'status','Bestellt')">📦 Bestellt</span>
-        <span class="chip" onclick="toggleChip(this,'status','Inaktiv')">○ Inaktiv</span>
-      </div>
+      <div class="fp-lbl">Eignung</div>
+      <input class="fp-select" type="text" id="f-eignung-filter" placeholder="z.B. Fleisch, Fisch, Käse…" oninput="renderList()" style="height:38px;">
     </div>
     <div class="fp-row">
-      <div class="fp-lbl">Trinkreife-Status</div>
-      <div class="chip-row" id="fc-trink">
-        <span class="chip on" onclick="toggleChip(this,'trink','')">Alle</span>
-        <span class="chip" onclick="toggleChip(this,'trink','ok')">✅ Trinkbereit</span>
-        <span class="chip" onclick="toggleChip(this,'trink','lagern')">⏳ Noch lagern</span>
-        <span class="chip" onclick="toggleChip(this,'trink','over')">⚠️ Überfällig</span>
-      </div>
+      <div class="fp-lbl">Rebsorte</div>
+      <input class="fp-select" type="text" id="f-sorte-filter" placeholder="z.B. Pinot Noir, Chardonnay…" oninput="renderList()" style="height:38px;">
     </div>
     <div class="fp-row">
       <div class="fp-lbl">Mindest-Bewertung</div>
@@ -238,10 +231,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
     <div class="fp-row">
-      <div class="fp-lbl">Rebsorte</div>
-      <select class="fp-select" id="f-sorte-filter" onchange="renderList()">
-        <option value="">– alle Rebsorten –</option>
-      </select>
+      <div class="fp-lbl">Trinkreife-Status</div>
+      <div class="chip-row" id="fc-trink">
+        <span class="chip" onclick="toggleChip(this,'trink','')">Alle</span>
+        <span class="chip on" onclick="toggleChip(this,'trink','ok')">✅ Trinkbereit</span>
+        <span class="chip" onclick="toggleChip(this,'trink','lagern')">⏳ Noch lagern</span>
+        <span class="chip" onclick="toggleChip(this,'trink','over')">⚠️ Überfällig</span>
+      </div>
     </div>
     <div class="fp-row">
       <div class="fp-lbl">Anbau</div>
@@ -249,6 +245,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="chip on" onclick="toggleChip(this,'anbau','')">Alle</span>
         <span class="chip" onclick="toggleChip(this,'anbau','BIO')">🌿 BIO</span>
         <span class="chip" onclick="toggleChip(this,'anbau','NACHHALTIG')">♻️ Nachhaltig</span>
+      </div>
+    </div>
+    <div class="fp-row">
+      <div class="fp-lbl">Status</div>
+      <div class="chip-row" id="fc-status">
+        <span class="chip on" onclick="toggleChip(this,'status','')">Alle</span>
+        <span class="chip" onclick="toggleChip(this,'status','Aktiv')">✅ Aktiv</span>
+        <span class="chip" onclick="toggleChip(this,'status','Bestellt')">📦 Bestellt</span>
+        <span class="chip" onclick="toggleChip(this,'status','Inaktiv')">○ Inaktiv</span>
       </div>
     </div>
     <div style="display:flex;justify-content:flex-end;padding-top:4px;">
@@ -267,7 +272,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="stat"><div class="stat-val" id="statFlaschen">0</div><div class="stat-lbl">Flaschen</div></div>
     <div class="stat"><div class="stat-val" id="statWert">CHF 0</div><div class="stat-lbl">Schätzwert</div></div>
   </div>
-  <button class="fab-scan" onclick="openScanner()" title="Wein scannen"><i class="ti ti-scan" aria-hidden="true"></i></button>
+  <button class="fab-scan" onclick="openScanner()" title="Weinetikett scannen"><i class="ti ti-scan" aria-hidden="true"></i></button>
   <button class="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
 </div>
 
@@ -275,10 +280,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="scanModal" class="scan-modal">
   <video id="scanVideo" class="scan-video" playsinline autoplay muted></video>
   <div class="scan-overlay">
-    <div class="scan-frame"></div>
-    <div class="scan-hint">EAN-Barcode auf der Flasche zentrieren</div>
+    <div class="scan-frame" style="height:220px;"></div>
+    <div class="scan-hint">Weinetikett im Rahmen positionieren</div>
   </div>
   <button class="scan-close" onclick="closeScanner()"><i class="ti ti-x"></i></button>
+  <button class="scan-capture-btn" id="scanCaptureBtn" onclick="captureLabel()" style="display:none;"><i class="ti ti-camera"></i></button>
   <div class="scan-status" id="scanStatus"></div>
 </div>
 
@@ -375,7 +381,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 const SK='weinkeller_v11';
 let wines=[],editingId=null;
-let fTyp='',fStatus='',fTrink='',fMinBew=0,fAnbau='';
+let fTyp='',fStatus='',fTrink='ok',fMinBew=0,fAnbau='',fEignung='';
+
+const FLAGS={'Frankreich':'🇫🇷','Italien':'🇮🇹','Spanien':'🇪🇸','Deutschland':'🇩🇪','Österreich':'🇦🇹','Schweiz':'🇨🇭','Portugal':'🇵🇹','Griechenland':'🇬🇷','Ungarn':'🇭🇺','Kroatien':'🇭🇷','Slowenien':'🇸🇮','Rumänien':'🇷🇴','Bulgarien':'🇧🇬','England':'🏴󠁧󠁢󠁥󠁮󠁧󁿢','Georgien':'🇬🇪','USA':'🇺🇸','Argentinien':'🇦🇷','Chile':'🇨🇱','Australien':'🇦🇺','Neuseeland':'🇳🇿','Südafrika':'🇿🇦'};
+function flagOf(land){return FLAGS[land]||'';}
 const EU=['Frankreich','Italien','Spanien','Deutschland','Österreich','Schweiz','Portugal','Griechenland','Ungarn','Kroatien','Slowenien','Rumänien','Bulgarien','England','Georgien','USA','Argentinien','Chile','Australien','Neuseeland','Südafrika'];
 
 const IMPORT=[{"id":"mw0jjf3y","name":"Riesling Brand Grand Crue","weingut":"Paul Buecher","jahr":2022,"typ":"Weisswein","sorte":"Riesling","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Grafit, Citrus Gaumen: Kräftig, fruchtig und mineralisch","eignung":"","ausbau":"","anbau":"BIO","anzahl":6,"preis":24.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"s3qt2ef4","name":"Pinot Gris Brand Grand Crue 2008","weingut":"Paul Buecher","jahr":2008,"typ":"Weisswein","sorte":"Pinot Gris, Moelleux","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Farbe: Bernstein Nase: Quitte, Papaya Gaumen: Fruchtig, intensiv, ein wirklich grosser, reifer Pinot Gris mit viel Charme und Tiefgang, feine Restsüsse im Abgang 18/20 trinken, toller Apérobegleiter","eignung":"","ausbau":"","anbau":"BIO","anzahl":3,"preis":21.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"direkt"},{"id":"p1i7d2r8","name":"Pinot Gris Brand Grand Crue 2018","weingut":"Paul Buecher","jahr":2018,"typ":"Weisswein","sorte":"Pinot Gris","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Nase: Akatienhonig, Papaya, Zitrus Gaumen: Fruchtig, kräftig, tief, intensiv und vielschichtig, langer Abgang nach Zitrus und Akatienhonig. 18/20 kann noch zulegen","eignung":"","ausbau":"","anbau":"BIO","anzahl":6,"preis":24.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"fw19veoh","name":"Pinot Gris Brand Grand Crue 2021","weingut":"Paul Buecher","jahr":2021,"typ":"Weisswein","sorte":"Pinot Gris","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Nase: Honig, Zitrus, Birnen Gaumen: Kräftig, fruchtig, Papaya, Zitrus, Honig, schöne Balance Säure und Frucht, langer Abgang nach Zitrus und Honig 18,5/20 trinken","eignung":"Pilze, Scharfe Gerichte","ausbau":"","anbau":"BIO","anzahl":6,"preis":24.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"tpruupbk","name":"Pinot Gris Clos Gottestal","weingut":"Paul Buecher","jahr":2023,"typ":"Weisswein","sorte":"Pinot Gris","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Tiefes Gelb, in der Nase konfierte Früchte und Zitrusnoten","eignung":"Aperitif, Geflügel","ausbau":"","anbau":"BIO","anzahl":4,"preis":18.5,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2028,"notizen":"","lieferant":"Vinsano"},{"id":"x435fa52","name":"Gewürztraminer Hengst Grand Crue, Vendanges Tardives","weingut":"Paul Buecher","jahr":2020,"typ":"Weisswein","sorte":"Gewürztraminer","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Nase: Pfirsich, Papaya und Zitrus Gaumen: Kräftig, exotisch fruchtig, feine präsente Säure, toller Schmelz, langer Abgang. 19/20 trinken","eignung":"Reife Käsesorten und Hartkäse, Blauschimmelkäse, Fruchtige Desserts","ausbau":"","anbau":"BIO","anzahl":6,"preis":19.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2028,"notizen":"","lieferant":"Vinsano"},{"id":"tx540xft","name":"Gewürztraminer Morelleux, 0.375","weingut":"Paul Buecher","jahr":2020,"typ":"Weisswein","sorte":"Gewürztraminer","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Papaya, Mango, Zitrus Gaumen: Frisch, fruchtig, süffig, fein, ausgewogen, langer fruchtiger Abgang. 16/20 trinken","eignung":"Tapas, Fisch an würziger Sauce, affinierter Münsterkäse, Milde Käsesorten und Weichkäse","ausbau":"","anbau":"BIO","anzahl":6,"preis":7.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Direkt"},{"id":"y8qxyqgm","name":"Eiswein Alsace","weingut":"Paul Buecher","jahr":null,"typ":"Süsswein","sorte":"","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"","eignung":"","ausbau":"","anbau":"BIO","anzahl":6,"preis":40.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Direkt"},{"id":"l25uy9qf","name":"Seppelaia Riserva","weingut":"Eichenstein","jahr":2021,"typ":"Weisswein","sorte":"Chardonnay","land":"Italien","gebiet":"Südtirol","region":"Meran","degustation":"Dichtes Bouquet aus weissen Blüten, Südfrüchten und Honig","eignung":"Fisch, Geflügel, Vitello Tonato, Kalbstartar, Trüffel, Ziegenkäse","ausbau":"12 Monate im kleinen Eichenfass, anschliessend 10 Monate im Stahltank","anbau":"BIO","anzahl":2,"preis":35.5,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2032,"notizen":"","lieferant":"Vinsano"},{"id":"y6rgxaey","name":"Ateyon","weingut":"Loacker","jahr":2023,"typ":"Weisswein","sorte":"Chardonnay, Kerner","land":"Italien","gebiet":"Südtirol","region":"Bozen","degustation":"Komplexer Wein, Noten von Mandeln, Marzipan und Vanille, am Gaumen frisch und lebhaft","eignung":"Üppige Vorspeisen, grillierter Fisch, helles Fleisch, Risotto","ausbau":"11 Monate 50% grosses Eichenfass, 50% kleines Eichenfass","anbau":"BIO","anzahl":4,"preis":28.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"rqhoy7ha","name":"Liebacher Dunkelsüss","weingut":"Liebacher","jahr":null,"typ":"Süsswein","sorte":"","land":"Schweiz","gebiet":"Nord-Ostschweiz","region":"Stein am Rhein","degustation":"Likörwein aus voll ausgereiften Trauben.","eignung":"Begleiter zu Käsen oder einfach so zum geniessen","ausbau":"Gärung durch Weinbrand abgestoppt, mehrere Jahre in kleinen Eichenfässern aus Schaffhauser Eiche gereift.","anbau":"","anzahl":1,"preis":0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2033,"notizen":"","lieferant":"Roland"},{"id":"1xlzzium","name":"Crémant d'Alsace Préstige, 0.375","weingut":"Paul Buecher","jahr":2024,"typ":"Schaumwein","sorte":"Chardonnay, Pinot Noir, Pinot Blanc","land":"Frankreich","gebiet":"Elsass","region":"Wettolsheim","degustation":"Fruchtig, mit Noten von Zitrusfrüchten, Pfirsich und weissen Blumen","eignung":"Apéro","ausbau":"Methode Champenoise","anbau":"BIO","anzahl":12,"preis":13.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"4xdi6pdl","name":"L'Amandier","weingut":"Château Duvivier","jahr":2023,"typ":"Weisswein","sorte":"Rolle, Clairette, Grenache Blanc","land":"Frankreich","gebiet":"Provence","region":"Pontevès","degustation":"Hellgelb; Bukett nach exotischen Früchten wie Mango und Litschi, floral-würzige Noten von Lavendel, Vanille und Honig; frischer Auftakt, am Gaumen aromatisch und druckvoll, harmonische, komplexe Struktur; mineralische Anklänge begleiten den anhaltenden, saftigen Abgang","eignung":"Gebratener Fisch, Pilzrisotto, Gemüsequiche","ausbau":"","anbau":"BIO","anzahl":6,"preis":17.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2030,"notizen":"","lieferant":"Delinat"},{"id":"w08xv8pt","name":"Brisasur","weingut":"Pago Casa Gran","jahr":2024,"typ":"Weisswein","sorte":"Moscatel","land":"Spanien","gebiet":"Levante","region":"Valencia","degustation":"Leuchtendes Hellgelb; Bukett nach exotischen Früchten und Pfirsich, würzig-florale Noten von Muskat, Rosenblättern und frisch geschnittenem Gras; frischer Auftakt, am Gaumen aromatisch und saftig, elegante, harmonische Struktur, anhaltender, feinfruchtiger Abgang","eignung":"Spargel im Blätterteig, Aperitifgebäck mit Kräuter- oder Tomatenpesto, Gemüse-Coca","ausbau":"Temperaturkontrolliert in Edelstahltanks.","anbau":"BIO","anzahl":4,"preis":11.6,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2028,"notizen":"","lieferant":"Delinat"},{"id":"887fgzox","name":"Aventurer blanc","weingut":"Albert I Noya","jahr":null,"typ":"Weisswein","sorte":"Sauvignac, Muscaris, Marina Rión","land":"Spanien","gebiet":"Katalonien","region":"Penedes","degustation":"Helles Gelb, Bukett mit einem Hauch von Lychée und gelbem Kernobst, Anklänge von Sternfrüchten sowie zarte herbale Noten; belebend fruchtige Frische im Ansatz, herrlicher Spannungsbogen am Gaumen; saftig im Abgang","eignung":"Gemüsetartar, Fisch- und Muschelgerichte","ausbau":"Temperaturkontrolliert im Stahltank, kein Holzausbau.","anbau":"BIO","anzahl":1,"preis":15.2,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2027,"notizen":"","lieferant":"Delinat"},{"id":"6tghpui2","name":"Solus","weingut":"Château de Caraguilhes","jahr":2019,"typ":"Rotwein","sorte":"Syrah, Grenache, Mourvedre","land":"Frankreich","gebiet":"Languedoc-Roussillon","region":"Corbières","degustation":"Herrlich druckvolle, intensive Nase mit Zwetschge, Pflaume und einer Spur Zimt. Mit 8 Jahren ist der Wein am oberen Ende seiner Kapazität.","eignung":"Kräftige Speisen, Pasta","ausbau":"10 Monate in Barrique, 65% im Holzfass","anbau":"BIO","anzahl":20,"preis":22.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":null,"notizen":"","lieferant":"Coop"},{"id":"gpevtkzh","name":"Cigalus","weingut":"Domaine de Cigalus, Gérard Bertrand","jahr":2016,"typ":"Rotwein","sorte":"Carignan, Merlot, Cabernet Franc, Cabernet Sauvignon, Grenache, Syrah","land":"Frankreich","gebiet":"Languedoc-Roussillon","region":"Aude Hauterive","degustation":"Intensive rubinrote Farbe. Bouquet mit konzentrierten, sehr reifen schwarzen Früchten, gegrillten Gewürzen und geröstetem Eichenholz. Am Gaumen üppig und opulent mit samtigen Tanninen, Aromen von Brombeeren, schwarzen Kirschen und Pflaumen, langer Abgang mit perfekter Balance.","eignung":"Pastagerichte","ausbau":"Mindestens 1 Jahr in neuen 225-Liter-Fässern.","anbau":"BIO","anzahl":20,"preis":36.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":null,"notizen":"","lieferant":"Coop"},{"id":"zxge1xgx","name":"Le Lien - Châteauneuf du Pape","weingut":"Domaine Tour Saint Michel","jahr":2019,"typ":"Rotwein","sorte":"Grenache","land":"Frankreich","gebiet":"Südliches Rhonetal","region":"Châteauneuf du Pape","degustation":"Nase: Kirschen, Nelken, Zedern Gaumen: Würzig, kräftig, fruchtig, tiefgründig, langer Abgang nach Kirschen und Nelken. 18,5/20 trinken","eignung":"Kräftiges, würziges Essen","ausbau":"Betontank","anbau":"NACHHALTIG","anzahl":6,"preis":55.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2035,"notizen":"","lieferant":"Vinsano"},{"id":"qb8jm4lv","name":"Lirac Rouge","weingut":"Domaine du Clos de Sixte - Alain Jaume","jahr":2022,"typ":"Rotwein","sorte":"Grenache, Syrah","land":"Frankreich","gebiet":"Südliches Rhonetal","region":"Lirac","degustation":"Wunderbar dezent fruchtig in der Nase. Im Gaumen blumig leicht mit etwas Cassis und Tabaknoten. Schön eingebundene Tanine. Kräftig im Abgang.","eignung":"","ausbau":"Betontank","anbau":"NACHHALTIG","anzahl":6,"preis":21.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2030,"notizen":"","lieferant":"Vinsano"},{"id":"5wf3n88v","name":"Pouilly-Fuissé Vieilles Vignes 'Les Chataigniers'","weingut":"Domaine Barraud","jahr":2023,"typ":"Weisswein","sorte":"Chardonnay","land":"Frankreich","gebiet":"Burgund","region":"Vergisson","degustation":"Nase: Birnen, Zitrus Gaumen: Kräftig, mineralisch, mittlere Tiefe, langer Abgang, 65 jährige Rebstöcke. 17/20","eignung":"","ausbau":"","anbau":"","anzahl":3,"preis":0,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":null,"notizen":"","lieferant":""},{"id":"s6iazv93","name":"Sopra Cabernet Franc","weingut":"Collini di Sopra","jahr":2020,"typ":"Rotwein","sorte":"Cabernet Franc","land":"Italien","gebiet":"Toscana","region":"Montescudaio","degustation":"Nase: Dunkle und rote Beeren, Würze Gaumen: Fruchtig, fein, würzig, wunderschön gemacht, tiefgründig und komplex, rote und schwarze Beeren, CF-Würze, langer Abgang. 19/20 beginnen zu trinken","eignung":"","ausbau":"24 Monate in neuen französischen Eichenfässern","anbau":"BIO","anzahl":2,"preis":60.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2028,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"whqgnti4","name":"Eva Le Crocine","weingut":"Tenuta di Biserno","jahr":2022,"typ":"Rotwein","sorte":"Cabernet Franc","land":"Italien","gebiet":"Toscana","region":"Livorno","degustation":"Nase: Heidelbeeren, Brombeeren, Würze Gaumen: Fruchtig, kräftig, tiefgründig und vollmundig, schön eingebundene Tannine, rund und sehr zugänglich, langer Abgang. 18,5/20 trinken","eignung":"","ausbau":"1 Jahr in französischen gebrauchten und neuen Barriques","anbau":"NACHHALTIG","anzahl":6,"preis":50.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2033,"notizen":"","lieferant":"Vinsano"},{"id":"cf33xaak","name":"Sopra Merlot","weingut":"Collini di Sopra","jahr":2019,"typ":"Rotwein","sorte":"Merlot","land":"Italien","gebiet":"Toscana","region":"Montescudaio","degustation":"In der Nase Aromen von Brombeeren, Pflaumen und Schwarzkirschen, etwas Zimt und Nelken. Am Gaumen intensiv mit einer belebenden Frucht und lebendigen Tanninen, der Abgang ist angenehm würzig","eignung":"","ausbau":"24 Monate in neuen französischen Eichenfässern","anbau":"BIO","anzahl":6,"preis":52.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2028,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"9i9a6mpm","name":"Soover","weingut":"Collini di Sopra","jahr":2021,"typ":"Rotwein","sorte":"Sangiovese, Merlot, Syrah, Cabernet Franc, Petit Verdot, Cabernet Sauvignon","land":"Italien","gebiet":"Toscana","region":"Montescudaio","degustation":"In der Nase Aromen von Brombeere, Cassis, Pflaume, etwas Schokolade und zarten Kräuternoten. Am Gaumen fein strukturiert mit schöner ausgewogener Frucht, angenehme Mineralität","eignung":"","ausbau":"Reifung während 6 Monaten im Stahltank","anbau":"NACHHALTIG","anzahl":2,"preis":23.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"gq7bitrq","name":"Lodolaia Syrah","weingut":"Tenuta Valdifalco","jahr":null,"typ":"Rotwein","sorte":"Syrah","land":"Italien","gebiet":"Toscana","region":"Maremma","degustation":"Milchschokoladen-Nase, lieblich, rund, Caramel, dann Syrah-typische Rotfruchtigkeit und Pfeffernoten. Leichter Körper, fruchtbetont, Schmelz, feine aber präsente Tannine.","eignung":"","ausbau":"","anbau":"BIO","anzahl":1,"preis":28.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":null,"notizen":"","lieferant":"Vinsano"},{"id":"qsglp1hz","name":"Aventurer","weingut":"Albert I Noya","jahr":null,"typ":"Rotwein","sorte":"Belat, VB 91-26-26","land":"Spanien","gebiet":"Katalonien","region":"Penedes","degustation":"Dichtes Purpurviolett; verführerische Noten von Waldbeeren und Cassis, Anklänge von Vanille und Mokka sowie ein Hauch von Lakritz; geschmeidiger Ansatz, vollmundige, saftige Struktur, feinkörniges Tannin; aromatischer Abgang.","eignung":"Auberginen-Pasta, Thymianpasta mit Pilzen, Gemüsegrilladen, reich gedeckte Paella","ausbau":"Im Barrique gereift.","anbau":"BIO","anzahl":1,"preis":15.2,"bewertung":null,"status":"Aktiv","trinkreife_ab":2026,"trinkreife":2031,"notizen":"","lieferant":"Delinat"},{"id":"s8jauz70","name":"Vinya Laia","weingut":"Albert I Noya","jahr":2020,"typ":"Rotwein","sorte":"Merlot, Cabernet Sauvignon, Garnacha, Syrah","land":"Spanien","gebiet":"Katalonien","region":"Penedes","degustation":"Funkelndes Rubinrot; würziges Bukett begleitet von Kirschen- sowie Zwetschgenfrucht mit einem Hauch von Kokos und Zimt; geschmeidiger Auftakt, ausgewogenes Gaumenspiel, unterlegt mit zarter Eichenwürze, geschliffenes Tannin; saftiger Abgang","eignung":"Hähnchen mit Kartoffelpüree, Eintopf mit Linsen, katalanische Kichererbsen","ausbau":"Temperaturkontrolliert im Stahltank vergoren, rund ein halbes Jahr im Tank stabilisiert.","anbau":"BIO","anzahl":1,"preis":16.4,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":2032,"notizen":"","lieferant":"Delinat"},{"id":"nr0p7dsk","name":"Reserva Marti","weingut":"Albert I Noya","jahr":2019,"typ":"Rotwein","sorte":"Cabernet Sauvignon, Garnacha, Merlot","land":"Spanien","gebiet":"Katalonien","region":"Penedes","degustation":"Tiefes Bordeaux-Rot, im Bukett Beerenkompott, Feigen, Nelke und Zimt, auch ein Hauch Eukalyptus, Röstkaffe und Zedernholz; geschmeidiger Antrunk, herrliches Gaumenspiel, komplex, reife Frucht, exzellente Balance, weiches Tannin; langes Finale","eignung":"Gemüseeintopf, Lammfleisch, Ratatouille, Steinpilze","ausbau":"4-tägige Kaltmazeration, 24 Monate neue französische Barriques.","anbau":"BIO","anzahl":1,"preis":37.0,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":2036,"notizen":"","lieferant":"Delinat"},{"id":"e4u4swvh","name":"Pastoret","weingut":"Josep Girones Llop","jahr":null,"typ":"Rotwein","sorte":"Garnacha, Syrah","land":"Spanien","gebiet":"Katalonien","region":"Taragona / Terra Alta","degustation":"Brillantes Kirschrot; Noten von Waldbeeren, Lakritz und Süsskirschen, ein Hauch von Rauch, Vanille und Muskat; weicher Ansatz, verführerische Fruchtsüsse am Gaumen, feines, rundes Tannin; lange ausklingend.","eignung":"Romesco-Fisoleneintopf, gereifter Schafkäse","ausbau":"Klassische Maischegärung, kontrollierter Ausbau in Eichenholzfässern.","anbau":"BIO","anzahl":6,"preis":16.4,"bewertung":null,"status":"Aktiv","trinkreife_ab":null,"trinkreife":2030,"notizen":"","lieferant":"Delinat"}];
@@ -388,7 +397,7 @@ function statusDV(s){if(s==='Aktiv')return'<span class="status-aktiv">✅ Aktiv<
 function landChanged(){const v=document.getElementById('f-land').value;document.getElementById('landCustomGrp').style.display=v==='anderes'?'flex':'none';if(v!=='anderes')document.getElementById('f-land-custom').value='';}
 function getLand(){const v=document.getElementById('f-land').value;if(v==='anderes')return document.getElementById('f-land-custom').value.trim();return v;}
 function setLand(val){const sel=document.getElementById('f-land'),grp=document.getElementById('landCustomGrp');if(!val){sel.value='';grp.style.display='none';return;}if(EU.includes(val)){sel.value=val;grp.style.display='none';}else{sel.value='anderes';grp.style.display='flex';document.getElementById('f-land-custom').value=val;}}
-function rebuildSorteDropdown(){const sel=document.getElementById('f-sorte-filter'),cur=sel.value,set=new Set();wines.forEach(w=>{if(w.sorte)set.add(w.sorte.trim());});const sorted=[...set].sort((a,b)=>a.localeCompare(b,'de'));sel.innerHTML='<option value="">– alle Rebsorten –</option>'+sorted.map(s=>`<option value="${s}"${s===cur?' selected':''}>${s}</option>`).join('');}
+function rebuildSorteDropdown(){}
 function load(){try{wines=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){wines=[];}if(!wines.length){wines=[...IMPORT];save();}rebuildSorteDropdown();}
 function save(){localStorage.setItem(SK,JSON.stringify(wines));}
 function uid(){return Math.random().toString(36).slice(2,10);}
@@ -401,25 +410,28 @@ function anbauTag(a){if(a==='BIO')return'<span class="tag tag-bio">🌿 BIO</spa
 function toggleFilter(){const p=document.getElementById('filterPanel'),btn=document.getElementById('filterToggle');btn.classList.toggle('active',p.classList.toggle('open'));}
 function toggleChip(el,group,val){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');if(group==='typ')fTyp=val;else if(group==='status')fStatus=val;else if(group==='trink')fTrink=val;else if(group==='anbau')fAnbau=val;renderList();}
 function setMinBew(n){fMinBew=n;for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.toggle('on',i<=n&&n>0);renderList();}
-function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';document.getElementById('f-sorte-filter').value='';document.getElementById('searchInput').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
-function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||document.getElementById('f-sorte-filter').value||(document.getElementById('searchInput').value||'').trim();}
+function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-sorte-filter').value='';document.getElementById('searchInput').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
+function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||document.getElementById('f-sorte-filter').value||(document.getElementById('searchInput').value||'').trim();}
 
 /* ── Render List ── */
 function renderList(){
   const q=(document.getElementById('searchInput').value||'').toLowerCase();
   const sorteF=document.getElementById('f-sorte-filter').value;
+  fEignung=(document.getElementById('f-eignung-filter').value||'').toLowerCase().trim();
   let list=wines.filter(w=>{
     if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;
     if(fTyp&&w.typ!==fTyp)return false;
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;
     if(fMinBew>0&&(w.bewertung||0)<fMinBew)return false;
-    if(sorteF&&w.sorte!==sorteF)return false;
+    if(fEignung&&!(w.eignung||'').toLowerCase().includes(fEignung))return false;
+    if(sorteF&&!(w.sorte||'').toLowerCase().includes(sorteF.toLowerCase()))return false;
     if(fTrink){const s=trinkStatus(w);if(s!==fTrink)return false;}
     return true;
   });
+  list.sort((a,b)=>a.name.localeCompare(b.name,'de'));
   const bar=document.getElementById('activeBar');
-  if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
+  if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);if(fEignung)parts.push('Eignung: '+fEignung);document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
   document.getElementById('statTotal').textContent=list.length;
   document.getElementById('statFlaschen').textContent=list.reduce((a,w)=>a+(w.anzahl||0),0);
   document.getElementById('statWert').textContent='CHF '+Math.round(list.reduce((a,w)=>a+(w.anzahl||0)*(w.preis||0),0)).toLocaleString('de-CH');
@@ -427,19 +439,19 @@ function renderList(){
   if(!list.length){el.innerHTML='<div class="empty"><i class="ti ti-bottle-off"></i><p>Keine Einträge gefunden</p></div>';return;}
   el.innerHTML=list.map(w=>{
     const ts=trinkStatus(w),tl=trinkLabel(ts),st=w.status||'Aktiv';
-    const h=[w.land,w.gebiet].filter(Boolean).join(' · ');
+    const metaParts=[w.weingut,w.land?flagOf(w.land):null,w.gebiet,w.jahr].filter(Boolean);
+    const meta=metaParts.join(' · ');
     return`<div class="wine-card ${typClass(w.typ)}${st==='Inaktiv'?' inaktiv':''}" onclick="openDetail('${w.id}')">
       <div class="wc-top"><div class="cdot ${dotClass(w.typ)}"></div>
         <div style="flex:1">
           <div class="wc-name">${w.name}</div>
-          ${(w.weingut||w.jahr)?`<div class="wc-gut-row">${w.weingut?`<span class="wc-gut">${w.weingut}</span>`:''}<span class="wc-jahr">${w.jahr||''}</span></div>`:''}
         </div>
+        ${w.bewertung?`<div style="color:var(--wr);font-size:12px;letter-spacing:1px;flex-shrink:0;margin-right:4px;">${stars(w.bewertung)}</div>`:''}
         <div class="wc-cnt">${w.anzahl} Fl.</div>
       </div>
-      ${h?`<div class="wc-meta">${h}</div>`:''}
+      ${meta?`<div class="wc-meta">${meta}</div>`:''}
       ${(w.sorte||w.ausbau)?`<div class="wc-meta" style="display:flex;justify-content:space-between;gap:8px;">${w.sorte?`<span>${w.sorte}</span>`:''}<span style="color:var(--wrm);font-size:11px;text-align:right;flex-shrink:0;">${w.ausbau||''}</span></div>`:''}
       ${w.eignung?`<div class="wc-meta" style="text-align:right;color:#7A8B5A;font-size:11px;">${w.eignung}</div>`:''}
-      ${w.bewertung?`<div class="stars-disp">${stars(w.bewertung)}</div>`:''}
       <div class="wc-tags">${statusTag(st)}${tl?`<span class="tag">${tl}</span>`:''}${anbauTag(w.anbau)}</div>
     </div>`;
   }).join('');
@@ -493,7 +505,7 @@ function openDetail(id){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
   const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
-  const hR=[['Land',w.land],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
+  const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
   const cR=[['Eignung',w.eignung],['Anbau',w.anbau?`<span class="${w.anbau==='BIO'?'bio-c':'nach-c'}">${w.anbau==='BIO'?'🌿':'♻️'} ${w.anbau}</span>`:null]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
   s.innerHTML=`
@@ -560,7 +572,7 @@ function closeSync(){document.getElementById('syncModal').classList.remove('open
 /* ── JSON Export ── */
 function exportJSON(){
   const date=new Date().toISOString().slice(0,10);
-  const blob=new Blob([JSON.stringify({version:'1.1',exportDate:date,wines},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({version:'1.2',exportDate:date,wines},null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=`weinkeller_backup_${date}.json`;
@@ -602,87 +614,84 @@ function exportCSV(){
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
 }
 
-/* ── Scanner ── */
-let scanStream=null,scanInterval=null;
+/* ── Etiketten-Scanner (OCR) ── */
+let scanStream=null;
+let tesseractReady=false;
+
+function loadTesseract(){
+  return new Promise(resolve=>{
+    if(window.Tesseract){resolve();return;}
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload=()=>resolve();
+    document.head.appendChild(s);
+  });
+}
 
 async function openScanner(){
-  if(!('BarcodeDetector' in window)){
-    alert('Barcode-Scanner wird von diesem Browser nicht unterstützt.\nBitte Chrome auf Android verwenden.');
-    return;
-  }
   document.getElementById('scanModal').classList.add('open');
+  document.getElementById('scanCaptureBtn').style.display='none';
   document.getElementById('scanStatus').textContent='Kamera wird gestartet…';
   try{
-    scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});
+    scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}});
     const video=document.getElementById('scanVideo');
     video.srcObject=scanStream;
     await video.play();
-    startBarcodeDetection(video);
+    document.getElementById('scanStatus').textContent='Etikett positionieren, dann fotografieren';
+    document.getElementById('scanCaptureBtn').style.display='flex';
   }catch(e){
     document.getElementById('scanStatus').textContent='Kamera-Zugriff verweigert. Bitte Berechtigung erteilen.';
   }
 }
 
-async function startBarcodeDetection(video){
-  const detector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
-  let detected=false;
-  document.getElementById('scanStatus').textContent='Barcode suchen…';
-  scanInterval=setInterval(async()=>{
-    if(detected)return;
-    try{
-      const codes=await detector.detect(video);
-      if(codes.length>0){
-        detected=true;
-        const code=codes[0].rawValue;
-        document.getElementById('scanStatus').textContent=`✅ Barcode ${code} gefunden — suche Wein…`;
-        await lookupBarcode(code);
-      }
-    }catch(e){}
-  },400);
+async function captureLabel(){
+  const video=document.getElementById('scanVideo');
+  const canvas=document.createElement('canvas');
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
+  canvas.getContext('2d').drawImage(video,0,0);
+  document.getElementById('scanCaptureBtn').style.display='none';
+  document.getElementById('scanStatus').textContent='📷 Etikett erkannt – lade OCR…';
+  closeScanner();
+  try{
+    await loadTesseract();
+    openAdd();
+    document.getElementById('modalTitle').innerHTML='<i class="ti ti-scan"></i> Etikett scannen <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button>';
+    const worker=await Tesseract.createWorker(['deu','fra','ita','eng']);
+    const {data:{text}}=await worker.recognize(canvas);
+    await worker.terminate();
+    prefillFromOCR(text);
+  }catch(e){
+    if(!document.getElementById('addModal').classList.contains('open')) openAdd();
+  }
 }
 
 function closeScanner(){
-  clearInterval(scanInterval);
   if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
   document.getElementById('scanModal').classList.remove('open');
   document.getElementById('scanStatus').textContent='';
 }
 
-async function lookupBarcode(code){
-  try{
-    const res=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
-    const data=await res.json();
-    closeScanner();
-    openAdd();
-    if(data.status===1&&data.product){
-      const p=data.product;
-      const name=p.product_name_de||p.product_name||'';
-      if(name) document.getElementById('f-name').value=name;
-      if(p.brands) document.getElementById('f-weingut').value=p.brands;
-      // Jahrgang aus Name extrahieren
-      const ym=(name+' '+(p.product_name||'')).match(/\b(19[5-9]\d|20[0-2]\d)\b/);
-      if(ym) document.getElementById('f-jahr').value=ym[0];
-      // Land
-      const cmap={'en:france':'Frankreich','en:italy':'Italien','en:spain':'Spanien','en:germany':'Deutschland','en:austria':'Österreich','en:switzerland':'Schweiz','en:portugal':'Portugal','en:greece':'Griechenland','en:hungary':'Ungarn','en:united-states':'USA','en:argentina':'Argentinien','en:chile':'Chile','en:australia':'Australien','en:new-zealand':'Neuseeland','en:south-africa':'Südafrika'};
-      const ct=(p.countries_tags||[]);
-      for(const c of ct){if(cmap[c]){setLand(cmap[c]);break;}}
-      // Gebiet
-      if(p.origins) document.getElementById('f-gebiet').value=p.origins;
-      // BIO
-      const labs=(p.labels_tags||[]).join(' ');
-      if(labs.includes('bio')||labs.includes('organic')||labs.includes('biologique')) document.getElementById('f-anbau').value='BIO';
-      // Typ aus Name
-      const nl=name.toLowerCase();
-      if(/rouge|rosso|rotwein|\bred wine\b|tinto/.test(nl)) document.getElementById('f-typ').value='Rotwein';
-      else if(/blanc|bianco|weisswein|white wine|weiss/.test(nl)) document.getElementById('f-typ').value='Weisswein';
-      else if(/ros[eé]/.test(nl)) document.getElementById('f-typ').value='Rosé';
-      else if(/crémant|cremant|sekt|prosecco|champagne|cava|spumante/.test(nl)) document.getElementById('f-typ').value='Schaumwein';
-    }
-    // Falls nicht gefunden: leeres Formular bleibt offen
-  }catch(e){
-    closeScanner();
-    openAdd();
-  }
+function prefillFromOCR(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>2);
+  const lower=text.toLowerCase();
+  // Jahrgang
+  const ym=text.match(/\b(19[5-9]\d|20[0-2]\d)\b/);
+  if(ym) document.getElementById('f-jahr').value=ym[0];
+  // Weintyp
+  if(/rouge|rosso|rotwein|red wine|tinto|pinot noir|cabernet|merlot|syrah|grenache|sangiovese/.test(lower)) document.getElementById('f-typ').value='Rotwein';
+  else if(/blanc|bianco|weisswein|white wine|chardonnay|riesling|pinot gris|sauvignon|gewürz/.test(lower)) document.getElementById('f-typ').value='Weisswein';
+  else if(/ros[eé]/.test(lower)) document.getElementById('f-typ').value='Rosé';
+  else if(/crémant|cremant|sekt|prosecco|champagne|cava|spumante|pétillant/.test(lower)) document.getElementById('f-typ').value='Schaumwein';
+  // Land
+  const landMap={'france|frankreich|alsace|bordeaux|bourgogne|rhône|provence|languedoc|loire|alsace|côtes':'Frankreich','italy|italia|italien|toscana|toscano|piemonte|veneto|sicilia|alto adige|südtirol|barolo|brunello|chianti':'Italien','spain|españa|spanien|rioja|ribera|penedès|priorat':'Spanien','germany|deutschland|mosel|rheingau|pfalz|rheinhessen':'Deutschland','austria|österreich|wachau|burgenland|kamptal':'Österreich','suisse|schweiz|switzerland':'Schweiz','portugal|douro|alentejo|vinho verde':'Portugal','greece|griechenland|greek':'Griechenland','argentina|mendoza':'Argentinien','chile|maipo|colchagua':'Chile','australia|barossa|mclaren':'Australien','new zealand|marlborough|hawke':'Neuseeland','south africa|stellenbosch|swartland':'Südafrika','usa|napa|sonoma|california':'USA'};
+  for(const [pat,country] of Object.entries(landMap)){if(new RegExp(pat,'i').test(text)){setLand(country);break;}}
+  // BIO
+  if(/bio\b|organic|biologique|biologico|\beco\b/.test(lower)) document.getElementById('f-anbau').value='BIO';
+  // Name & Weingut aus den ersten sinnvollen Zeilen
+  const goodLines=lines.filter(l=>l.length>3&&!/^\d+([.,]\d+)?%?$/.test(l)&&!/^(rouge|blanc|rosé|aoc|doc|igt|dop|igp|appellation|denominazione|mis en bouteille|product of|alc|vol|cl|ml|l$)$/i.test(l));
+  if(goodLines[0]&&!document.getElementById('f-name').value) document.getElementById('f-name').value=goodLines[0];
+  if(goodLines[1]&&!document.getElementById('f-weingut').value) document.getElementById('f-weingut').value=goodLines[1];
 }
 
 load();
