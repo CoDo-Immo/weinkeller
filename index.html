@@ -844,3 +844,13 @@ Antworte NUR mit einem JSON-Objekt ohne zusätzlichen Text:
     document.getElementById('enrichStatus').style.color='green';
     document.getElementById('enrichStatus').textContent='✅ Felder ergänzt – bitte prüfen und bei Bedarf anpassen.';
   }catch(e){
+    document.getElementById('enrichStatus').textContent='❌ Fehler: '+e.message;
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+initAuth();
+</script>
+</body>
+</html>
