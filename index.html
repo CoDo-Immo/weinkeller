@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Weinkeller">
 <title>Mein Weinkeller</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -52,9 +53,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip.on{background:var(--wrl);border-color:var(--wrm);color:var(--wr);font-weight:700;}
 .fp-select{height:38px;padding:0 10px;font-size:13px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);width:100%;cursor:pointer;outline:none;transition:border-color .15s;}
 .fp-select:focus{border-color:var(--wr);}
-.filter-active-bar{display:none;background:var(--wrl);border-bottom:1px solid var(--wrm);padding:7px 16px;align-items:center;justify-content:space-between;}
+.filter-active-bar{display:none;background:#f0ece8;border-bottom:1px solid #d4cdc9;padding:7px 16px;align-items:center;justify-content:space-between;}
 .filter-active-bar.show{display:flex;}
-.filter-active-bar span{font-size:12px;color:var(--wr);font-weight:500;}
+.filter-active-bar span{font-size:12px;color:var(--tm);font-weight:500;}
 .fab-clear{font-size:12px;color:var(--wr);background:none;border:none;cursor:pointer;font-weight:700;padding:0;}
 .star-filter{display:flex;gap:4px;align-items:center;}
 .star-btn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--bd);padding:0 2px;line-height:1;transition:color .1s,transform .1s;}
@@ -181,14 +182,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .scan-capture-btn{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:#fff;border:3px solid rgba(255,255,255,0.6);color:#8B2E4A;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
 .scan-capture-btn:active{transform:translateX(-50%) scale(0.92);}
+
+/* ── Login Screen ── */
+#loginScreen{display:none;position:fixed;inset:0;background:var(--cs);z-index:100;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--cb);border-radius:var(--br-lg);padding:28px 24px 24px;width:100%;max-width:360px;box-shadow:var(--shadow-md);}
+.login-logo{text-align:center;font-size:40px;margin-bottom:8px;}
+.login-card h2{text-align:center;font-size:18px;font-weight:700;color:var(--tx);margin-bottom:20px;letter-spacing:-0.3px;}
+.login-field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+.login-field label{font-size:12px;font-weight:600;color:var(--tm);}
+.login-field input{font-size:14px;padding:10px 12px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;transition:border-color .15s,box-shadow .15s;}
+.login-field input:focus{border-color:var(--wr);box-shadow:0 0 0 3px rgba(139,46,74,0.10);}
+.login-btn{width:100%;height:46px;background:var(--wr);color:#fff;border:none;border-radius:var(--br-md);font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;transition:opacity .15s;}
+.login-btn:disabled{opacity:.6;cursor:default;}
+.login-err{font-size:12px;color:#A32D2D;text-align:center;margin-top:8px;min-height:18px;}
+.login-toggle{text-align:center;margin-top:14px;font-size:13px;color:var(--tm);}
+.login-toggle a{color:var(--wr);text-decoration:none;font-weight:600;cursor:pointer;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
-<div id="app">
+
+<!-- ── Login Screen ── -->
+<div id="loginScreen" style="display:flex;">
+  <div class="login-card">
+    <div class="login-logo">🍷</div>
+    <h2>Mein Weinkeller</h2>
+    <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
+    <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
+    <div class="login-err" id="loginErr"></div>
+    <div class="login-toggle">Noch kein Konto? <a onclick="toggleAuthMode()">Registrieren</a></div>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v1.2</span>
+      <span class="version-badge">v1.3</span>
+      <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
       <input type="text" id="searchInput" placeholder="Wein suchen…" oninput="renderList()">
@@ -302,6 +334,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importJSON(this)">
     <div id="importStatus" style="font-size:13px;color:var(--tm);margin-top:10px;text-align:center;min-height:20px;"></div>
+    <div id="migrationSection" style="display:none;">
+      <div class="dsec" style="margin-top:16px;">Erstimport</div>
+      <p style="font-size:12px;color:var(--tm);margin-bottom:10px;line-height:1.5;">Die 29 Weine aus der App-Version ohne Supabase in die Datenbank importieren (nur einmalig nötig).</p>
+      <div class="arow"><button class="abtn primary" id="migrateBtn" onclick="migrateData()"><i class="ti ti-database-import"></i> 29 Weine in Supabase importieren</button></div>
+      <div id="migrateStatus" style="font-size:13px;color:var(--tm);margin-top:8px;text-align:center;"></div>
+    </div>
   </div>
 </div>
 
@@ -379,8 +417,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-const SK='weinkeller_v11';
-let wines=[],editingId=null;
+/* ── Supabase Config ─────────────────────────────────────────────────────
+   TODO: Werte aus Supabase Dashboard → Project Settings → API einfügen   */
+const SUPABASE_URL  = 'https://vzsmjneerahucqwisouv.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6c21qbmVlcmFodWNxd2lzb3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTIxOTEsImV4cCI6MjA5NzY4ODE5MX0.5irEYhQBJpxAKsnYQ28Wrd9H4qlvvUSFQDioqvGTqmo';
+/* ────────────────────────────────────────────────────────────────────── */
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let wines=[],editingId=null,currentUser=null,isSaving=false;
 let fTyp='',fStatus='',fTrink='ok',fMinBew=0,fAnbau='',fEignung='';
 
 const FLAGS={'Frankreich':'🇫🇷','Italien':'🇮🇹','Spanien':'🇪🇸','Deutschland':'🇩🇪','Österreich':'🇦🇹','Schweiz':'🇨🇭','Portugal':'🇵🇹','Griechenland':'🇬🇷','Ungarn':'🇭🇺','Kroatien':'🇭🇷','Slowenien':'🇸🇮','Rumänien':'🇷🇴','Bulgarien':'🇧🇬','England':'🏴󠁧󠁢󠁥󠁮󠁧󁿢','Georgien':'🇬🇪','USA':'🇺🇸','Argentinien':'🇦🇷','Chile':'🇨🇱','Australien':'🇦🇺','Neuseeland':'🇳🇿','Südafrika':'🇿🇦'};
@@ -392,14 +436,73 @@ const IMPORT=[{"id":"mw0jjf3y","name":"Riesling Brand Grand Crue","weingut":"Pau
 /* ── Helpers ── */
 function typClass(t){return t==='Rotwein'?'c-rot':t==='Weisswein'?'c-weis':t==='Rosé'?'c-rose':t==='Schaumwein'?'c-schau':t==='Süsswein'?'c-suss':'c-brand';}
 function dotClass(t){return t==='Rotwein'?'d-rot':t==='Weisswein'?'d-weis':t==='Rosé'?'d-rose':t==='Schaumwein'?'d-schau':t==='Süsswein'?'d-suss':'d-brand';}
+function dotColor(t){return t==='Rotwein'?'#8B2E4A':t==='Weisswein'?'#C8A93B':t==='Rosé'?'#E8889E':t==='Schaumwein'?'#7BBBD8':t==='Süsswein'?'#9B75C8':'#C07A4A';}
 function statusTag(s){if(s==='Aktiv')return'<span class="tag tag-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="tag tag-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="tag tag-inaktiv">○ Inaktiv</span>';return'';}
 function statusDV(s){if(s==='Aktiv')return'<span class="status-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="status-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="status-inaktiv">○ Inaktiv</span>';return s||'–';}
 function landChanged(){const v=document.getElementById('f-land').value;document.getElementById('landCustomGrp').style.display=v==='anderes'?'flex':'none';if(v!=='anderes')document.getElementById('f-land-custom').value='';}
 function getLand(){const v=document.getElementById('f-land').value;if(v==='anderes')return document.getElementById('f-land-custom').value.trim();return v;}
 function setLand(val){const sel=document.getElementById('f-land'),grp=document.getElementById('landCustomGrp');if(!val){sel.value='';grp.style.display='none';return;}if(EU.includes(val)){sel.value=val;grp.style.display='none';}else{sel.value='anderes';grp.style.display='flex';document.getElementById('f-land-custom').value=val;}}
 function rebuildSorteDropdown(){}
-function load(){try{wines=JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){wines=[];}if(!wines.length){wines=[...IMPORT];save();}rebuildSorteDropdown();}
-function save(){localStorage.setItem(SK,JSON.stringify(wines));}
+
+/* ── Auth ── */
+function showLogin(){document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
+function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';}
+let authMode='login';
+function toggleAuthMode(){
+  authMode=authMode==='login'?'register':'login';
+  document.getElementById('loginBtn').textContent=authMode==='login'?'Einloggen':'Registrieren';
+  document.querySelector('.login-toggle a').textContent=authMode==='login'?'Registrieren':'Zurück zum Login';
+  document.getElementById('loginErr').textContent='';
+}
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPw').value;
+  const errEl=document.getElementById('loginErr');
+  errEl.textContent='';errEl.style.color='#A32D2D';
+  if(!email||!pw){errEl.textContent='Bitte E-Mail und Passwort eingeben.';return;}
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true;btn.textContent=authMode==='login'?'Einloggen…':'Registrieren…';
+  const fn=authMode==='login'?db.auth.signInWithPassword({email,password:pw}):db.auth.signUp({email,password:pw});
+  const {error}=await fn;
+  btn.disabled=false;btn.textContent=authMode==='login'?'Einloggen':'Registrieren';
+  if(error){errEl.textContent='Fehler: '+error.message;return;}
+  if(authMode==='register'){errEl.style.color='green';errEl.textContent='✅ Konto erstellt! Bitte jetzt einloggen.';authMode='login';return;}
+}
+async function doLogout(){await db.auth.signOut();wines=[];showLogin();}
+
+/* ── Data Layer ── */
+async function loadWines(){
+  const el=document.getElementById('wineList');
+  el.innerHTML='<div class="empty"><i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i><p style="margin-top:8px;">Weine werden geladen…</p></div>';
+  const {data,error}=await db.from('wines').select('*').order('name');
+  if(error){el.innerHTML='<div class="empty"><i class="ti ti-wifi-off"></i><p>Verbindungsfehler.<br>Bitte Seite neu laden.</p></div>';return;}
+  wines=data||[];
+  if(!wines.length)document.getElementById('migrationSection').style.display='block';
+  renderList();
+}
+async function saveWineToDb(w){const {error}=await db.from('wines').upsert(w,{onConflict:'id'});if(error)throw error;}
+async function deleteWineFromDb(id){const {error}=await db.from('wines').delete().eq('id',id);if(error)throw error;}
+
+async function initAuth(){
+  const {data:{session}}=await db.auth.getSession();
+  if(session?.user){currentUser=session.user;showApp();await loadWines();}
+  else showLogin();
+  db.auth.onAuthStateChange(async(_,session)=>{
+    if(session?.user){currentUser=session.user;showApp();await loadWines();}
+    else{currentUser=null;wines=[];showLogin();}
+  });
+}
+
+/* ── Migration (Erstimport) ── */
+async function migrateData(){
+  const btn=document.getElementById('migrateBtn'),st=document.getElementById('migrateStatus');
+  btn.disabled=true;st.textContent='Importiere…';
+  let ok=0,err=0;
+  for(const w of IMPORT){try{await saveWineToDb({...w,user_id:currentUser.id});ok++;}catch(e){err++;}}
+  st.textContent=`✅ ${ok} Weine importiert${err?' ('+err+' Fehler)':''}.`;
+  document.getElementById('migrationSection').style.display='none';
+  await loadWines();
+}
 function uid(){return Math.random().toString(36).slice(2,10);}
 function stars(n){if(!n)return'';let s='';for(let i=1;i<=5;i++)s+=i<=n?'★':'☆';return s;}
 function trinkStatus(w){const now=new Date().getFullYear(),ab=w.trinkreife_ab,bis=w.trinkreife;if(ab&&now<ab)return'lagern';if(bis&&now>bis)return'over';if(ab||bis)return'ok';return null;}
@@ -446,11 +549,11 @@ function renderList(){
         <div style="flex:1">
           <div class="wc-name">${w.name}</div>
         </div>
-        ${w.bewertung?`<div style="color:var(--wr);font-size:12px;letter-spacing:1px;flex-shrink:0;margin-right:4px;">${stars(w.bewertung)}</div>`:''}
+        ${w.bewertung?`<div style="color:${dotColor(w.typ)};font-size:12px;letter-spacing:1px;flex-shrink:0;margin-right:4px;">${stars(w.bewertung)}</div>`:''}
         <div class="wc-cnt">${w.anzahl} Fl.</div>
       </div>
       ${meta?`<div class="wc-meta">${meta}</div>`:''}
-      ${(w.sorte||w.ausbau)?`<div class="wc-meta" style="display:flex;justify-content:space-between;gap:8px;">${w.sorte?`<span>${w.sorte}</span>`:''}<span style="color:var(--wrm);font-size:11px;text-align:right;flex-shrink:0;">${w.ausbau||''}</span></div>`:''}
+      ${(w.sorte||w.ausbau)?`<div class="wc-meta" style="display:flex;gap:8px;">${w.sorte?`<span style="flex:0 0 50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${w.sorte}</span>`:'<span style="flex:0 0 50%;"></span>'}<span style="flex:0 0 50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--wrm);font-size:11px;text-align:right;">${w.ausbau||''}</span></div>`:''}
       ${w.eignung?`<div class="wc-meta" style="text-align:right;color:#7A8B5A;font-size:11px;">${w.eignung}</div>`:''}
       <div class="wc-tags">${statusTag(st)}${tl?`<span class="tag">${tl}</span>`:''}${anbauTag(w.anbau)}</div>
     </div>`;
@@ -495,7 +598,19 @@ function readForm(){
   w.land=getLand();
   return w;
 }
-function saveWine(){if(!document.getElementById('f-name').value.trim()){document.getElementById('f-name').focus();return;}const w={id:editingId||uid(),...readForm()};if(editingId){const i=wines.findIndex(x=>x.id===editingId);if(i>=0)wines[i]=w;}else wines.unshift(w);save();rebuildSorteDropdown();closeAdd();renderList();}
+async function saveWine(){
+  if(!document.getElementById('f-name').value.trim()){document.getElementById('f-name').focus();return;}
+  if(isSaving)return;isSaving=true;
+  const btn=document.querySelector('#addModal .btn-p');
+  if(btn){btn.textContent='Speichern…';btn.disabled=true;}
+  const w={id:editingId||uid(),user_id:currentUser.id,...readForm()};
+  try{
+    await saveWineToDb(w);
+    if(editingId){const i=wines.findIndex(x=>x.id===editingId);if(i>=0)wines[i]=w;}else wines.unshift(w);
+    rebuildSorteDropdown();closeAdd();renderList();
+  }catch(e){alert('Fehler beim Speichern: '+e.message);}
+  finally{isSaving=false;if(btn){btn.textContent='Speichern';btn.disabled=false;}}
+}
 
 /* ── Detail View ── */
 function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('')}</div>`;}
@@ -534,7 +649,13 @@ function openDetail(id){
   document.getElementById('detailModal').classList.add('open');
 }
 function closeDetail(){document.getElementById('detailModal').classList.remove('open');}
-function abbuchenOne(id){const w=wines.find(x=>x.id===id);if(!w)return;if(w.anzahl<=0){alert('Keine Flaschen mehr vorhanden.');return;}w.anzahl--;save();closeDetail();renderList();}
+async function abbuchenOne(id){
+  const w=wines.find(x=>x.id===id);if(!w)return;
+  if(w.anzahl<=0){alert('Keine Flaschen mehr vorhanden.');return;}
+  w.anzahl--;
+  try{await saveWineToDb(w);}catch(e){w.anzahl++;alert('Fehler: '+e.message);return;}
+  closeDetail();renderList();
+}
 
 function fillFormFromWine(w){
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)e.value=w[f]||'';});
@@ -563,7 +684,11 @@ function duplicateWine(id){
   fillFormFromWine(w);
   document.getElementById('addModal').classList.add('open');
 }
-function deleteWine(id){if(!confirm('Eintrag wirklich löschen?'))return;wines=wines.filter(x=>x.id!==id);save();rebuildSorteDropdown();closeDetail();renderList();}
+async function deleteWine(id){
+  if(!confirm('Eintrag wirklich löschen?'))return;
+  try{await deleteWineFromDb(id);}catch(e){alert('Fehler: '+e.message);return;}
+  wines=wines.filter(x=>x.id!==id);rebuildSorteDropdown();closeDetail();renderList();
+}
 
 /* ── Sync Modal ── */
 function openSync(){document.getElementById('syncModal').classList.add('open');}
@@ -582,25 +707,25 @@ function exportJSON(){
 /* ── JSON Import ── */
 function importJSON(input){
   const file=input.files[0];if(!file)return;
+  const st=document.getElementById('importStatus');
   const reader=new FileReader();
-  reader.onload=e=>{
+  reader.onload=async e=>{
     try{
       const data=JSON.parse(e.target.result);
       const imported=Array.isArray(data)?data:(data.wines||[]);
-      if(!imported.length){document.getElementById('importStatus').textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
+      if(!imported.length){st.textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
+      st.textContent='Importiere…';
       let added=0,updated=0;
-      imported.forEach(w=>{
-        if(!w.id||!w.name)return;
-        const idx=wines.findIndex(x=>x.id===w.id);
-        if(idx>=0){wines[idx]=w;updated++;}
-        else{wines.unshift(w);added++;}
-      });
-      save();rebuildSorteDropdown();renderList();
-      document.getElementById('importStatus').textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
+      for(const w of imported){
+        if(!w.id||!w.name)continue;
+        const exists=wines.some(x=>x.id===w.id);
+        await saveWineToDb(w);
+        if(exists)updated++;else added++;
+      }
+      await loadWines();
+      st.textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
       input.value='';
-    }catch(err){
-      document.getElementById('importStatus').textContent='❌ Ungültige Datei.';
-    }
+    }catch(err){st.textContent='❌ Fehler: '+err.message;}
   };
   reader.readAsText(file);
 }
@@ -694,8 +819,7 @@ function prefillFromOCR(text){
   if(goodLines[1]&&!document.getElementById('f-weingut').value) document.getElementById('f-weingut').value=goodLines[1];
 }
 
-load();
-renderList();
+initAuth();
 </script>
 </body>
 </html>
