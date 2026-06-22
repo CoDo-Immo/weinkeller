@@ -106,15 +106,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fab-scan{position:fixed;bottom:90px;right:20px;width:46px;height:46px;border-radius:50%;background:var(--cb);color:var(--wr);border:1.5px solid var(--wrm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:20;box-shadow:var(--shadow-md);transition:transform .15s;}
 .fab-scan:active{transform:scale(0.92);}
 
-/* ── Scan Modal ── */
-.scan-modal{display:none;position:fixed;inset:0;background:#000;z-index:50;flex-direction:column;}
-.scan-modal.open{display:flex;}
-.scan-video{width:100%;flex:1;object-fit:cover;}
-.scan-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
-.scan-frame{width:72%;max-width:280px;height:150px;border:2.5px solid #fff;border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,0.55);}
-.scan-hint{color:rgba(255,255,255,0.85);font-size:13px;margin-top:18px;text-align:center;}
-.scan-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);border:none;color:#fff;width:42px;height:42px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;pointer-events:all;}
-.scan-status{position:absolute;bottom:44px;left:0;right:0;text-align:center;color:#fff;font-size:13px;padding:0 24px;line-height:1.5;}
 
 /* ── Overlays & Sheets ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:30;align-items:flex-end;backdrop-filter:blur(2px);}
@@ -180,8 +171,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bio-c{color:#3B6D11;}.nach-c{color:#0F6E56;}
 .status-aktiv{color:#3B6D11;font-weight:600;}.status-bestellt{color:#185FA5;font-weight:600;}.status-inaktiv{color:var(--tm);}
 
-.scan-capture-btn{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:#fff;border:3px solid rgba(255,255,255,0.6);color:#8B2E4A;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
-.scan-capture-btn:active{transform:translateX(-50%) scale(0.92);}
+.fab-scan{display:none;}
 
 /* ── Login Screen ── */
 #loginScreen{display:none;position:fixed;inset:0;background:var(--cs);z-index:100;align-items:center;justify-content:center;padding:24px;}
@@ -304,21 +294,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="stat"><div class="stat-val" id="statFlaschen">0</div><div class="stat-lbl">Flaschen</div></div>
     <div class="stat"><div class="stat-val" id="statWert">CHF 0</div><div class="stat-lbl">Schätzwert</div></div>
   </div>
-  <button class="fab-scan" onclick="openScanner()" title="Weinetikett scannen"><i class="ti ti-scan" aria-hidden="true"></i></button>
   <button class="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
 </div>
 
-<!-- Scan Modal -->
-<div id="scanModal" class="scan-modal">
-  <video id="scanVideo" class="scan-video" playsinline autoplay muted></video>
-  <div class="scan-overlay">
-    <div class="scan-frame" style="height:220px;"></div>
-    <div class="scan-hint">Weinetikett im Rahmen positionieren</div>
-  </div>
-  <button class="scan-close" onclick="closeScanner()"><i class="ti ti-x"></i></button>
-  <button class="scan-capture-btn" id="scanCaptureBtn" onclick="captureLabel()" style="display:none;"><i class="ti ti-camera"></i></button>
-  <div class="scan-status" id="scanStatus"></div>
-</div>
 
 <!-- Import/Export -->
 <div class="overlay" id="syncModal">
@@ -334,6 +312,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importJSON(this)">
     <div id="importStatus" style="font-size:13px;color:var(--tm);margin-top:10px;text-align:center;min-height:20px;"></div>
+    <div class="dsec" style="margin-top:16px;">Claude API Key</div>
+    <p style="font-size:12px;color:var(--tm);margin-bottom:8px;line-height:1.5;">Für die Datenergänzung. Wird nur lokal in diesem Browser gespeichert.</p>
+    <div style="display:flex;gap:8px;">
+      <input type="password" id="claudeKeyInput" placeholder="sk-ant-api03-..." style="flex:1;font-size:13px;padding:9px 11px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;">
+      <button class="abtn" style="flex-shrink:0;width:90px;" onclick="saveClaudeKey()">Speichern</button>
+    </div>
+    <div id="claudeKeyStatus" style="font-size:12px;color:var(--tm);margin-top:6px;min-height:16px;"></div>
     <div id="migrationSection" style="display:none;">
       <div class="dsec" style="margin-top:16px;">Erstimport</div>
       <p style="font-size:12px;color:var(--tm);margin-bottom:10px;line-height:1.5;">Die 29 Weine aus der App-Version ohne Supabase in die Datenbank importieren (nur einmalig nötig).</p>
@@ -356,6 +341,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <select id="f-typ"><option>Rotwein</option><option>Weisswein</option><option>Rosé</option><option>Schaumwein</option><option>Süsswein</option><option>Brandwein</option></select>
       </div>
       <div class="fg full"><label>Rebsorte</label><input id="f-sorte" type="text" placeholder="z.B. Cabernet Sauvignon"></div>
+      <div class="fg full" style="margin-top:4px;">
+        <button type="button" onclick="enrichWineData()" id="enrichBtn" style="width:100%;height:42px;background:var(--cs);color:var(--wr);border:1px solid var(--wrm);border-radius:var(--br-md);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;">
+          <i class="ti ti-sparkles"></i> Daten ergänzen via Claude
+        </button>
+        <div id="enrichStatus" style="font-size:12px;color:var(--tm);margin-top:5px;text-align:center;min-height:16px;"></div>
+      </div>
     </div>
     <div class="fsec">Herkunft</div>
     <div class="fgrid">
@@ -542,7 +533,7 @@ function renderList(){
   if(!list.length){el.innerHTML='<div class="empty"><i class="ti ti-bottle-off"></i><p>Keine Einträge gefunden</p></div>';return;}
   el.innerHTML=list.map(w=>{
     const ts=trinkStatus(w),tl=trinkLabel(ts),st=w.status||'Aktiv';
-    const metaParts=[w.weingut,w.land?flagOf(w.land):null,w.gebiet,w.jahr].filter(Boolean);
+    const metaParts=[w.weingut,w.land?flagOf(w.land):null,w.gebiet,w.region,w.jahr].filter(Boolean);
     const meta=metaParts.join(' · ');
     return`<div class="wine-card ${typClass(w.typ)}${st==='Inaktiv'?' inaktiv':''}" onclick="openDetail('${w.id}')">
       <div class="wc-top"><div class="cdot ${dotClass(w.typ)}"></div>
@@ -691,7 +682,11 @@ async function deleteWine(id){
 }
 
 /* ── Sync Modal ── */
-function openSync(){document.getElementById('syncModal').classList.add('open');}
+function openSync(){
+  document.getElementById('syncModal').classList.add('open');
+  const key=localStorage.getItem(CLAUDE_KEY_SK)||'';
+  if(key)document.getElementById('claudeKeyInput').value=key;
+}
 function closeSync(){document.getElementById('syncModal').classList.remove('open');document.getElementById('importStatus').textContent='';}
 
 /* ── JSON Export ── */
@@ -739,87 +734,103 @@ function exportCSV(){
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
 }
 
-/* ── Etiketten-Scanner (OCR) ── */
-let scanStream=null;
-let tesseractReady=false;
+/* ── Datenergänzung via Claude API ── */
+const CLAUDE_KEY_SK='wk_claude_key';
 
-function loadTesseract(){
-  return new Promise(resolve=>{
-    if(window.Tesseract){resolve();return;}
-    const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-    s.onload=()=>resolve();
-    document.head.appendChild(s);
-  });
+function saveClaudeKey(){
+  const key=document.getElementById('claudeKeyInput').value.trim();
+  const st=document.getElementById('claudeKeyStatus');
+  if(!key){localStorage.removeItem(CLAUDE_KEY_SK);st.textContent='Key gelöscht.';return;}
+  localStorage.setItem(CLAUDE_KEY_SK,key);
+  st.style.color='green';st.textContent='✅ Key gespeichert.';
+  setTimeout(()=>st.textContent='',2000);
 }
 
-async function openScanner(){
-  document.getElementById('scanModal').classList.add('open');
-  document.getElementById('scanCaptureBtn').style.display='none';
-  document.getElementById('scanStatus').textContent='Kamera wird gestartet…';
-  try{
-    scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}});
-    const video=document.getElementById('scanVideo');
-    video.srcObject=scanStream;
-    await video.play();
-    document.getElementById('scanStatus').textContent='Etikett positionieren, dann fotografieren';
-    document.getElementById('scanCaptureBtn').style.display='flex';
-  }catch(e){
-    document.getElementById('scanStatus').textContent='Kamera-Zugriff verweigert. Bitte Berechtigung erteilen.';
+async function enrichWineData(){
+  let apiKey=localStorage.getItem(CLAUDE_KEY_SK)||'';
+  if(!apiKey){
+    openSync();
+    document.getElementById('enrichStatus').textContent='⚠️ Bitte zuerst Claude API Key im ↕ Menü speichern.';
+    return;
   }
-}
-
-async function captureLabel(){
-  const video=document.getElementById('scanVideo');
-  const canvas=document.createElement('canvas');
-  canvas.width=video.videoWidth;
-  canvas.height=video.videoHeight;
-  canvas.getContext('2d').drawImage(video,0,0);
-  document.getElementById('scanCaptureBtn').style.display='none';
-  document.getElementById('scanStatus').textContent='📷 Etikett erkannt – lade OCR…';
-  closeScanner();
-  try{
-    await loadTesseract();
-    openAdd();
-    document.getElementById('modalTitle').innerHTML='<i class="ti ti-scan"></i> Etikett scannen <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button>';
-    const worker=await Tesseract.createWorker(['deu','fra','ita','eng']);
-    const {data:{text}}=await worker.recognize(canvas);
-    await worker.terminate();
-    prefillFromOCR(text);
-  }catch(e){
-    if(!document.getElementById('addModal').classList.contains('open')) openAdd();
+  const name=document.getElementById('f-name').value.trim();
+  const weingut=document.getElementById('f-weingut').value.trim();
+  const jahr=document.getElementById('f-jahr').value.trim();
+  if(!name&&!weingut){
+    document.getElementById('enrichStatus').textContent='⚠️ Bitte mindestens Name oder Weingut eingeben.';
+    return;
   }
-}
+  const btn=document.getElementById('enrichBtn');
+  btn.disabled=true;
+  document.getElementById('enrichStatus').textContent='Claude wird befragt…';
 
-function closeScanner(){
-  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
-  document.getElementById('scanModal').classList.remove('open');
-  document.getElementById('scanStatus').textContent='';
-}
+  const prompt=`Du bist ein Weinexperte. Ergänze die fehlenden Daten für diesen Wein.
+Wein: ${name||'–'}
+Weingut: ${weingut||'–'}
+Jahrgang: ${jahr||'–'}
 
-function prefillFromOCR(text){
-  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>2);
-  const lower=text.toLowerCase();
-  // Jahrgang
-  const ym=text.match(/\b(19[5-9]\d|20[0-2]\d)\b/);
-  if(ym) document.getElementById('f-jahr').value=ym[0];
-  // Weintyp
-  if(/rouge|rosso|rotwein|red wine|tinto|pinot noir|cabernet|merlot|syrah|grenache|sangiovese/.test(lower)) document.getElementById('f-typ').value='Rotwein';
-  else if(/blanc|bianco|weisswein|white wine|chardonnay|riesling|pinot gris|sauvignon|gewürz/.test(lower)) document.getElementById('f-typ').value='Weisswein';
-  else if(/ros[eé]/.test(lower)) document.getElementById('f-typ').value='Rosé';
-  else if(/crémant|cremant|sekt|prosecco|champagne|cava|spumante|pétillant/.test(lower)) document.getElementById('f-typ').value='Schaumwein';
-  // Land
-  const landMap={'france|frankreich|alsace|bordeaux|bourgogne|rhône|provence|languedoc|loire|alsace|côtes':'Frankreich','italy|italia|italien|toscana|toscano|piemonte|veneto|sicilia|alto adige|südtirol|barolo|brunello|chianti':'Italien','spain|españa|spanien|rioja|ribera|penedès|priorat':'Spanien','germany|deutschland|mosel|rheingau|pfalz|rheinhessen':'Deutschland','austria|österreich|wachau|burgenland|kamptal':'Österreich','suisse|schweiz|switzerland':'Schweiz','portugal|douro|alentejo|vinho verde':'Portugal','greece|griechenland|greek':'Griechenland','argentina|mendoza':'Argentinien','chile|maipo|colchagua':'Chile','australia|barossa|mclaren':'Australien','new zealand|marlborough|hawke':'Neuseeland','south africa|stellenbosch|swartland':'Südafrika','usa|napa|sonoma|california':'USA'};
-  for(const [pat,country] of Object.entries(landMap)){if(new RegExp(pat,'i').test(text)){setLand(country);break;}}
-  // BIO
-  if(/bio\b|organic|biologique|biologico|\beco\b/.test(lower)) document.getElementById('f-anbau').value='BIO';
-  // Name & Weingut aus den ersten sinnvollen Zeilen
-  const goodLines=lines.filter(l=>l.length>3&&!/^\d+([.,]\d+)?%?$/.test(l)&&!/^(rouge|blanc|rosé|aoc|doc|igt|dop|igp|appellation|denominazione|mis en bouteille|product of|alc|vol|cl|ml|l$)$/i.test(l));
-  if(goodLines[0]&&!document.getElementById('f-name').value) document.getElementById('f-name').value=goodLines[0];
-  if(goodLines[1]&&!document.getElementById('f-weingut').value) document.getElementById('f-weingut').value=goodLines[1];
+Antworte NUR mit einem JSON-Objekt ohne zusätzlichen Text:
+{
+  "typ": "Rotwein|Weisswein|Rosé|Schaumwein|Süsswein|Brandwein",
+  "sorte": "Rebsorte(n) auf Deutsch oder leer",
+  "land": "Herkunftsland auf Deutsch oder leer",
+  "gebiet": "Weinbaugebiet auf Deutsch oder leer",
+  "region": "Region/Appellation oder leer",
+  "degustation": "Kurze Beschreibung Nase und Gaumen auf Deutsch oder leer",
+  "eignung": "Essensempfehlung auf Deutsch oder leer",
+  "ausbau": "Ausbauart auf Deutsch oder leer",
+  "anbau": "BIO oder NACHHALTIG oder leer",
+  "trinkreife_ab": Jahreszahl als Zahl oder null,
+  "trinkreife": Jahreszahl als Zahl oder null
+}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'content-type':'application/json',
+        'anthropic-dangerous-allow-browser':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:800,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(!res.ok){
+      if(res.status===401){localStorage.removeItem(CLAUDE_KEY_SK);document.getElementById('enrichStatus').textContent='❌ Ungültiger API Key – bitte im ↕ Menü neu eingeben.';}
+      else document.getElementById('enrichStatus').textContent='❌ Fehler: HTTP '+res.status;
+      return;
+    }
+    const data=await res.json();
+    const text=data.content[0].text.trim();
+    const jsonMatch=text.match(/\{[\s\S]*\}/);
+    if(!jsonMatch)throw new Error('Kein JSON erhalten');
+    const w=JSON.parse(jsonMatch[0]);
+    if(w.typ)document.getElementById('f-typ').value=w.typ;
+    if(w.sorte)document.getElementById('f-sorte').value=w.sorte;
+    if(w.land)setLand(w.land);
+    if(w.gebiet)document.getElementById('f-gebiet').value=w.gebiet;
+    if(w.region)document.getElementById('f-region').value=w.region;
+    if(w.degustation)document.getElementById('f-degustation').value=w.degustation;
+    if(w.eignung)document.getElementById('f-eignung').value=w.eignung;
+    if(w.ausbau)document.getElementById('f-ausbau').value=w.ausbau;
+    if(w.anbau&&['BIO','NACHHALTIG'].includes(w.anbau))document.getElementById('f-anbau').value=w.anbau;
+    if(w.trinkreife_ab)document.getElementById('f-trinkreife-ab').value=w.trinkreife_ab;
+    if(w.trinkreife)document.getElementById('f-trinkreife').value=w.trinkreife;
+    document.getElementById('enrichStatus').style.color='green';
+    document.getElementById('enrichStatus').textContent='✅ Felder ergänzt – bitte prüfen und bei Bedarf anpassen.';
+  }catch(e){
+    document.getElementById('enrichStatus').textContent='❌ Fehler: '+e.message;
+  }finally{
+    btn.disabled=false;
+  }
 }
 
 initAuth();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
