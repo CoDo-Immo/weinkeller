@@ -1,74 +1,92 @@
-# Mein Weinkeller – Release Notes v1.2
+# Mein Weinkeller – Release Notes v1.3
 
-**Datum:** 21.06.2026  
-**Vorherige Version:** v1.1
+**Datum:** 22.06.2026  
+**Vorherige Version:** v1.2
 
 ---
 
 ## Übersicht
 
-Version 1.2 bringt eine überarbeitete Weinliste mit kompakterer Darstellung, deutlich erweiterte Filtermöglichkeiten sowie einen komplett neuen Etiketten-Scanner mit OCR-Erkennung.
+Version 1.3 ist ein grösserer Umbau: Die Datenhaltung wechselt von lokalem Browser-Speicher auf eine sichere Cloud-Datenbank (Supabase). Neu ist ein Login-System, geräteübergreifender Zugriff sowie ein App-Icon für den Smartphone-Homescreen.
 
 ---
 
-## Neue Funktionen
+## ☁️ Cloud & Synchronisation
 
-### Etiketten-Scanner (OCR)
-Der bisherige Barcode-Scanner wurde durch einen Etiketten-Scanner ersetzt. Die Kamera fotografiert die Weinetikett; Tesseract.js analysiert das Bild und füllt das Erfassungsformular automatisch vor:
-- Weinname und Weingut
-- Jahrgang (vierstellige Jahreszahl)
-- Weintyp (Rot, Weiss, Rosé, Schaum)
-- Land (aus Regionen und Begriffen auf dem Etikett erkannt)
-- BIO-Kennzeichnung
+### Supabase Cloud-Datenbank
+Alle Weine werden neu in einer sicheren Cloud-Datenbank gespeichert – kein lokaler Browser-Speicher mehr. Daten bleiben erhalten, auch wenn der Browser-Cache gelöscht wird.
 
-Unterstützte Sprachen: Deutsch, Französisch, Italienisch, Englisch.
+### Login mit E-Mail und Passwort
+Neues Anmeldesystem mit Registrierung und Login. Daten sind nur nach erfolgreicher Anmeldung zugänglich.
 
-### Filter: Eignung
-Neues Textfeld im Filterpanel. Eingabe eines Begriffs (z. B. «Fisch», «Käse») zeigt alle Weine, in deren Eignungsfeld dieser Begriff vorkommt.
+### Geräteübergreifender Zugriff
+Mit denselben Login-Daten kann die App auf beliebig vielen Geräten (Smartphone, Tablet, PC) genutzt werden. Alle Geräte zeigen denselben Weinbestand.
 
-### Filter: Rebsorte als Suche
-Die Rebsorte-Auswahl wurde von einem Dropdown auf ein Freitextfeld umgestellt. Die Suche arbeitet mit Teilübereinstimmung – Weine mit mehreren Rebsorten werden korrekt gefunden (z. B. «Pinot» findet «Pinot Noir, Merlot»).
+### Datenmigration vom Vorgänger
+Bestehende Weine aus der Version ohne Cloud-Anbindung konnten einmalig per Erstimport in die neue Datenbank übernommen werden.
 
 ---
 
-## Verbesserungen
+## ✨ Benutzeroberfläche
 
-### Weinliste – kompaktere Darstellung
-- Weingut, Länderfahne, Gebiet und Jahrgang werden auf einer einzigen Zeile zusammengefasst.
-- Die Liste ist jetzt alphabetisch nach Weinname sortiert.
-- Die Sternebewertung erscheint direkt in der Titelzeile zwischen dem Namen und der Flaschenanzahl.
+### Gleichmässige Aufteilung Rebsorte / Ausbau
+In der Weinliste teilen sich Rebsorte und Ausbau neu je genau die Hälfte der Zeile – übersichtlicher und konsistenter.
 
-### Länderfahnen
-- In der Weinliste wird nur noch das Flaggen-Emoji angezeigt (ohne Ländernamen).
-- In der Detailansicht bleibt der vollständige Ländername mit Flagge erhalten.
+### Bewertungssterne in Weinfarbe
+Die Sterne in der Weinliste werden je nach Weintyp eingefärbt: Rot für Rotwein, Gold für Weisswein, Rosa für Rosé usw.
 
-### Filter: Startreihenfolge
-Der Trinkreife-Status-Filter ist beim Öffnen der App automatisch auf «Trinkbereit» voreingestellt. Alle anderen Filter starten auf «Alle».
+### Filter-Aktiv-Leiste dezenter gestaltet
+Die Anzeige aktiver Filter erscheint neu in einem ruhigen, warmen Grauton statt dem früheren grellen Farbton.
 
-### Filter: Neue Reihenfolge
-Das Filterpanel ist jetzt logisch gegliedert:
-1. Typ
-2. Eignung
-3. Rebsorte
-4. Mindest-Bewertung
-5. Trinkreife-Status
-6. Anbau
-7. Status
+### Neues Feld: Region
+In der Weinliste und im Erfassungsformular wurde das Feld „Region" ergänzt (z.B. Médoc, Pauillac). Es erscheint zwischen Gebiet und Jahrgang.
 
 ---
 
-## Behobene Fehler
+## 📱 App & Installation
 
-- Strukturfehler im HTML (doppeltes `</div>`) nach Umbau des Filterpanels behoben.
-- Defekte `rebuildSorteDropdown`-Funktion nach Umstellung auf Texteingabe bereinigt.
+### App-Icon für Smartphone
+Die App kann jetzt mit einem eigenen Icon zum Homescreen hinzugefügt werden. Das Icon zeigt eine Weinflasche mit Trauben auf weinrotem Hintergrund.
+
+### Web App Manifest
+Dank `manifest.json` verhält sich die App auf Android und iOS wie eine native App: kein Browser-Chrome, Vollbild, korrekter App-Name.
+
+### Hosting auf GitHub Pages
+Die App ist über **https://codo-immo.github.io/weinkeller/** erreichbar – kostenlos, HTTPS, immer aktuell nach jedem GitHub-Upload.
 
 ---
 
-## Technische Abhängigkeiten
+## 🗑️ Entfernte Funktionen
+
+### Etiketten-Scanner entfernt
+Der Kamera-Scanner für Weinetiketten wurde entfernt, da die Texterkennung keine zuverlässigen Ergebnisse lieferte.
+
+### Datenergänzung via Claude API entfernt
+Die automatische Datenanreicherung via KI wurde wieder entfernt, da direkte Browser-zu-API-Aufrufe aufgrund von CORS-Einschränkungen nicht zuverlässig funktionieren.
+
+---
+
+## ⚙️ Technischer Hintergrund
+
+| Was | Details |
+|---|---|
+| Architektur | Single-File HTML-App (kein Framework) |
+| Datenbank | Supabase PostgreSQL mit Row Level Security |
+| Auth | Supabase Auth (E-Mail / Passwort) |
+| Hosting | GitHub Pages |
+| Kosten | CHF 0.– (Free Tier) |
 
 | Ressource | Version | Zweck |
 |---|---|---|
 | Tabler Icons | 3.19.0 | Icons (CDN) |
-| Tesseract.js | 5.x | OCR-Erkennung beim Etikett-Scan (lazy load) |
+| Supabase JS | 2.x | Datenbank & Auth (CDN) |
 
-Alle Daten werden lokal im Browser (`localStorage`) gespeichert. Es wird keine Serververbindung benötigt – ausser beim Etikett-Scan (Tesseract.js-Download beim ersten Einsatz).
+---
+
+## Vorherige Versionen
+
+### v1.2 – 21.06.2026
+Etiketten-Scanner (OCR), erweiterte Filtermöglichkeiten (Eignung, Rebsorte als Freitextsuche), kompaktere Weinliste, Länderfahnen-Optimierung.
+
+### v1.1
+Grundversion mit lokalem Speicher, Barcode-Scanner, Grundfilter.
