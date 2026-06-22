@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Weinkeller">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
 <title>Mein Weinkeller</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -312,13 +314,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importJSON(this)">
     <div id="importStatus" style="font-size:13px;color:var(--tm);margin-top:10px;text-align:center;min-height:20px;"></div>
-    <div class="dsec" style="margin-top:16px;">Claude API Key</div>
-    <p style="font-size:12px;color:var(--tm);margin-bottom:8px;line-height:1.5;">Für die Datenergänzung. Wird nur lokal in diesem Browser gespeichert.</p>
-    <div style="display:flex;gap:8px;">
-      <input type="password" id="claudeKeyInput" placeholder="sk-ant-api03-..." style="flex:1;font-size:13px;padding:9px 11px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;">
-      <button class="abtn" style="flex-shrink:0;width:90px;" onclick="saveClaudeKey()">Speichern</button>
-    </div>
-    <div id="claudeKeyStatus" style="font-size:12px;color:var(--tm);margin-top:6px;min-height:16px;"></div>
     <div id="migrationSection" style="display:none;">
       <div class="dsec" style="margin-top:16px;">Erstimport</div>
       <p style="font-size:12px;color:var(--tm);margin-bottom:10px;line-height:1.5;">Die 29 Weine aus der App-Version ohne Supabase in die Datenbank importieren (nur einmalig nötig).</p>
@@ -341,12 +336,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <select id="f-typ"><option>Rotwein</option><option>Weisswein</option><option>Rosé</option><option>Schaumwein</option><option>Süsswein</option><option>Brandwein</option></select>
       </div>
       <div class="fg full"><label>Rebsorte</label><input id="f-sorte" type="text" placeholder="z.B. Cabernet Sauvignon"></div>
-      <div class="fg full" style="margin-top:4px;">
-        <button type="button" onclick="enrichWineData()" id="enrichBtn" style="width:100%;height:42px;background:var(--cs);color:var(--wr);border:1px solid var(--wrm);border-radius:var(--br-md);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;">
-          <i class="ti ti-sparkles"></i> Daten ergänzen via Claude
-        </button>
-        <div id="enrichStatus" style="font-size:12px;color:var(--tm);margin-top:5px;text-align:center;min-height:16px;"></div>
-      </div>
     </div>
     <div class="fsec">Herkunft</div>
     <div class="fgrid">
@@ -684,13 +673,6 @@ async function deleteWine(id){
 /* ── Sync Modal ── */
 function openSync(){
   document.getElementById('syncModal').classList.add('open');
-  const key=localStorage.getItem(CLAUDE_KEY_SK)||'';
-  if(key){
-    document.getElementById('claudeKeyInput').value=key;
-    const st=document.getElementById('claudeKeyStatus');
-    st.style.color='green';
-    st.textContent='✅ Key geladen: '+key.substring(0,12)+'…';
-  }
 }
 function closeSync(){document.getElementById('syncModal').classList.remove('open');document.getElementById('importStatus').textContent='';}
 
@@ -739,116 +721,6 @@ function exportCSV(){
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
 }
 
-/* ── Datenergänzung via Claude API ── */
-const CLAUDE_KEY_SK='wk_claude_key';
-
-function saveClaudeKey(){
-  const key=document.getElementById('claudeKeyInput').value.trim();
-  const st=document.getElementById('claudeKeyStatus');
-  if(!key){localStorage.removeItem(CLAUDE_KEY_SK);st.textContent='Key gelöscht.';return;}
-  localStorage.setItem(CLAUDE_KEY_SK,key);
-  st.style.color='green';st.textContent='✅ Key gespeichert.';
-  setTimeout(()=>st.textContent='',2000);
-}
-
-async function enrichWineData(){
-  let apiKey=localStorage.getItem(CLAUDE_KEY_SK)||'';
-  if(!apiKey){
-    openSync();
-    document.getElementById('enrichStatus').textContent='⚠️ Bitte zuerst Claude API Key im ↕ Menü speichern.';
-    return;
-  }
-  const name=document.getElementById('f-name').value.trim();
-  const weingut=document.getElementById('f-weingut').value.trim();
-  const jahr=document.getElementById('f-jahr').value.trim();
-  if(!name&&!weingut){
-    document.getElementById('enrichStatus').textContent='⚠️ Bitte mindestens Name oder Weingut eingeben.';
-    return;
-  }
-  const btn=document.getElementById('enrichBtn');
-  btn.disabled=true;
-  document.getElementById('enrichStatus').textContent='Claude wird befragt…';
-
-  const prompt=`Du bist ein Weinexperte. Ergänze die fehlenden Daten für diesen Wein.
-Wein: ${name||'–'}
-Weingut: ${weingut||'–'}
-Jahrgang: ${jahr||'–'}
-
-Antworte NUR mit einem JSON-Objekt ohne zusätzlichen Text:
-{
-  "typ": "Rotwein|Weisswein|Rosé|Schaumwein|Süsswein|Brandwein",
-  "sorte": "Rebsorte(n) auf Deutsch oder leer",
-  "land": "Herkunftsland auf Deutsch oder leer",
-  "gebiet": "Weinbaugebiet auf Deutsch oder leer",
-  "region": "Region/Appellation oder leer",
-  "degustation": "Kurze Beschreibung Nase und Gaumen auf Deutsch oder leer",
-  "eignung": "Essensempfehlung auf Deutsch oder leer",
-  "ausbau": "Ausbauart auf Deutsch oder leer",
-  "anbau": "BIO oder NACHHALTIG oder leer",
-  "trinkreife_ab": Jahreszahl als Zahl oder null,
-  "trinkreife": Jahreszahl als Zahl oder null
-}`;
-
-  try{
-    const payload=JSON.stringify({
-      model:'claude-haiku-4-5-20251001',
-      max_tokens:800,
-      messages:[{role:'user',content:prompt}]
-    });
-    // Versuch 1: ohne anthropic-dangerous-allow-browser (kein CORS-Preflight-Problem)
-    let res;
-    let corsError=false;
-    try{
-      res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json'},
-        body:payload
-      });
-    }catch(e1){
-      corsError=true;
-      // Versuch 2: mit Header (ältere API-Versionen)
-      try{
-        res=await fetch('https://api.anthropic.com/v1/messages',{
-          method:'POST',
-          headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-allow-browser':'true'},
-          body:payload
-        });
-        corsError=false;
-      }catch(e2){
-        throw new Error('Netzwerkfehler / CORS: Die App kann die Anthropic API nicht direkt erreichen. Prüfe ob du auf https://codo-immo.github.io/weinkeller/ bist (nicht lokal), und ob dein Browser Drittanbieter-Anfragen erlaubt. Details: '+e2.message);
-      }
-    }
-    if(!res.ok){
-      if(res.status===401){localStorage.removeItem(CLAUDE_KEY_SK);document.getElementById('enrichStatus').textContent='❌ Ungültiger API Key – bitte im ↕ Menü neu eingeben.';}
-      else if(res.status===403){document.getElementById('enrichStatus').textContent='❌ Zugriff verweigert (403) – API Key hat keine Berechtigung für dieses Modell.';}
-      else if(res.status===429){document.getElementById('enrichStatus').textContent='❌ Zu viele Anfragen – kurz warten und nochmals versuchen.';}
-      else{let errTxt='';try{const j=await res.json();errTxt=j.error?.message||'';}catch(e){}document.getElementById('enrichStatus').textContent='❌ Fehler HTTP '+res.status+(errTxt?' – '+errTxt:'');}
-      return;
-    }
-    const data=await res.json();
-    const text=data.content[0].text.trim();
-    const jsonMatch=text.match(/\{[\s\S]*\}/);
-    if(!jsonMatch)throw new Error('Kein JSON erhalten');
-    const w=JSON.parse(jsonMatch[0]);
-    if(w.typ)document.getElementById('f-typ').value=w.typ;
-    if(w.sorte)document.getElementById('f-sorte').value=w.sorte;
-    if(w.land)setLand(w.land);
-    if(w.gebiet)document.getElementById('f-gebiet').value=w.gebiet;
-    if(w.region)document.getElementById('f-region').value=w.region;
-    if(w.degustation)document.getElementById('f-degustation').value=w.degustation;
-    if(w.eignung)document.getElementById('f-eignung').value=w.eignung;
-    if(w.ausbau)document.getElementById('f-ausbau').value=w.ausbau;
-    if(w.anbau&&['BIO','NACHHALTIG'].includes(w.anbau))document.getElementById('f-anbau').value=w.anbau;
-    if(w.trinkreife_ab)document.getElementById('f-trinkreife-ab').value=w.trinkreife_ab;
-    if(w.trinkreife)document.getElementById('f-trinkreife').value=w.trinkreife;
-    document.getElementById('enrichStatus').style.color='green';
-    document.getElementById('enrichStatus').textContent='✅ Felder ergänzt – bitte prüfen und bei Bedarf anpassen.';
-  }catch(e){
-    document.getElementById('enrichStatus').textContent='❌ Fehler: '+e.message;
-  }finally{
-    btn.disabled=false;
-  }
-}
 
 initAuth();
 </script>
