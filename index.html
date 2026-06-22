@@ -685,7 +685,12 @@ async function deleteWine(id){
 function openSync(){
   document.getElementById('syncModal').classList.add('open');
   const key=localStorage.getItem(CLAUDE_KEY_SK)||'';
-  if(key)document.getElementById('claudeKeyInput').value=key;
+  if(key){
+    document.getElementById('claudeKeyInput').value=key;
+    const st=document.getElementById('claudeKeyStatus');
+    st.style.color='green';
+    st.textContent='✅ Key geladen: '+key.substring(0,12)+'…';
+  }
 }
 function closeSync(){document.getElementById('syncModal').classList.remove('open');document.getElementById('importStatus').textContent='';}
 
@@ -785,23 +790,39 @@ Antworte NUR mit einem JSON-Objekt ohne zusätzlichen Text:
 }`;
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'x-api-key':apiKey,
-        'anthropic-version':'2023-06-01',
-        'content-type':'application/json',
-        'anthropic-dangerous-allow-browser':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:800,
-        messages:[{role:'user',content:prompt}]
-      })
+    const payload=JSON.stringify({
+      model:'claude-haiku-4-5-20251001',
+      max_tokens:800,
+      messages:[{role:'user',content:prompt}]
     });
+    // Versuch 1: ohne anthropic-dangerous-allow-browser (kein CORS-Preflight-Problem)
+    let res;
+    let corsError=false;
+    try{
+      res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json'},
+        body:payload
+      });
+    }catch(e1){
+      corsError=true;
+      // Versuch 2: mit Header (ältere API-Versionen)
+      try{
+        res=await fetch('https://api.anthropic.com/v1/messages',{
+          method:'POST',
+          headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-allow-browser':'true'},
+          body:payload
+        });
+        corsError=false;
+      }catch(e2){
+        throw new Error('Netzwerkfehler / CORS: Die App kann die Anthropic API nicht direkt erreichen. Prüfe ob du auf https://codo-immo.github.io/weinkeller/ bist (nicht lokal), und ob dein Browser Drittanbieter-Anfragen erlaubt. Details: '+e2.message);
+      }
+    }
     if(!res.ok){
       if(res.status===401){localStorage.removeItem(CLAUDE_KEY_SK);document.getElementById('enrichStatus').textContent='❌ Ungültiger API Key – bitte im ↕ Menü neu eingeben.';}
-      else document.getElementById('enrichStatus').textContent='❌ Fehler: HTTP '+res.status;
+      else if(res.status===403){document.getElementById('enrichStatus').textContent='❌ Zugriff verweigert (403) – API Key hat keine Berechtigung für dieses Modell.';}
+      else if(res.status===429){document.getElementById('enrichStatus').textContent='❌ Zu viele Anfragen – kurz warten und nochmals versuchen.';}
+      else{let errTxt='';try{const j=await res.json();errTxt=j.error?.message||'';}catch(e){}document.getElementById('enrichStatus').textContent='❌ Fehler HTTP '+res.status+(errTxt?' – '+errTxt:'');}
       return;
     }
     const data=await res.json();
@@ -823,14 +844,3 @@ Antworte NUR mit einem JSON-Objekt ohne zusätzlichen Text:
     document.getElementById('enrichStatus').style.color='green';
     document.getElementById('enrichStatus').textContent='✅ Felder ergänzt – bitte prüfen und bei Bedarf anpassen.';
   }catch(e){
-    document.getElementById('enrichStatus').textContent='❌ Fehler: '+e.message;
-  }finally{
-    btn.disabled=false;
-  }
-}
-
-initAuth();
-</script>
-</body>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
