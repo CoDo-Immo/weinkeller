@@ -148,6 +148,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-p{background:var(--wr);color:#fff;border-color:var(--wr);}
 .btn-s{background:transparent;color:var(--tx);}
 
+/* Sheet header with action icons */
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;}
+.sheet-head h2{margin-bottom:0;flex:1;min-width:0;}
+.head-actions{display:flex;gap:8px;flex-shrink:0;}
+.head-ico{width:38px;height:38px;border-radius:var(--br-md);border:1px solid var(--bd);background:var(--cs);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;transition:opacity .12s,transform .1s;}
+.head-ico:active{opacity:.75;transform:scale(0.94);}
+.head-ico:disabled{opacity:.6;cursor:default;}
+.head-ico.save{background:var(--wr);color:#fff;border-color:var(--wr);}
+
 /* ── Detail View ── */
 .drows{display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:var(--br-md);overflow:hidden;margin-bottom:14px;}
 .drow{display:flex;justify-content:space-between;padding:9px 12px;font-size:13px;border-bottom:1px solid var(--bd);gap:12px;align-items:baseline;}
@@ -211,7 +220,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v1.3</span>
+      <span class="version-badge">v1.4</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
@@ -269,6 +278,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="chip on" onclick="toggleChip(this,'anbau','')">Alle</span>
         <span class="chip" onclick="toggleChip(this,'anbau','BIO')">🌿 BIO</span>
         <span class="chip" onclick="toggleChip(this,'anbau','NACHHALTIG')">♻️ Nachhaltig</span>
+        <span class="chip" onclick="toggleChip(this,'anbau','Biodynamisch')">🌙 Biodynamisch</span>
+        <span class="chip" onclick="toggleChip(this,'anbau','Demeter')">🌱 Demeter</span>
+        <span class="chip" onclick="toggleChip(this,'anbau','Konventionell')">🚜 Konventionell</span>
       </div>
     </div>
     <div class="fp-row">
@@ -326,7 +338,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- Erfassen/Bearbeiten -->
 <div class="overlay" id="addModal">
   <div class="sheet">
-    <h2 id="modalTitle"><i class="ti ti-plus" aria-hidden="true"></i> Erfassen <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button></h2>
+    <div class="sheet-head">
+      <h2 id="modalTitle"><i class="ti ti-plus" aria-hidden="true"></i> Erfassen</h2>
+      <div class="head-actions">
+        <button class="head-ico save" id="saveBtn" onclick="saveWine()" title="Speichern"><i class="ti ti-check"></i></button>
+        <button class="head-ico" onclick="closeAdd()" title="Abbrechen"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
     <div class="fsec">Wein</div>
     <div class="fgrid">
       <div class="fg full"><label>Name *</label><input id="f-name" type="text" placeholder="z.B. Château Margaux"></div>
@@ -355,9 +373,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="fgrid">
       <div class="fg full"><label>Degustation</label><textarea id="f-degustation" placeholder="Farbe, Nase, Gaumen, Abgang…"></textarea></div>
       <div class="fg full"><label>Eignung</label><input id="f-eignung" type="text" placeholder="z.B. Aperitif, Fleisch, Käse, Dessert"></div>
+      <div class="fg full"><label>Trinktemperatur</label><input id="f-trinktemperatur" type="text" placeholder="z.B. 16–18 °C"></div>
       <div class="fg full"><label>Ausbau</label><input id="f-ausbau" type="text" placeholder="z.B. Barrique 18 Monate"></div>
       <div class="fg full"><label>Anbau</label>
-        <select id="f-anbau"><option value="">– keine Angabe –</option><option value="BIO">BIO</option><option value="NACHHALTIG">NACHHALTIG</option></select>
+        <select id="f-anbau"><option value="">– keine Angabe –</option><option value="BIO">BIO</option><option value="NACHHALTIG">NACHHALTIG</option><option value="Biodynamisch">Biodynamisch</option><option value="Demeter">Demeter</option><option value="Konventionell">Konventionell</option></select>
       </div>
     </div>
     <div class="fsec">Keller</div>
@@ -383,10 +402,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="fg"><label>Trinkreife bis</label><input id="f-trinkreife" type="number" placeholder="2028"></div>
       <div class="fg full"><label>Notizen</label><textarea id="f-notizen" placeholder="Eigene Bemerkungen…"></textarea></div>
       <div class="fg full"><label>Lieferant</label><input id="f-lieferant" type="text" placeholder="z.B. Martel AG, Flaschenpost"></div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-s" onclick="closeAdd()">Abbrechen</button>
-      <button class="btn btn-p" onclick="saveWine()">Speichern</button>
     </div>
   </div>
 </div>
@@ -487,7 +502,9 @@ function uid(){return Math.random().toString(36).slice(2,10);}
 function stars(n){if(!n)return'';let s='';for(let i=1;i<=5;i++)s+=i<=n?'★':'☆';return s;}
 function trinkStatus(w){const now=new Date().getFullYear(),ab=w.trinkreife_ab,bis=w.trinkreife;if(ab&&now<ab)return'lagern';if(bis&&now>bis)return'over';if(ab||bis)return'ok';return null;}
 function trinkLabel(s){return s==='ok'?'✅ Trinkbereit':s==='lagern'?'⏳ Noch lagern':s==='over'?'⚠️ Überfällig':null;}
-function anbauTag(a){if(a==='BIO')return'<span class="tag tag-bio">🌿 BIO</span>';if(a==='NACHHALTIG')return'<span class="tag tag-nach">♻️ NACHHALTIG</span>';return'';}
+const ANBAU_META={'BIO':['🌿','tag-bio','bio-c'],'NACHHALTIG':['♻️','tag-nach','nach-c'],'Biodynamisch':['🌙','tag-bio','bio-c'],'Demeter':['🌱','tag-bio','bio-c'],'Konventionell':['🚜','tag-inaktiv','']};
+function anbauTag(a){const m=ANBAU_META[a];if(!m)return a?`<span class="tag">${a}</span>`:'';return`<span class="tag ${m[1]}">${m[0]} ${a}</span>`;}
+function anbauDV(a){const m=ANBAU_META[a];if(!m)return a;return`<span class="${m[2]}">${m[0]} ${a}</span>`;}
 
 /* ── Filter ── */
 function toggleFilter(){const p=document.getElementById('filterPanel'),btn=document.getElementById('filterToggle');btn.classList.toggle('active',p.classList.toggle('open'));}
@@ -548,7 +565,7 @@ function setFormBew(n){
 }
 
 /* ── Form helpers ── */
-const TXT_F=['name','weingut','sorte','gebiet','region','degustation','eignung','ausbau','notizen','lieferant'];
+const TXT_F=['name','weingut','sorte','gebiet','region','degustation','eignung','trinktemperatur','ausbau','notizen','lieferant'];
 const INT_F=['jahr','anzahl'];
 function clearForm(){
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)e.value='';});
@@ -562,7 +579,7 @@ function clearForm(){
   setFormBew(0);
   setLand('');
 }
-function openAdd(){editingId=null;document.getElementById('modalTitle').innerHTML='<i class="ti ti-plus"></i> Erfassen <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button>';clearForm();document.getElementById('addModal').classList.add('open');}
+function openAdd(){editingId=null;document.getElementById('modalTitle').innerHTML='<i class="ti ti-plus"></i> Erfassen';clearForm();document.getElementById('addModal').classList.add('open');}
 function closeAdd(){document.getElementById('addModal').classList.remove('open');}
 function readForm(){
   const w={};
@@ -581,15 +598,15 @@ function readForm(){
 async function saveWine(){
   if(!document.getElementById('f-name').value.trim()){document.getElementById('f-name').focus();return;}
   if(isSaving)return;isSaving=true;
-  const btn=document.querySelector('#addModal .btn-p');
-  if(btn){btn.textContent='Speichern…';btn.disabled=true;}
+  const btn=document.getElementById('saveBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
   const w={id:editingId||uid(),user_id:currentUser.id,...readForm()};
   try{
     await saveWineToDb(w);
     if(editingId){const i=wines.findIndex(x=>x.id===editingId);if(i>=0)wines[i]=w;}else wines.unshift(w);
     rebuildSorteDropdown();closeAdd();renderList();
   }catch(e){alert('Fehler beim Speichern: '+e.message);}
-  finally{isSaving=false;if(btn){btn.textContent='Speichern';btn.disabled=false;}}
+  finally{isSaving=false;if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i>';}}
 }
 
 /* ── Detail View ── */
@@ -601,7 +618,7 @@ function openDetail(id){
   const ts=trinkStatus(w),tl=trinkLabel(ts);
   const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
   const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
-  const cR=[['Eignung',w.eignung],['Anbau',w.anbau?`<span class="${w.anbau==='BIO'?'bio-c':'nach-c'}">${w.anbau==='BIO'?'🌿':'♻️'} ${w.anbau}</span>`:null]].filter(r=>r[1]);
+  const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Anbau',w.anbau?anbauDV(w.anbau):null]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
   s.innerHTML=`
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;">
@@ -653,14 +670,14 @@ function fillFormFromWine(w){
 function editWine(id){
   const w=wines.find(x=>x.id===id);if(!w)return;
   closeDetail();editingId=id;
-  document.getElementById('modalTitle').innerHTML='<i class="ti ti-edit"></i> Bearbeiten <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button>';
+  document.getElementById('modalTitle').innerHTML='<i class="ti ti-edit"></i> Bearbeiten';
   fillFormFromWine(w);
   document.getElementById('addModal').classList.add('open');
 }
 function duplicateWine(id){
   const w=wines.find(x=>x.id===id);if(!w)return;
   closeDetail();editingId=null;
-  document.getElementById('modalTitle').innerHTML='<i class="ti ti-copy"></i> Duplizieren <button class="cx" onclick="closeAdd()"><i class="ti ti-x"></i></button>';
+  document.getElementById('modalTitle').innerHTML='<i class="ti ti-copy"></i> Duplizieren';
   fillFormFromWine(w);
   document.getElementById('addModal').classList.add('open');
 }
@@ -679,7 +696,7 @@ function closeSync(){document.getElementById('syncModal').classList.remove('open
 /* ── JSON Export ── */
 function exportJSON(){
   const date=new Date().toISOString().slice(0,10);
-  const blob=new Blob([JSON.stringify({version:'1.2',exportDate:date,wines},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({version:'1.4',exportDate:date,wines},null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=`weinkeller_backup_${date}.json`;
@@ -714,8 +731,8 @@ function importJSON(input){
 
 /* ── CSV Export ── */
 function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
   const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv=[hdr,...rows].join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
