@@ -488,7 +488,7 @@ function rebuildSorteDropdown(){}
 
 /* ── Auth ── */
 function showLogin(){document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
-function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';}
+function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='';}
 let authMode='login';
 function toggleAuthMode(){
   authMode=authMode==='login'?'register':'login';
