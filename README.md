@@ -1,3 +1,51 @@
+# Mein Weinkeller – Release Notes v2.0
+
+**Datum:** 25.06.2026
+**Vorherige Version:** v1.4
+
+---
+
+## Übersicht
+
+Version 2.0 bringt drei UI-Verbesserungen und ein vollständig neues Desktop-Layout. Keine Datenbank-Migration nötig – alle Änderungen sind rein im Frontend.
+
+---
+
+## 🔍 Filter
+
+### Eignung-Filter mit mehreren Suchbegriffen
+Das Filterfeld «Eignung» unterstützt neu mehrere Suchbegriffe gleichzeitig – getrennt durch Leerzeichen oder Komma (z.B. «Fleisch Käse»). Die App zeigt nur Weine, die **alle** Begriffe enthalten (AND-Logik). Reihenfolge und genaue Schreibweise spielen keine Rolle.
+
+---
+
+## ✨ Benutzeroberfläche
+
+### Aktionsleiste als farbige Icons
+Die Aktionen in der Detailansicht werden ausschliesslich als Icons in einer Zeile dargestellt – kein Textbalken mehr. Reihenfolge: 🗑 Löschen (Rot) · 📋 Duplizieren (Weinrot hell) · ✕ Abbruch (Grau) · ✏️ Bearbeiten (Weinrot) · ➖ Abbuchen (Blau).
+
+### Löschbestätigung als App-interner Dialog
+Das native Browser-Bestätigungsfenster wurde durch einen eigenen Dialog ersetzt, der den Weinnamen anzeigt und zwei klar beschriftete Buttons bietet: «Abbrechen» und «Ja, löschen».
+
+---
+
+## 🖥️ Desktop-Layout (neu)
+
+Ab 768px Viewport-Breite wechselt die App automatisch in ein **dreispaltiges Layout**:
+
+- **Links (260px):** Filterbereich – immer sichtbar, kein Toggle-Button mehr nötig.
+- **Mitte (flexibel):** Weinliste mit Stat-Bar am unteren Rand.
+- **Rechts (380px):** Detailansicht – öffnet direkt beim Klick auf einen Wein, ohne Popup. Aktiver Wein wird in der Liste hervorgehoben.
+
+Auf dem Smartphone (unter 768px) bleibt das Mobile-Layout mit Overlays vollständig erhalten.
+
+---
+
+## 🚀 Bereitstellung
+
+Keine Supabase-Migration nötig. `index.html` auf GitHub aktualisieren – fertig.
+
+---
+
 # Mein Weinkeller – Release Notes v1.4
 
 **Datum:** 23.06.2026  
