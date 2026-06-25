@@ -156,6 +156,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .head-ico:active{opacity:.75;transform:scale(0.94);}
 .head-ico:disabled{opacity:.6;cursor:default;}
 .head-ico.save{background:var(--wr);color:#fff;border-color:var(--wr);}
+.head-ico.danger{color:#A32D2D;border-color:#F09595;background:#FCEBEB;}
+.head-ico.dup{color:var(--wr);border-color:var(--wrm);background:var(--wrl);}
+.head-ico.abbruch{color:#5F5E5A;border-color:#B4B2A9;background:#F1EFE8;}
+.head-ico.abbuchen{color:#185FA5;border-color:#85B7EB;background:#E6F1FB;}
+.detail-actions{display:flex;gap:8px;margin-top:8px;margin-bottom:8px;}
 
 /* ── Detail View ── */
 .drows{display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:var(--br-md);overflow:hidden;margin-bottom:14px;}
@@ -199,6 +204,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .login-toggle{text-align:center;margin-top:14px;font-size:13px;color:var(--tm);}
 .login-toggle a{color:var(--wr);text-decoration:none;font-weight:600;cursor:pointer;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── Desktop 3-Column ── */
+@media(min-width:768px){
+  #app{max-width:100%;display:flex;flex-direction:column;height:100vh;}
+  .topbar{flex-shrink:0;max-width:100%;}
+  .topbar h1{font-size:20px;}
+  .app-layout{display:grid;grid-template-columns:260px 1fr 380px;flex:1;min-height:0;}
+  .filter-panel{display:flex!important;position:static!important;border-bottom:none;border-right:1px solid var(--bd);overflow-y:auto;padding:16px;max-height:none;}
+  #filterToggle{display:none;}
+  #activeBar{display:none!important;}
+  .mid-col{display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+  #wineList{flex:1;overflow-y:auto;padding-bottom:20px;}
+  .stat-bar{flex-shrink:0;}
+  .right-panel{display:block;border-left:1px solid var(--bd);overflow-y:auto;background:var(--cb);}
+  .right-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:80%;text-align:center;padding:40px 24px;}
+  .right-empty i{font-size:48px;margin-bottom:12px;color:var(--bd);}
+  .right-empty p{font-size:14px;color:var(--tm);}
+  .right-panel>.sheet{border-radius:0;box-shadow:none;padding:24px 20px 100px;max-height:none;overflow:visible;width:100%;}
+  .right-panel>.sheet::before{display:none;}
+  .wine-card.selected{border-color:var(--wrm);box-shadow:0 0 0 2px rgba(139,46,74,0.12);}
+  .detail-actions{flex-wrap:wrap;}
+}
+.right-panel{display:none;}
 </style>
 </head>
 <body>
@@ -220,7 +248,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v1.4</span>
+      <span class="version-badge">v2.0</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
@@ -230,6 +258,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <div class="app-layout">
   <div class="filter-panel" id="filterPanel">
     <div class="fp-row">
       <div class="fp-lbl">Typ</div>
@@ -297,6 +326,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <div class="mid-col">
   <div class="filter-active-bar" id="activeBar">
     <span id="activeBarText"></span>
     <button class="fab-clear" onclick="clearAllFilters()">Zurücksetzen</button>
@@ -308,6 +338,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="stat"><div class="stat-val" id="statFlaschen">0</div><div class="stat-lbl">Flaschen</div></div>
     <div class="stat"><div class="stat-val" id="statWert">CHF 0</div><div class="stat-lbl">Schätzwert</div></div>
   </div>
+  </div><!-- /mid-col -->
+  <div class="right-panel" id="rightPanel">
+    <div class="right-empty"><i class="ti ti-bottle" aria-hidden="true"></i><p>Wein auswählen</p></div>
+  </div>
+  </div><!-- /app-layout -->
   <button class="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
 </div>
 
@@ -409,6 +444,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- Detail -->
 <div class="overlay" id="detailModal">
   <div class="sheet" id="detailSheet"></div>
+</div>
+
+<!-- Lösch-Bestätigung -->
+<div class="overlay" id="confirmModal">
+  <div class="sheet" style="padding-bottom:24px;">
+    <h2><i class="ti ti-trash" style="color:#A32D2D;"></i> Wein löschen?</h2>
+    <p id="confirmText" style="font-size:14px;color:var(--tm);margin-bottom:20px;line-height:1.5;"></p>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-s" style="border-color:var(--bd);" onclick="closeConfirm()">Abbrechen</button>
+      <button class="btn btn-p" style="background:#A32D2D;border-color:#A32D2D;" id="confirmOkBtn">Ja, löschen</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -524,7 +571,7 @@ function renderList(){
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;
     if(fMinBew>0&&(w.bewertung||0)<fMinBew)return false;
-    if(fEignung&&!(w.eignung||'').toLowerCase().includes(fEignung))return false;
+    if(fEignung){const terms=fEignung.split(/[\s,;]+/).filter(t=>t.length>0);const el=(w.eignung||'').toLowerCase();if(!terms.every(t=>el.includes(t)))return false;}
     if(sorteF&&!(w.sorte||'').toLowerCase().includes(sorteF.toLowerCase()))return false;
     if(fTrink){const s=trinkStatus(w);if(s!==fTrink)return false;}
     return true;
@@ -610,24 +657,20 @@ async function saveWine(){
 }
 
 /* ── Detail View ── */
+function isDesktop(){return window.innerWidth>=768;}
 function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('')}</div>`;}
-function openDetail(id){
-  const w=wines.find(x=>x.id===id);if(!w)return;
-  const s=document.getElementById('detailSheet');
+function buildDetailHTML(id,w){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
   const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
-  const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
+  const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
   const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Anbau',w.anbau?anbauDV(w.anbau):null]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
-  s.innerHTML=`
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;">
-      <div>
-        <div class="big-name">${w.name}</div>
-        ${w.weingut?`<div class="big-gut">${w.weingut}</div>`:''}
-        <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
-      </div>
-      <button class="cx" onclick="closeDetail()"><i class="ti ti-x"></i></button>
+  return`
+    <div style="margin-bottom:4px;">
+      <div class="big-name">${w.name}</div>
+      ${w.weingut?`<div class="big-gut">${w.weingut}</div>`:''}
+      <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
     </div>
     ${wR.length?'<div class="dsec">Wein</div>'+mkRows(wR):''}
     ${hR.length?'<div class="dsec">Herkunft</div>'+mkRows(hR):''}
@@ -635,23 +678,41 @@ function openDetail(id){
     ${cR.length?mkRows(cR):''}
     ${kR.length?'<div class="dsec">Keller</div>'+mkRows(kR):''}
     <div style="height:10px;"></div>
-    <div class="arow">
-      <button class="abtn primary" onclick="abbuchenOne('${id}')"><i class="ti ti-minus"></i> Abbuchen</button>
-      <button class="abtn" onclick="editWine('${id}')"><i class="ti ti-edit"></i> Bearbeiten</button>
-    </div>
-    <div class="arow">
-      <button class="abtn dup" onclick="duplicateWine('${id}')"><i class="ti ti-copy"></i> Duplizieren</button>
-      <button class="abtn danger" onclick="deleteWine('${id}')"><i class="ti ti-trash"></i> Löschen</button>
+    <div class="detail-actions">
+      <button class="head-ico danger" onclick="deleteWine('${id}')" title="Löschen"><i class="ti ti-trash"></i></button>
+      <button class="head-ico dup" onclick="duplicateWine('${id}')" title="Duplizieren"><i class="ti ti-copy"></i></button>
+      <button class="head-ico abbruch" onclick="closeDetail()" title="Abbruch"><i class="ti ti-x"></i></button>
+      <button class="head-ico save" onclick="editWine('${id}')" title="Bearbeiten"><i class="ti ti-edit"></i></button>
+      <button class="head-ico abbuchen" onclick="abbuchenOne('${id}')" title="Abbuchen"><i class="ti ti-minus"></i></button>
     </div>`;
-  document.getElementById('detailModal').classList.add('open');
 }
-function closeDetail(){document.getElementById('detailModal').classList.remove('open');}
+function openDetail(id){
+  const w=wines.find(x=>x.id===id);if(!w)return;
+  const html=buildDetailHTML(id,w);
+  if(isDesktop()){
+    document.getElementById('rightPanel').innerHTML=`<div class="sheet">${html}</div>`;
+    document.querySelectorAll('.wine-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelector(`.wine-card[onclick*="${id}"]`)?.classList.add('selected');
+  }else{
+    document.getElementById('detailSheet').innerHTML=html;
+    document.getElementById('detailModal').classList.add('open');
+  }
+}
+function closeDetail(){
+  if(isDesktop()){
+    document.getElementById('rightPanel').innerHTML='<div class="right-empty"><i class="ti ti-bottle" aria-hidden="true"></i><p>Wein auswählen</p></div>';
+    document.querySelectorAll('.wine-card').forEach(c=>c.classList.remove('selected'));
+  }else{
+    document.getElementById('detailModal').classList.remove('open');
+  }
+}
 async function abbuchenOne(id){
   const w=wines.find(x=>x.id===id);if(!w)return;
   if(w.anzahl<=0){alert('Keine Flaschen mehr vorhanden.');return;}
   w.anzahl--;
   try{await saveWineToDb(w);}catch(e){w.anzahl++;alert('Fehler: '+e.message);return;}
-  closeDetail();renderList();
+  renderList();
+  if(isDesktop()){openDetail(id);}else{closeDetail();}
 }
 
 function fillFormFromWine(w){
@@ -681,65 +742,14 @@ function duplicateWine(id){
   fillFormFromWine(w);
   document.getElementById('addModal').classList.add('open');
 }
-async function deleteWine(id){
-  if(!confirm('Eintrag wirklich löschen?'))return;
-  try{await deleteWineFromDb(id);}catch(e){alert('Fehler: '+e.message);return;}
-  wines=wines.filter(x=>x.id!==id);rebuildSorteDropdown();closeDetail();renderList();
-}
-
-/* ── Sync Modal ── */
-function openSync(){
-  document.getElementById('syncModal').classList.add('open');
-}
-function closeSync(){document.getElementById('syncModal').classList.remove('open');document.getElementById('importStatus').textContent='';}
-
-/* ── JSON Export ── */
-function exportJSON(){
-  const date=new Date().toISOString().slice(0,10);
-  const blob=new Blob([JSON.stringify({version:'1.4',exportDate:date,wines},null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`weinkeller_backup_${date}.json`;
-  a.click();
-}
-
-/* ── JSON Import ── */
-function importJSON(input){
-  const file=input.files[0];if(!file)return;
-  const st=document.getElementById('importStatus');
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    try{
-      const data=JSON.parse(e.target.result);
-      const imported=Array.isArray(data)?data:(data.wines||[]);
-      if(!imported.length){st.textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
-      st.textContent='Importiere…';
-      let added=0,updated=0;
-      for(const w of imported){
-        if(!w.id||!w.name)continue;
-        const exists=wines.some(x=>x.id===w.id);
-        await saveWineToDb(w);
-        if(exists)updated++;else added++;
-      }
-      await loadWines();
-      st.textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
-      input.value='';
-    }catch(err){st.textContent='❌ Fehler: '+err.message;}
+function deleteWine(id){
+  const w=wines.find(x=>x.id===id);if(!w)return;
+  document.getElementById('confirmText').textContent=`«${w.name}» wird unwiderruflich gelöscht.`;
+  document.getElementById('confirmOkBtn').onclick=async()=>{
+    closeConfirm();
+    try{await deleteWineFromDb(id);}catch(e){alert('Fehler: '+e.message);return;}
+    wines=wines.filter(x=>x.id!==id);rebuildSorteDropdown();closeDetail();renderList();
   };
-  reader.readAsText(file);
+  document.getElementById('confirmModal').classList.add('open');
 }
-
-/* ── CSV Export ── */
-function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
-  const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
-  const csv=[hdr,...rows].join('\n');
-  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
-}
-
-
-initAuth();
-</script>
-</body>
-</html>
+function closeConfirm(){document.getElementById('confirmModal').classList.remove('o
