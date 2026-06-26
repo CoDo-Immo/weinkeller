@@ -1,3 +1,81 @@
+# Mein Weinkeller – Release Notes v2.2
+
+**Datum:** 26.06.2026
+**Vorherige Version:** v2.1
+
+---
+
+## Übersicht
+
+Version 2.2 bringt einen **Viewer-Login** (Lesezugriff ohne Bearbeitungsrechte), eine verfeinerte **Sortierung** der Weinliste sowie die Anzeige von **Erfassungs- und Mutationsdatum** in der Detailansicht. Keine Datenbank-Migration nötig – lediglich die RLS-Policies in Supabase müssen einmalig aktualisiert werden (siehe `viewer_role_setup.sql`).
+
+---
+
+## 👁 Viewer-Login
+
+Ein zweiter Account kann neu als reiner Lesezugriff eingerichtet werden – z.B. für Familienmitglieder oder Gäste. Der Viewer sieht alle Weine, kann aber nichts erfassen, bearbeiten, abbuchen oder löschen.
+
+**Erkennungsmerkmale im Viewer-Modus:**
+- Blauer «👁 Viewer»-Badge in der Topbar
+- FAB-Button (+) zum Erfassen ausgeblendet
+- Detailansicht zeigt nur den Schliessen-Button, keine Aktionsbuttons
+- Erstimport-Bereich ausgeblendet
+
+**Einrichtung:** `viewer_role_setup.sql` im Supabase SQL Editor ausführen, dann im Dashboard unter Authentication → Users einen neuen User anlegen mit Raw user metadata `{"role": "viewer"}`. Details in der Installationsanleitung.
+
+---
+
+## 🔤 Sortierung Weinliste
+
+Bei Weinen mit identischem Namen und Weingut (z.B. mehrere Jahrgänge desselben Weins) werden die Einträge neu zusätzlich **nach Jahrgang aufsteigend** sortiert. Die alphabetische Primärsortierung bleibt erhalten.
+
+---
+
+## 📅 Erfassungs- und Mutationsdatum
+
+In der Detailansicht erscheint unterhalb der Aktionsbuttons ein dezenter Block mit:
+- **Erfasst:** Datum und Uhrzeit der ersten Erfassung
+- **Geändert:** Datum und Uhrzeit der letzten Mutation (wird nur angezeigt, wenn das Datum vom Erfassungsdatum abweicht)
+
+---
+
+## 🚀 Bereitstellung
+
+1. `viewer_role_setup.sql` im Supabase SQL Editor ausführen (einmalig)
+2. Viewer-Account im Supabase Dashboard anlegen (optional)
+3. `index.html` auf GitHub aktualisieren – fertig
+
+---
+
+# Mein Weinkeller – Release Notes v2.1
+
+**Datum:** 25.06.2026
+**Vorherige Version:** v2.0
+
+---
+
+## Übersicht
+
+Version 2.1 optimiert die Suchlogik und reorganisiert die Suchleiste für ein intuitiveres Bedienkonzept. Keine Datenbank-Migration, keine Supabase-Änderungen nötig.
+
+---
+
+## 🔍 Suche & Filter
+
+### Eignung-Suche: OR-Logik statt AND
+Die Eignung-Suche arbeitet neu mit **OR-Logik**: Es werden alle Weine angezeigt, die mindestens einen der eingegebenen Begriffe enthalten. Bisher wurden nur Weine angezeigt, die *alle* Begriffe enthielten (AND). Damit sind breitere Suchanfragen wie «Fisch Käse» deutlich praktikabler.
+
+### Eignung-Suche direkt in der Topbar
+Das Eignung-Suchfeld wurde aus dem Filterpanel in die **Topbar** verschoben und ersetzt dort das allgemeine Suchfeld. Das allgemeine Suchfeld (Name, Weingut, …) ist neu im Filterpanel unter «Wein suchen» zu finden. Dadurch ist die häufig genutzte Eignung-Suche sofort erreichbar, ohne das Panel öffnen zu müssen.
+
+---
+
+## 🚀 Bereitstellung
+
+`index.html` auf GitHub aktualisieren – fertig.
+
+---
+
 # Mein Weinkeller – Release Notes v2.0
 
 **Datum:** 25.06.2026
