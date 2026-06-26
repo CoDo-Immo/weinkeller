@@ -248,7 +248,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.1</span>
+      <span class="version-badge">v2.2</span>
+      <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
@@ -343,7 +344,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="right-empty"><i class="ti ti-bottle" aria-hidden="true"></i><p>Wein auswählen</p></div>
   </div>
   </div><!-- /app-layout -->
-  <button class="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
+  <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
 </div>
 
 
@@ -466,7 +467,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 /* ────────────────────────────────────────────────────────────────────── */
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let wines=[],editingId=null,currentUser=null,isSaving=false;
+let wines=[],editingId=null,currentUser=null,isSaving=false,isViewer=false;
 let fTyp='',fStatus='',fTrink='ok',fMinBew=0,fAnbau='',fEignung='';
 
 const FLAGS={'Frankreich':'🇫🇷','Italien':'🇮🇹','Spanien':'🇪🇸','Deutschland':'🇩🇪','Österreich':'🇦🇹','Schweiz':'🇨🇭','Portugal':'🇵🇹','Griechenland':'🇬🇷','Ungarn':'🇭🇺','Kroatien':'🇭🇷','Slowenien':'🇸🇮','Rumänien':'🇷🇴','Bulgarien':'🇧🇬','England':'🏴󠁧󠁢󠁥󠁮󠁧󁿢','Georgien':'🇬🇪','USA':'🇺🇸','Argentinien':'🇦🇷','Chile':'🇨🇱','Australien':'🇦🇺','Neuseeland':'🇳🇿','Südafrika':'🇿🇦'};
@@ -488,7 +489,15 @@ function rebuildSorteDropdown(){}
 
 /* ── Auth ── */
 function showLogin(){document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
-function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='';}
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='';
+  // Viewer-Modus anwenden
+  isViewer=(currentUser?.user_metadata?.role==='viewer');
+  document.getElementById('viewerBadge').style.display=isViewer?'inline-flex':'none';
+  document.getElementById('fab').style.display=isViewer?'none':'flex';
+  if(isViewer)document.getElementById('migrationSection').style.display='none';
+}
 let authMode='login';
 function toggleAuthMode(){
   authMode=authMode==='login'?'register':'login';
@@ -576,7 +585,11 @@ function renderList(){
     if(fTrink){const s=trinkStatus(w);if(s!==fTrink)return false;}
     return true;
   });
-  list.sort((a,b)=>a.name.localeCompare(b.name,'de'));
+  list.sort((a,b)=>{
+    const n=a.name.localeCompare(b.name,'de');if(n!==0)return n;
+    const g=(a.weingut||'').localeCompare(b.weingut||'','de');if(g!==0)return g;
+    return(a.jahr||9999)-(b.jahr||9999);
+  });
   const bar=document.getElementById('activeBar');
   if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);if(fEignung)parts.push('Eignung: '+fEignung);document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
   document.getElementById('statTotal').textContent=list.length;
@@ -679,13 +692,21 @@ function buildDetailHTML(id,w){
     ${kR.length?'<div class="dsec">Keller</div>'+mkRows(kR):''}
     <div style="height:10px;"></div>
     <div class="detail-actions">
-      <button class="head-ico danger" onclick="deleteWine('${id}')" title="Löschen"><i class="ti ti-trash"></i></button>
+      ${isViewer
+        ? `<button class="head-ico abbruch" onclick="closeDetail()" title="Schliessen"><i class="ti ti-x"></i></button>`
+        : `<button class="head-ico danger" onclick="deleteWine('${id}')" title="Löschen"><i class="ti ti-trash"></i></button>
       <button class="head-ico dup" onclick="duplicateWine('${id}')" title="Duplizieren"><i class="ti ti-copy"></i></button>
       <button class="head-ico abbruch" onclick="closeDetail()" title="Abbruch"><i class="ti ti-x"></i></button>
       <button class="head-ico save" onclick="editWine('${id}')" title="Bearbeiten"><i class="ti ti-edit"></i></button>
-      <button class="head-ico abbuchen" onclick="abbuchenOne('${id}')" title="Abbuchen"><i class="ti ti-minus"></i></button>
-    </div>`;
+      <button class="head-ico abbuchen" onclick="abbuchenOne('${id}')" title="Abbuchen"><i class="ti ti-minus"></i></button>`
+      }
+    </div>
+    ${(w.created_at||w.updated_at)?`<div style="margin-top:10px;padding:7px 10px;background:var(--cs);border-radius:var(--br-md);display:flex;flex-direction:column;gap:3px;">
+      ${w.created_at?`<span style="font-size:11px;color:var(--ts);"><i class="ti ti-calendar-plus" style="font-size:11px;margin-right:3px;"></i>Erfasst: ${fmtDate(w.created_at)}</span>`:''}
+      ${w.updated_at&&w.updated_at!==w.created_at?`<span style="font-size:11px;color:var(--ts);"><i class="ti ti-calendar-event" style="font-size:11px;margin-right:3px;"></i>Geändert: ${fmtDate(w.updated_at)}</span>`:''}
+    </div>`:''}`;
 }
+function fmtDate(iso){if(!iso)return'–';const d=new Date(iso);return d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+d.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});}
 function openDetail(id){
   const w=wines.find(x=>x.id===id);if(!w)return;
   const html=buildDetailHTML(id,w);
@@ -770,43 +791,4 @@ function exportJSON(){
   a.click();
 }
 
-/* ── JSON Import ── */
-function importJSON(input){
-  const file=input.files[0];if(!file)return;
-  const st=document.getElementById('importStatus');
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    try{
-      const data=JSON.parse(e.target.result);
-      const imported=Array.isArray(data)?data:(data.wines||[]);
-      if(!imported.length){st.textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
-      st.textContent='Importiere…';
-      let added=0,updated=0;
-      for(const w of imported){
-        if(!w.id||!w.name)continue;
-        const exists=wines.some(x=>x.id===w.id);
-        await saveWineToDb(w);
-        if(exists)updated++;else added++;
-      }
-      await loadWines();
-      st.textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
-      input.value='';
-    }catch(err){st.textContent='❌ Fehler: '+err.message;}
-  };
-  reader.readAsText(file);
-}
-
-/* ── CSV Export ── */
-function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
-  const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
-  const csv=[hdr,...rows].join('\n');
-  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
-}
-
-
-initAuth();
-</script>
-</body>
-</html>
+/* ── JSON
