@@ -248,11 +248,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.0</span>
+      <span class="version-badge">v2.1</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
-      <input type="text" id="searchInput" placeholder="Wein suchen…" oninput="renderList()">
+      <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()">
       <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
       <button class="icon-btn" onclick="openSync()" title="Import / Export"><i class="ti ti-arrows-transfer-down" aria-hidden="true"></i></button>
     </div>
@@ -273,8 +273,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
     <div class="fp-row">
-      <div class="fp-lbl">Eignung</div>
-      <input class="fp-select" type="text" id="f-eignung-filter" placeholder="z.B. Fleisch, Fisch, Käse…" oninput="renderList()" style="height:38px;">
+      <div class="fp-lbl">Wein suchen</div>
+      <input class="fp-select" type="text" id="searchInput" placeholder="Name, Weingut…" oninput="renderList()" style="height:38px;">
     </div>
     <div class="fp-row">
       <div class="fp-lbl">Rebsorte</div>
@@ -571,7 +571,7 @@ function renderList(){
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;
     if(fMinBew>0&&(w.bewertung||0)<fMinBew)return false;
-    if(fEignung){const terms=fEignung.split(/[\s,;]+/).filter(t=>t.length>0);const el=(w.eignung||'').toLowerCase();if(!terms.every(t=>el.includes(t)))return false;}
+    if(fEignung){const terms=fEignung.split(/[\s,;]+/).filter(t=>t.length>0);const el=(w.eignung||'').toLowerCase();if(!terms.some(t=>el.includes(t)))return false;}
     if(sorteF&&!(w.sorte||'').toLowerCase().includes(sorteF.toLowerCase()))return false;
     if(fTrink){const s=trinkStatus(w);if(s!==fTrink)return false;}
     return true;
