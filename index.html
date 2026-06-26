@@ -791,4 +791,43 @@ function exportJSON(){
   a.click();
 }
 
-/* ── JSON
+/* ── JSON Import ── */
+function importJSON(input){
+  const file=input.files[0];if(!file)return;
+  const st=document.getElementById('importStatus');
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const imported=Array.isArray(data)?data:(data.wines||[]);
+      if(!imported.length){st.textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
+      st.textContent='Importiere…';
+      let added=0,updated=0;
+      for(const w of imported){
+        if(!w.id||!w.name)continue;
+        const exists=wines.some(x=>x.id===w.id);
+        await saveWineToDb(w);
+        if(exists)updated++;else added++;
+      }
+      await loadWines();
+      st.textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
+      input.value='';
+    }catch(err){st.textContent='❌ Fehler: '+err.message;}
+  };
+  reader.readAsText(file);
+}
+
+/* ── CSV Export ── */
+function exportCSV(){
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
+  const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
+  const csv=[hdr,...rows].join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
+}
+
+
+initAuth();
+</script>
+</body>
+</html>
