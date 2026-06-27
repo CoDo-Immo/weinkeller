@@ -466,10 +466,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const SUPABASE_URL  = 'https://vzsmjneerahucqwisouv.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6c21qbmVlcmFodWNxd2lzb3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTIxOTEsImV4cCI6MjA5NzY4ODE5MX0.5irEYhQBJpxAKsnYQ28Wrd9H4qlvvUSFQDioqvGTqmo';
 /* ────────────────────────────────────────────────────────────────────── */
-if(typeof supabase === 'undefined'){
-  document.getElementById('loginErr').textContent = '⚠️ Bibliothek nicht geladen – bitte Internetverbindung prüfen und Seite neu laden (Cmd+Shift+R / Ctrl+Shift+R).';
-  throw new Error('supabase not loaded');
-}
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let wines=[],editingId=null,currentUser=null,isSaving=false,isViewer=false;
@@ -833,5 +829,4 @@ function importJSON(input){
 
 /* ── CSV Export ── */
 function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','boden','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkr
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet
