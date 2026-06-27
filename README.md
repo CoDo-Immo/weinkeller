@@ -1,3 +1,37 @@
+# Mein Weinkeller – Release Notes v2.3
+
+**Datum:** 27.06.2026
+**Vorherige Version:** v2.2
+
+---
+
+## Übersicht
+
+Version 2.3 ergänzt das neue Feld **Boden** (Bodentyp des Weinbergs) und verbessert die Benutzeroberfläche der Detailansicht: Alle Aktionsicons sind neu oben rechts neben dem Weinnamen platziert. Einmalig muss `add_boden_column.sql` in Supabase ausgeführt werden.
+
+---
+
+## 🌱 Neues Feld: Boden
+
+Neues Textfeld **Boden** in der Erfassungsmaske (nach «Ausbau»), z.B. «Kalkstein», «Schiefer, Lehm». In der Detailansicht erscheint es in der Rubrik **Wein** nach Ausbau und Anbau. Wird im CSV- und JSON-Export mitgeführt.
+
+**Supabase-Migration (einmalig):** `add_boden_column.sql` im SQL Editor ausführen.
+
+---
+
+## ✨ Aktionsicons oben rechts
+
+Alle Aktionsicons der Detailansicht sind neu oben rechts neben dem Weinnamen: 🗑 Löschen · 📋 Duplizieren · ➖ Abbuchen · ✕ Schliessen · ✏️ Bearbeiten. Die separate Aktionsleiste am unteren Ende entfällt.
+
+---
+
+## 🚀 Bereitstellung
+
+1. `add_boden_column.sql` im Supabase SQL Editor ausführen (einmalig)
+2. `index.html` auf GitHub aktualisieren – fertig
+
+---
+
 # Mein Weinkeller – Release Notes v2.2
 
 **Datum:** 26.06.2026

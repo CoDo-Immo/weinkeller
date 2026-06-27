@@ -248,7 +248,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.2</span>
+      <span class="version-badge">v2.3</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
@@ -411,6 +411,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="fg full"><label>Eignung</label><input id="f-eignung" type="text" placeholder="z.B. Aperitif, Fleisch, Käse, Dessert"></div>
       <div class="fg full"><label>Trinktemperatur</label><input id="f-trinktemperatur" type="text" placeholder="z.B. 16–18 °C"></div>
       <div class="fg full"><label>Ausbau</label><input id="f-ausbau" type="text" placeholder="z.B. Barrique 18 Monate"></div>
+      <div class="fg full"><label>Boden</label><input id="f-boden" type="text" placeholder="z.B. Kalkstein, Schiefer, Lehm"></div>
       <div class="fg full"><label>Anbau</label>
         <select id="f-anbau"><option value="">– keine Angabe –</option><option value="BIO">BIO</option><option value="NACHHALTIG">NACHHALTIG</option><option value="Biodynamisch">Biodynamisch</option><option value="Demeter">Demeter</option><option value="Konventionell">Konventionell</option></select>
       </div>
@@ -625,7 +626,7 @@ function setFormBew(n){
 }
 
 /* ── Form helpers ── */
-const TXT_F=['name','weingut','sorte','gebiet','region','degustation','eignung','trinktemperatur','ausbau','notizen','lieferant'];
+const TXT_F=['name','weingut','sorte','gebiet','region','degustation','eignung','trinktemperatur','ausbau','boden','notizen','lieferant'];
 const INT_F=['jahr','anzahl'];
 function clearForm(){
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)e.value='';});
@@ -675,15 +676,27 @@ function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"
 function buildDetailHTML(id,w){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
-  const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
+  const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
   const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
-  const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Anbau',w.anbau?anbauDV(w.anbau):null]].filter(r=>r[1]);
+  const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
   return`
-    <div style="margin-bottom:4px;">
-      <div class="big-name">${w.name}</div>
-      ${w.weingut?`<div class="big-gut">${w.weingut}</div>`:''}
-      <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;min-width:0;">
+        <div class="big-name">${w.name}</div>
+        ${w.weingut?`<div class="big-gut">${w.weingut}</div>`:''}
+        <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px;">
+        ${isViewer
+          ? `<button class="head-ico abbruch" onclick="closeDetail()" title="Schliessen"><i class="ti ti-x"></i></button>`
+          : `<button class="head-ico danger" onclick="deleteWine('${id}')" title="Löschen"><i class="ti ti-trash"></i></button>
+        <button class="head-ico dup" onclick="duplicateWine('${id}')" title="Duplizieren"><i class="ti ti-copy"></i></button>
+        <button class="head-ico abbuchen" onclick="abbuchenOne('${id}')" title="Abbuchen"><i class="ti ti-minus"></i></button>
+        <button class="head-ico abbruch" onclick="closeDetail()" title="Schliessen"><i class="ti ti-x"></i></button>
+        <button class="head-ico save" onclick="editWine('${id}')" title="Bearbeiten"><i class="ti ti-edit"></i></button>`
+        }
+      </div>
     </div>
     ${wR.length?'<div class="dsec">Wein</div>'+mkRows(wR):''}
     ${hR.length?'<div class="dsec">Herkunft</div>'+mkRows(hR):''}
@@ -691,16 +704,6 @@ function buildDetailHTML(id,w){
     ${cR.length?mkRows(cR):''}
     ${kR.length?'<div class="dsec">Keller</div>'+mkRows(kR):''}
     <div style="height:10px;"></div>
-    <div class="detail-actions">
-      ${isViewer
-        ? `<button class="head-ico abbruch" onclick="closeDetail()" title="Schliessen"><i class="ti ti-x"></i></button>`
-        : `<button class="head-ico danger" onclick="deleteWine('${id}')" title="Löschen"><i class="ti ti-trash"></i></button>
-      <button class="head-ico dup" onclick="duplicateWine('${id}')" title="Duplizieren"><i class="ti ti-copy"></i></button>
-      <button class="head-ico abbruch" onclick="closeDetail()" title="Abbruch"><i class="ti ti-x"></i></button>
-      <button class="head-ico save" onclick="editWine('${id}')" title="Bearbeiten"><i class="ti ti-edit"></i></button>
-      <button class="head-ico abbuchen" onclick="abbuchenOne('${id}')" title="Abbuchen"><i class="ti ti-minus"></i></button>`
-      }
-    </div>
     ${(w.created_at||w.updated_at)?`<div style="margin-top:10px;padding:7px 10px;background:var(--cs);border-radius:var(--br-md);display:flex;flex-direction:column;gap:3px;">
       ${w.created_at?`<span style="font-size:11px;color:var(--ts);"><i class="ti ti-calendar-plus" style="font-size:11px;margin-right:3px;"></i>Erfasst: ${fmtDate(w.created_at)}</span>`:''}
       ${w.updated_at&&w.updated_at!==w.created_at?`<span style="font-size:11px;color:var(--ts);"><i class="ti ti-calendar-event" style="font-size:11px;margin-right:3px;"></i>Geändert: ${fmtDate(w.updated_at)}</span>`:''}
@@ -819,15 +822,5 @@ function importJSON(input){
 
 /* ── CSV Export ── */
 function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
-  const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
-  const csv=[hdr,...rows].join('\n');
-  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
-}
-
-
-initAuth();
-</script>
-</body>
-</html>
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','boden','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkr
