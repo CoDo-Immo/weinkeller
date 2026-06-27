@@ -515,10 +515,11 @@ async function doLogin(){
   const btn=document.getElementById('loginBtn');
   btn.disabled=true;btn.textContent=authMode==='login'?'Einloggen…':'Registrieren…';
   const fn=authMode==='login'?db.auth.signInWithPassword({email,password:pw}):db.auth.signUp({email,password:pw});
-  const {error}=await fn;
+  const {data,error}=await fn;
   btn.disabled=false;btn.textContent=authMode==='login'?'Einloggen':'Registrieren';
   if(error){errEl.textContent='Fehler: '+error.message;return;}
   if(authMode==='register'){errEl.style.color='green';errEl.textContent='✅ Konto erstellt! Bitte jetzt einloggen.';authMode='login';return;}
+  if(data?.user){currentUser=data.user;showApp();await loadWines();}
 }
 async function doLogout(){await db.auth.signOut();wines=[];showLogin();}
 
