@@ -474,11 +474,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const SUPABASE_URL  = 'https://vzsmjneerahucqwisouv.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6c21qbmVlcmFodWNxd2lzb3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTIxOTEsImV4cCI6MjA5NzY4ODE5MX0.5irEYhQBJpxAKsnYQ28Wrd9H4qlvvUSFQDioqvGTqmo';
 /* ────────────────────────────────────────────────────────────────────── */
-if(typeof supabase==='undefined'){
-  const e=document.getElementById('loginErr');
-  if(e)e.textContent='⚠️ Verbindung fehlgeschlagen – bitte Seite mit Ctrl+Shift+R neu laden.';
-  throw new Error('supabase CDN not loaded');
-}
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let wines=[],editingId=null,currentUser=null,isSaving=false,isViewer=false;
@@ -826,4 +821,31 @@ function importJSON(input){
       if(!imported.length){st.textContent='⚠️ Keine Weine in der Datei gefunden.';return;}
       st.textContent='Importiere…';
       let added=0,updated=0;
-      for(const w of import
+      for(const w of imported){
+        if(!w.id||!w.name)continue;
+        const exists=wines.some(x=>x.id===w.id);
+        await saveWineToDb(w);
+        if(exists)updated++;else added++;
+      }
+      await loadWines();
+      st.textContent=`✅ ${added} hinzugefügt, ${updated} aktualisiert.`;
+      input.value='';
+    }catch(err){st.textContent='❌ Fehler: '+err.message;}
+  };
+  reader.readAsText(file);
+}
+
+/* ── CSV Export ── */
+function exportCSV(){
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','ausbau','boden','anbau','status','anzahl','preis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
+  const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
+  const csv=[hdr,...rows].join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
+}
+
+
+initAuth();
+</script>
+</body>
+</html>
