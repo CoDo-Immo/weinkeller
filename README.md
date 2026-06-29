@@ -7,7 +7,7 @@
 
 ## Übersicht
 
-Version 2.4 erweitert die Suche in der Kopfzeile um ein dediziertes Feld für Name und Weingut, ergänzt den Status «Bestellen» (inkl. Filter-Chip), macht das Eignung-Feld mehrzeilig und ordnet die Kopfzeilen-Suchfelder übersichtlich untereinander an. Keine Datenbank-Migration nötig.
+Version 2.4 erweitert Suche und Filter der App: neues Kopfzeilen-Suchfeld für Name/Weingut, Land-Filter im Filterpanel, neuer Status «Bestellen», mehrzeiliges Eignung-Feld und bereinigtes Filterpanel. Keine Datenbank-Migration nötig.
 
 ---
 
@@ -19,7 +19,13 @@ In der Kopfzeile gibt es neu ein zweites Suchfeld **Name / Weingut** direkt übe
 
 ## 📐 Suchfelder untereinander
 
-Die zwei Kopfzeilen-Suchfelder sind neu **vertikal gestapelt**: «Name / Weingut» oben (volle Breite), «Eignung» darunter mit den Aktionsbuttons (Filter, Import/Export) rechts daneben.
+Die zwei Kopfzeilen-Suchfelder sind **vertikal gestapelt** – gleiche Höhe, gleicher Look: «Name / Weingut» oben (volle Breite), «Eignung» darunter mit den Aktionsbuttons (Filter, Import/Export) rechts daneben.
+
+---
+
+## 🗺️ Neuer Filter: Land
+
+Im Filterpanel gibt es nach «Rebsorte» neu ein **Land-Dropdown**. Die verfügbaren Länder werden dynamisch aus den geladenen Weinen befüllt (inkl. Länderfahne). Wird kein Land ausgewählt, werden alle Weine angezeigt. Das gewählte Land erscheint auch in der Filter-Aktiv-Leiste.
 
 ---
 
@@ -32,6 +38,12 @@ Die Status-Auswahl (Erfassungsmaske und Filter-Chips) kennt neu den Wert **🛒 
 ## ✏️ Eignung als Textfeld (mehrzeilig)
 
 Das Feld **Eignung** in der Erfassungsmaske ist neu ein mehrzeiliges Textarea – analog zum Feld «Degustation». Längere Einträge lassen sich damit bequemer erfassen und lesen.
+
+---
+
+## 🧹 Filterpanel: «Wein suchen» entfernt
+
+Das Suchfeld «Wein suchen» wurde aus dem Filterpanel entfernt, da die Suche nach Name und Weingut neu direkt in der Kopfzeile verfügbar ist.
 
 ---
 

@@ -261,7 +261,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
-      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="width:100%;box-sizing:border-box;">
+      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="width:100%;box-sizing:border-box;height:38px;">
       <div style="display:flex;gap:8px;">
         <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()" style="flex:1;">
         <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
@@ -284,13 +284,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="chip" onclick="toggleChip(this,'typ','Brandwein')">🥃 Brandwein</span>
       </div>
     </div>
-    <div class="fp-row">
-      <div class="fp-lbl">Wein suchen</div>
-      <input class="fp-select" type="text" id="searchInput" placeholder="Name, Weingut…" oninput="renderList()" style="height:38px;">
-    </div>
+    <input type="hidden" id="searchInput" value="">
     <div class="fp-row">
       <div class="fp-lbl">Rebsorte</div>
       <input class="fp-select" type="text" id="f-sorte-filter" placeholder="z.B. Pinot Noir, Chardonnay…" oninput="renderList()" style="height:38px;">
+    </div>
+    <div class="fp-row">
+      <div class="fp-lbl">Land</div>
+      <select class="fp-select" id="fc-land-select" onchange="fLand=this.value;renderList();">
+        <option value="">Alle</option>
+      </select>
     </div>
     <div class="fp-row">
       <div class="fp-lbl">Mindest-Bewertung</div>
@@ -481,7 +484,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let wines=[],editingId=null,currentUser=null,isSaving=false,isViewer=false;
-let fTyp='',fStatus='',fTrink='ok',fMinBew=0,fAnbau='',fEignung='';
+let fTyp='',fStatus='',fTrink='ok',fMinBew=0,fAnbau='',fEignung='',fLand='';
 
 const FLAGS={'Frankreich':'🇫🇷','Italien':'🇮🇹','Spanien':'🇪🇸','Deutschland':'🇩🇪','Österreich':'🇦🇹','Schweiz':'🇨🇭','Portugal':'🇵🇹','Griechenland':'🇬🇷','Ungarn':'🇭🇺','Kroatien':'🇭🇷','Slowenien':'🇸🇮','Rumänien':'🇷🇴','Bulgarien':'🇧🇬','England':'🏴󠁧󠁢󠁥󠁮󠁧󁿢','Georgien':'🇬🇪','USA':'🇺🇸','Argentinien':'🇦🇷','Chile':'🇨🇱','Australien':'🇦🇺','Neuseeland':'🇳🇿','Südafrika':'🇿🇦'};
 function flagOf(land){return FLAGS[land]||'';}
@@ -548,6 +551,7 @@ async function loadWines(){
   const {data,error}=await db.from('wines').select('*').order('name');
   if(error){el.innerHTML='<div class="empty"><i class="ti ti-wifi-off"></i><p>Verbindungsfehler.<br>Bitte Seite neu laden.</p></div>';return;}
   wines=data||[];
+  populateLandFilter();
   if(!wines.length)document.getElementById('migrationSection').style.display='block';
   renderList();
 }
@@ -586,16 +590,17 @@ function anbauDV(a){const m=ANBAU_META[a];if(!m)return a;return`<span class="${m
 function toggleFilter(){const p=document.getElementById('filterPanel'),btn=document.getElementById('filterToggle');btn.classList.toggle('active',p.classList.toggle('open'));}
 function toggleChip(el,group,val){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');if(group==='typ')fTyp=val;else if(group==='status')fStatus=val;else if(group==='trink')fTrink=val;else if(group==='anbau')fAnbau=val;renderList();}
 function setMinBew(n){fMinBew=n;for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.toggle('on',i<=n&&n>0);renderList();}
-function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('f-sorte-filter').value='';document.getElementById('searchInput').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
-function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||document.getElementById('f-sorte-filter').value||(document.getElementById('searchInput').value||'').trim();}
+function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';fLand='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('fc-land-select').value='';document.getElementById('f-sorte-filter').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
+function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||fLand||document.getElementById('f-sorte-filter').value;}
 
+function populateLandFilter(){var sel=document.getElementById("fc-land-select");var prev=sel.value;var lands=[...new Set(wines.map(function(w){return w.land||""}).filter(function(l){return l}))].sort(function(a,b){return a.localeCompare(b,"de")});sel.innerHTML="<option value=\"\">(Alle)</option>"+lands.map(function(l){return "<option value=\""+l+"\">"+(FLAGS[l]||"")+" "+l+"</option>"}).join("");if(lands.indexOf(prev)>=0)sel.value=prev;}
 /* ── Render List ── */
 function renderList(){
   const q=(document.getElementById('searchInput').value||'').toLowerCase();
   const sorteF=document.getElementById('f-sorte-filter').value;
   fEignung=(document.getElementById('f-eignung-filter').value||'').toLowerCase().trim();const fName=(document.getElementById('f-name-filter').value||'').toLowerCase().trim();
   let list=wines.filter(w=>{
-    if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;if(fName&&!`${w.name} ${w.weingut}`.toLowerCase().includes(fName))return false;
+    if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;if(fName&&!`${w.name} ${w.weingut}`.toLowerCase().includes(fName))return false;if(fLand&&(w.land||"")!==fLand)return false;
     if(fTyp&&w.typ!==fTyp)return false;
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;
@@ -611,7 +616,7 @@ function renderList(){
     return(a.jahr||9999)-(b.jahr||9999);
   });
   const bar=document.getElementById('activeBar');
-  if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);if(fEignung)parts.push('Eignung: '+fEignung);document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
+  if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);if(fLand)parts.push(fLand);if(fEignung)parts.push('Eignung: '+fEignung);document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
   document.getElementById('statTotal').textContent=list.length;
   document.getElementById('statFlaschen').textContent=list.reduce((a,w)=>a+(w.anzahl||0),0);
   document.getElementById('statWert').textContent='CHF '+Math.round(list.reduce((a,w)=>a+(w.anzahl||0)*(w.preis||0),0)).toLocaleString('de-CH');
