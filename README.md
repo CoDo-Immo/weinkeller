@@ -7,19 +7,25 @@
 
 ## Übersicht
 
-Version 2.4 erweitert die Suche in der Kopfzeile um ein dediziertes Feld für Name und Weingut, ergänzt den Status «Bestellen» und macht das Eignung-Feld in der Erfassungsmaske mehrzeilig. Keine Datenbank-Migration nötig.
+Version 2.4 erweitert die Suche in der Kopfzeile um ein dediziertes Feld für Name und Weingut, ergänzt den Status «Bestellen» (inkl. Filter-Chip), macht das Eignung-Feld mehrzeilig und ordnet die Kopfzeilen-Suchfelder übersichtlich untereinander an. Keine Datenbank-Migration nötig.
 
 ---
 
 ## 🔍 Neues Suchfeld: Name / Weingut
 
-In der Kopfzeile gibt es neu ein zweites Suchfeld **Name / Weingut** direkt neben dem Eignung-Suchfeld. Damit kann gezielt nach Weinname oder Weingut gesucht werden, ohne das allgemeine Suchfeld im Filterpanel zu öffnen. Die beiden Kopfzeilen-Suchfelder (Eignung und Name/Weingut) arbeiten unabhängig und können kombiniert werden.
+In der Kopfzeile gibt es neu ein zweites Suchfeld **Name / Weingut** direkt über dem Eignung-Suchfeld. Damit kann gezielt nach Weinname oder Weingut gesucht werden, ohne das Filterpanel zu öffnen. Die beiden Felder arbeiten unabhängig und können kombiniert werden.
+
+---
+
+## 📐 Suchfelder untereinander
+
+Die zwei Kopfzeilen-Suchfelder sind neu **vertikal gestapelt**: «Name / Weingut» oben (volle Breite), «Eignung» darunter mit den Aktionsbuttons (Filter, Import/Export) rechts daneben.
 
 ---
 
 ## 🏷️ Neuer Status: Bestellen
 
-Die Status-Auswahl (Erfassungsmaske und Filter) kennt neu den Wert **🛒 Bestellen** – für Weine, die nachbestellt werden sollen. Dieser Status erscheint als orangefarbenes Label in der Weinliste und Detailansicht. Bestehende Werte (Aktiv, Bestellt, Inaktiv) bleiben unverändert.
+Die Status-Auswahl (Erfassungsmaske und Filter-Chips) kennt neu den Wert **🛒 Bestellen** – für Weine, die nachbestellt werden sollen. Der Filter-Chip erscheint im Filterpanel zwischen «📦 Bestellt» und «○ Inaktiv». In Weinliste und Detailansicht wird der Status als orangefarbenes Label dargestellt. Bestehende Werte (Aktiv, Bestellt, Inaktiv) bleiben unverändert.
 
 ---
 
