@@ -261,7 +261,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
-      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="width:100%;height:38px;">
+      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="width:100%;height:38px;flex:none;">
       <div style="display:flex;gap:8px;">
         <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()" style="flex:1;">
         <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
