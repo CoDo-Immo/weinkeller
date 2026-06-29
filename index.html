@@ -99,7 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-nach{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5;}
 .tag-aktiv{background:#EAF3DE;color:#3B6D11;border-color:#97C459;}
 .tag-bestellt{background:#E6F1FB;color:#185FA5;border-color:#85B7EB;}
-.tag-inaktiv{background:var(--cs);color:var(--ts);border-color:var(--bd);}
+.tag-inaktiv{background:var(--cs);color:var(--ts);border-color:var(--bd);}.tag-bestellen{background:#FEF3E2;color:#B45309;border-color:#F59E0B;}
 .stars-disp{color:var(--wr);font-size:12px;margin-left:21px;margin-top:4px;letter-spacing:1px;}
 
 /* ── Stat Bar ── */
@@ -192,7 +192,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .big-gut{font-size:13px;color:var(--tm);margin-bottom:2px;}
 .big-sub{font-size:13px;color:var(--tm);margin-bottom:14px;}
 .bio-c{color:#3B6D11;}.nach-c{color:#0F6E56;}
-.status-aktiv{color:#3B6D11;font-weight:600;}.status-bestellt{color:#185FA5;font-weight:600;}.status-inaktiv{color:var(--tm);}
+.status-aktiv{color:#3B6D11;font-weight:600;}.status-bestellt{color:#185FA5;font-weight:600;}.status-inaktiv{color:var(--tm);}.status-bestellen{color:#B45309;font-weight:600;}
 
 .fab-scan{display:none;}
 
@@ -243,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.3</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.4</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -256,11 +256,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.3</span>
+      <span class="version-badge">v2.4</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
+      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="flex:1;">
       <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()">
       <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
       <button class="icon-btn" onclick="openSync()" title="Import / Export"><i class="ti ti-arrows-transfer-down" aria-hidden="true"></i></button>
@@ -416,7 +417,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="fsec">Charakter</div>
     <div class="fgrid">
       <div class="fg full"><label>Degustation</label><textarea id="f-degustation" placeholder="Farbe, Nase, Gaumen, Abgang…"></textarea></div>
-      <div class="fg full"><label>Eignung</label><input id="f-eignung" type="text" placeholder="z.B. Aperitif, Fleisch, Käse, Dessert"></div>
+      <div class="fg full"><label>Eignung</label><textarea id="f-eignung" placeholder="z.B. Aperitif, Fleisch, Käse, Dessert"></textarea></div>
       <div class="fg full"><label>Trinktemperatur</label><input id="f-trinktemperatur" type="text" placeholder="z.B. 16–18 °C"></div>
       <div class="fg full"><label>Ausbau</label><input id="f-ausbau" type="text" placeholder="z.B. Barrique 18 Monate"></div>
       <div class="fg full"><label>Boden</label><input id="f-boden" type="text" placeholder="z.B. Kalkstein, Schiefer, Lehm"></div>
@@ -441,7 +442,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <input type="hidden" id="f-bewertung" value="">
       </div>
       <div class="fg"><label>Status</label>
-        <select id="f-status"><option value="Aktiv">Aktiv</option><option value="Bestellt">Bestellt</option><option value="Inaktiv">Inaktiv</option></select>
+        <select id="f-status"><option value="Aktiv">Aktiv</option><option value="Bestellt">Bestellt</option><option value="Bestellen">Bestellen</option><option value="Inaktiv">Inaktiv</option></select>
       </div>
       <div class="fg"><label>Trinkreife ab</label><input id="f-trinkreife-ab" type="number" placeholder="2024"></div>
       <div class="fg"><label>Trinkreife bis</label><input id="f-trinkreife" type="number" placeholder="2028"></div>
@@ -489,8 +490,8 @@ const IMPORT=[{"id":"mw0jjf3y","name":"Riesling Brand Grand Crue","weingut":"Pau
 function typClass(t){return t==='Rotwein'?'c-rot':t==='Weisswein'?'c-weis':t==='Rosé'?'c-rose':t==='Schaumwein'?'c-schau':t==='Süsswein'?'c-suss':'c-brand';}
 function dotClass(t){return t==='Rotwein'?'d-rot':t==='Weisswein'?'d-weis':t==='Rosé'?'d-rose':t==='Schaumwein'?'d-schau':t==='Süsswein'?'d-suss':'d-brand';}
 function dotColor(t){return t==='Rotwein'?'#8B2E4A':t==='Weisswein'?'#C8A93B':t==='Rosé'?'#E8889E':t==='Schaumwein'?'#7BBBD8':t==='Süsswein'?'#9B75C8':'#C07A4A';}
-function statusTag(s){if(s==='Aktiv')return'<span class="tag tag-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="tag tag-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="tag tag-inaktiv">○ Inaktiv</span>';return'';}
-function statusDV(s){if(s==='Aktiv')return'<span class="status-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="status-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="status-inaktiv">○ Inaktiv</span>';return s||'–';}
+function statusTag(s){if(s==='Aktiv')return'<span class="tag tag-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="tag tag-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="tag tag-inaktiv">○ Inaktiv</span>';if(s==='Bestellen')return'<span class="tag tag-bestellen">🛒 Bestellen</span>';return'';}
+function statusDV(s){if(s==='Aktiv')return'<span class="status-aktiv">✅ Aktiv</span>';if(s==='Bestellt')return'<span class="status-bestellt">📦 Bestellt</span>';if(s==='Inaktiv')return'<span class="status-inaktiv">○ Inaktiv</span>';if(s==='Bestellen')return'<span class="status-bestellen">🛒 Bestellen</span>';return s||'–';}
 function landChanged(){const v=document.getElementById('f-land').value;document.getElementById('landCustomGrp').style.display=v==='anderes'?'flex':'none';if(v!=='anderes')document.getElementById('f-land-custom').value='';}
 function getLand(){const v=document.getElementById('f-land').value;if(v==='anderes')return document.getElementById('f-land-custom').value.trim();return v;}
 function setLand(val){const sel=document.getElementById('f-land'),grp=document.getElementById('landCustomGrp');if(!val){sel.value='';grp.style.display='none';return;}if(EU.includes(val)){sel.value=val;grp.style.display='none';}else{sel.value='anderes';grp.style.display='flex';document.getElementById('f-land-custom').value=val;}}
@@ -582,16 +583,16 @@ function anbauDV(a){const m=ANBAU_META[a];if(!m)return a;return`<span class="${m
 function toggleFilter(){const p=document.getElementById('filterPanel'),btn=document.getElementById('filterToggle');btn.classList.toggle('active',p.classList.toggle('open'));}
 function toggleChip(el,group,val){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');if(group==='typ')fTyp=val;else if(group==='status')fStatus=val;else if(group==='trink')fTrink=val;else if(group==='anbau')fAnbau=val;renderList();}
 function setMinBew(n){fMinBew=n;for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.toggle('on',i<=n&&n>0);renderList();}
-function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-sorte-filter').value='';document.getElementById('searchInput').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
+function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('f-sorte-filter').value='';document.getElementById('searchInput').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
 function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||document.getElementById('f-sorte-filter').value||(document.getElementById('searchInput').value||'').trim();}
 
 /* ── Render List ── */
 function renderList(){
   const q=(document.getElementById('searchInput').value||'').toLowerCase();
   const sorteF=document.getElementById('f-sorte-filter').value;
-  fEignung=(document.getElementById('f-eignung-filter').value||'').toLowerCase().trim();
+  fEignung=(document.getElementById('f-eignung-filter').value||'').toLowerCase().trim();const fName=(document.getElementById('f-name-filter').value||'').toLowerCase().trim();
   let list=wines.filter(w=>{
-    if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;
+    if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;if(fName&&!`${w.name} ${w.weingut}`.toLowerCase().includes(fName))return false;
     if(fTyp&&w.typ!==fTyp)return false;
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;

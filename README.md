@@ -1,3 +1,40 @@
+# Mein Weinkeller – Release Notes v2.4
+
+**Datum:** 29.06.2026
+**Vorherige Version:** v2.3
+
+---
+
+## Übersicht
+
+Version 2.4 erweitert die Suche in der Kopfzeile um ein dediziertes Feld für Name und Weingut, ergänzt den Status «Bestellen» und macht das Eignung-Feld in der Erfassungsmaske mehrzeilig. Keine Datenbank-Migration nötig.
+
+---
+
+## 🔍 Neues Suchfeld: Name / Weingut
+
+In der Kopfzeile gibt es neu ein zweites Suchfeld **Name / Weingut** direkt neben dem Eignung-Suchfeld. Damit kann gezielt nach Weinname oder Weingut gesucht werden, ohne das allgemeine Suchfeld im Filterpanel zu öffnen. Die beiden Kopfzeilen-Suchfelder (Eignung und Name/Weingut) arbeiten unabhängig und können kombiniert werden.
+
+---
+
+## 🏷️ Neuer Status: Bestellen
+
+Die Status-Auswahl (Erfassungsmaske und Filter) kennt neu den Wert **🛒 Bestellen** – für Weine, die nachbestellt werden sollen. Dieser Status erscheint als orangefarbenes Label in der Weinliste und Detailansicht. Bestehende Werte (Aktiv, Bestellt, Inaktiv) bleiben unverändert.
+
+---
+
+## ✏️ Eignung als Textfeld (mehrzeilig)
+
+Das Feld **Eignung** in der Erfassungsmaske ist neu ein mehrzeiliges Textarea – analog zum Feld «Degustation». Längere Einträge lassen sich damit bequemer erfassen und lesen.
+
+---
+
+## 🚀 Bereitstellung
+
+Keine Supabase-Migration nötig. `index.html` auf GitHub aktualisieren – fertig.
+
+---
+
 # Mein Weinkeller – Release Notes v2.3
 
 **Datum:** 27.06.2026
