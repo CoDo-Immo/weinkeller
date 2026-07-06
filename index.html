@@ -745,22 +745,35 @@ function rebLookup(token){let t=rebNorm(token);if(!t||t==='moelleux')return null
 function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</span><i class="ti ti-info-circle" onclick="showRebsorteInfo('${id}')" title="Rebsorten-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:16px;"></i>`;}
 (function(){if(document.getElementById('rebiStyle'))return;const st=document.createElement('style');st.id='rebiStyle';st.textContent=`
   #rebiOverlay{position:fixed;inset:0;z-index:99999;display:none;}
-  #rebiOverlay .rebi-back{position:absolute;inset:0;background:rgba(0,0,0,.5);}
-  #rebiOverlay .rebi-sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86vh;display:flex;flex-direction:column;background:var(--bg,#fff);color:var(--tx,#222);border:1px solid var(--bd,#ddd);border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);}
-  #rebiOverlay .rebi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:700;font-size:15px;border-bottom:1px solid var(--bd,#eee);}
+  #rebiOverlay .rebi-back{position:absolute;inset:0;background:rgba(0,0,0,.55);}
+  #rebiOverlay .rebi-sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86vh;display:flex;flex-direction:column;background:#fffdfb;color:#2b2320;border:1px solid #e7ddd4;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+  #rebiOverlay .rebi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:700;font-size:15px;color:#6b2737;border-bottom:1px solid #eadfd8;}
   #rebiOverlay .rebi-scroll{padding:14px 16px;overflow-y:auto;}
-  #rebiOverlay .rebi-card{border:1px solid var(--bd,#e2e2e2);border-left:5px solid var(--bd,#ccc);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  #rebiOverlay .rebi-card{background:#ffffff;border:1px solid #eadfd8;border-left:5px solid #cbb8a8;border-radius:12px;padding:12px 14px;margin-bottom:12px;}
   #rebiOverlay .rebi-card.rot{border-left-color:#7b1e3b;}
-  #rebiOverlay .rebi-card.weiss{border-left-color:#c8a04b;}
+  #rebiOverlay .rebi-card.weiss{border-left-color:#b8860b;}
   #rebiOverlay .rebi-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
-  #rebiOverlay .rebi-name{font-size:16px;font-weight:700;}
+  #rebiOverlay .rebi-name{font-size:16px;font-weight:700;color:#2b2320;}
   #rebiOverlay .rebi-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:999px;white-space:nowrap;}
-  #rebiOverlay .rebi-badge.rot{background:rgba(123,30,59,.14);color:#7b1e3b;}
-  #rebiOverlay .rebi-badge.weiss{background:rgba(200,160,75,.22);color:#8a6d1f;}
+  #rebiOverlay .rebi-badge.rot{background:#f3d9de;color:#6b2737;}
+  #rebiOverlay .rebi-badge.weiss{background:#f2e7c8;color:#7a5c12;}
   #rebiOverlay .rebi-row{display:flex;gap:10px;font-size:13px;padding:2px 0;line-height:1.45;}
-  #rebiOverlay .rebi-row span{color:var(--ts,#888);min-width:96px;flex-shrink:0;}
-  #rebiOverlay .rebi-row b{font-weight:600;color:var(--tx,#222);}
-  #rebiOverlay .rebi-miss{font-size:12px;color:var(--ts,#888);padding:6px 2px;}
+  #rebiOverlay .rebi-row span{color:#8a7d76;min-width:96px;flex-shrink:0;}
+  #rebiOverlay .rebi-row b{font-weight:600;color:#2b2320;}
+  #rebiOverlay .rebi-miss{font-size:12px;color:#8a7d76;padding:6px 2px;}
+  @media (prefers-color-scheme: dark){
+    #rebiOverlay .rebi-sheet{background:#241f1c;color:#efe7e0;border-color:#3a322d;}
+    #rebiOverlay .rebi-head{color:#e8b3bf;border-bottom-color:#3a322d;}
+    #rebiOverlay .rebi-card{background:#2b2523;border-color:#3a322d;border-left-color:#5a4a44;}
+    #rebiOverlay .rebi-card.rot{border-left-color:#c76b7e;}
+    #rebiOverlay .rebi-card.weiss{border-left-color:#d9b24e;}
+    #rebiOverlay .rebi-name{color:#f3ede7;}
+    #rebiOverlay .rebi-badge.rot{background:rgba(199,107,126,.22);color:#eab8c2;}
+    #rebiOverlay .rebi-badge.weiss{background:rgba(217,178,78,.2);color:#e6c980;}
+    #rebiOverlay .rebi-row span{color:#b3a79f;}
+    #rebiOverlay .rebi-row b{color:#efe7e0;}
+    #rebiOverlay .rebi-miss{color:#b3a79f;}
+  }
 `;document.head.appendChild(st);})();
 function showRebsorteInfo(id){
   const w=wines.find(x=>x.id===id);if(!w)return;
