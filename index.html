@@ -243,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.4</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.5</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -256,7 +256,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.4</span>
+      <span class="version-badge">v2.5</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
@@ -545,7 +545,7 @@ async function doLogin(){
 async function doLogout(){await db.auth.signOut();wines=[];showLogin();}
 
 /* ── Data Layer ── */
-async function loadWines(){
+async function loadWines(){loadRebsorten();
   const el=document.getElementById('wineList');
   el.innerHTML='<div class="empty"><i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i><p style="margin-top:8px;">Weine werden geladen…</p></div>';
   const {data,error}=await db.from('wines').select('*').order('name');
@@ -635,7 +635,7 @@ function renderList(){
         <div class="wc-cnt">${w.anzahl} Fl.</div>
       </div>
       ${meta?`<div class="wc-meta">${meta}</div>`:''}
-      ${(w.sorte||w.ausbau)?`<div class="wc-meta" style="display:flex;gap:8px;">${w.sorte?`<span style="flex:0 0 50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${w.sorte}</span>`:'<span style="flex:0 0 50%;"></span>'}<span style="flex:0 0 50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--wrm);font-size:11px;text-align:right;">${w.ausbau||''}</span></div>`:''}
+      ${(w.sorte||w.ausbau)?`<div class="wc-meta" style="display:flex;gap:8px;">${w.sorte?`<span style="flex:0 0 50%;min-width:0;display:flex;align-items:center;gap:5px;"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${w.sorte}</span><i class="ti ti-info-circle" onclick="event.stopPropagation();showRebsorteInfo('${w.id}')" title="Rebsorten-Info" style="cursor:pointer;color:var(--wr);font-size:15px;flex-shrink:0;"></i></span>`:'<span style="flex:0 0 50%;"></span>'}<span style="flex:0 0 50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--wrm);font-size:11px;text-align:right;">${w.ausbau||''}</span></div>`:''}
       ${w.eignung?`<div class="wc-meta" style="text-align:right;color:#7A8B5A;font-size:11px;">${w.eignung}</div>`:''}
       <div class="wc-tags">${statusTag(st)}${tl?`<span class="tag">${tl}</span>`:''}${anbauTag(w.anbau)}</div>
     </div>`;
@@ -697,10 +697,100 @@ async function saveWine(){
 /* ── Detail View ── */
 function isDesktop(){return window.innerWidth>=768;}
 function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('')}</div>`;}
+/* ── Rebsorten-Info (Hilfe-Overlay) ── */
+/* Fallback-Liste (offline). Wird beim Start aus Supabase-Tabelle 'rebsorten' überschrieben, falls vorhanden. */
+let REBSORTEN=[
+  {n:"Barbera",t:"rot",h:"Piemont (IT)",k:"leicht–mittel",s:"hoch",e:"Tomatenpasta, Pilzrisotto, Hartkäse",c:"saftig, unkompliziert, tanninarm"},
+  {n:"Cabernet Franc",t:"rot",h:"Loire/Bordeaux (FR), Toskana",k:"mittel",s:"mittel–hoch",e:"Grillgemüse, Auberginen, Ratatouille, Ziegenkäse",c:"kräuterig-grün, frisch"},
+  {n:"Cabernet Sauvignon",t:"rot",h:"Bordeaux (FR)",k:"kräftig",s:"mittel",e:"Pilzschmorgerichte, gereifter Hartkäse",c:"tanninstark, ernst, langlebig"},
+  {n:"Carignan",t:"rot",h:"Südfrankreich/Spanien",k:"mittel–kräftig",s:"mittel–hoch",e:"Ratatouille, Linseneintopf, Grillgemüse",c:"herb, würzig, rustikal"},
+  {n:"Cornalin",t:"rot",h:"Wallis (CH)",k:"mittel–kräftig",s:"mittel",e:"Raclette/Alpkäse, Pilze, Rösti",c:"wild, pfeffrig, eigenständig"},
+  {n:"Grenache",t:"rot",h:"Südrhône/Spanien",k:"kräftig",s:"niedrig",e:"Gemüsetajine, Ratatouille, Bohneneintopf",c:"warm, fruchtsüss, alkoholreich"},
+  {n:"Humagne Rouge",t:"rot",h:"Wallis (CH)",k:"mittel",s:"mittel",e:"Pilze, Alpkäse, Randen",c:"rustikal, herbal, erdig"},
+  {n:"Merlot",t:"rot",h:"Bordeaux (FR)",k:"mittel–kräftig",s:"mittel",e:"Melanzane-Parmigiana, Pilzrisotto, Weichkäse",c:"rund, weich, zugänglich"},
+  {n:"Mourvèdre",t:"rot",h:"Südfrankreich/Spanien",k:"kräftig",s:"mittel",e:"Schmorgemüse, Linsen, kräftiger Käse",c:"dunkel, ledrig, wild"},
+  {n:"Nero d'Avola",t:"rot",h:"Sizilien (IT)",k:"kräftig",s:"mittel",e:"Caponata, Pasta alla Norma, Hartkäse",c:"warm, dunkelfruchtig, würzig"},
+  {n:"Petit Verdot",t:"rot",h:"Bordeaux (FR)",k:"kräftig",s:"mittel",e:"Kräftige Gemüseschmorgerichte",c:"würzig, farbtief (meist Verschnitt)"},
+  {n:"Pinot Noir",t:"rot",h:"Burgund (FR)",k:"leicht–mittel",s:"hoch",e:"Pilzrisotto, Kürbis, Weichkäse, Gnudi",c:"elegant, erdig, tanninarm",x:["blauburgunder"]},
+  {n:"Primitivo",t:"rot",h:"Apulien (IT)",k:"kräftig",s:"niedrig",e:"Grillgemüse, Auberginen, Bohnengerichte",c:"marmeladig, süsslich, wuchtig"},
+  {n:"Sangiovese",t:"rot",h:"Toskana (IT)",k:"mittel",s:"hoch",e:"Tomatenpasta, Pizza, Pecorino, Bruschetta",c:"herb-fruchtig, «italienisch»"},
+  {n:"Syrah",t:"rot",h:"Nordrhône (FR)",k:"kräftig",s:"mittel",e:"Grillgemüse mit Kräutern, Pilzragout",c:"pfeffrig, rauchig, kraftvoll",x:["shiraz"]},
+  {n:"Tempranillo",t:"rot",h:"Spanien (Rioja/Ribera)",k:"mittel–kräftig",s:"mittel",e:"Kichererbsen, Paprika, Manchego",c:"ledrig, tabakig, rund",x:["tinta roriz"]},
+  {n:"Tinta Cão",t:"rot",h:"Douro (PT)",k:"mittel–kräftig",s:"mittel",e:"Blauschimmelkäse, Schokodesserts",c:"Portsorte, würzig-strukturiert"},
+  {n:"Touriga Franca",t:"rot",h:"Douro (PT)",k:"kräftig",s:"mittel",e:"Blauschimmelkäse, Schokodesserts",c:"Portsorte, floral, tief"},
+  {n:"Belat",t:"rot",h:"Katalonien (ES)",k:"kräftig",s:"mittel",e:"Kräftige Gemüsegerichte, Grillgemüse",c:"PIWI-Neuzüchtung, farbtief"},
+  {n:"VB 91-26-26",t:"rot",h:"Katalonien (ES)",k:"kräftig",s:"mittel",e:"Kräftige Gemüsegerichte, Grillgemüse",c:"experimentelle PIWI, dunkel"},
+  {n:"Chardonnay",t:"weiss",h:"Burgund (FR)",k:"mittel–kräftig",s:"mittel",e:"Pilzrisotto, Käsefondue, cremige Pasta, Spargel",c:"wandelbar, nussig, oft Holz"},
+  {n:"Clairette",t:"weiss",h:"Südfrankreich",k:"mittel",s:"niedrig",e:"Apéro, Gemüsequiche, milder Käse",c:"mild, floral, weich"},
+  {n:"Gewürztraminer",t:"weiss",h:"Elsass (FR)/Südtirol",k:"kräftig",s:"niedrig",e:"Würzige Gemüsecurrys, Münster, Tapas",c:"opulent, Rose/Litschi, würzig"},
+  {n:"Grenache Blanc",t:"weiss",h:"Südrhône/Spanien",k:"kräftig",s:"niedrig–mittel",e:"Grillgemüse, Kräuteromelette, Ziegenkäse",c:"rund, ölig, kräuterig"},
+  {n:"Kerner",t:"weiss",h:"Deutschland/Südtirol",k:"leicht–mittel",s:"hoch",e:"Apéro, Spargel, Frischkäse, Sushi",c:"aromatisch, frisch (Riesling-Kreuzung)"},
+  {n:"Muscat/Moscatel",t:"weiss",h:"Mittelmeerraum",k:"leicht–mittel",s:"mittel",e:"Apéro, Gemüse-Tempura, fruchtige Salate",c:"traubig, floral, duftig",x:["muscat","moscatel"]},
+  {n:"Petite Arvine",t:"weiss",h:"Wallis (CH)",k:"mittel",s:"hoch",e:"Spargel, Ziegenkäse, Randensalat",c:"salzig, zitrisch, rassig"},
+  {n:"Pinot Blanc",t:"weiss",h:"Elsass/Deutschland",k:"leicht–mittel",s:"mittel",e:"Quiche, Spargel, milder Käse, Apéro",c:"dezent, unaufdringlich, frisch",x:["weissburgunder"]},
+  {n:"Pinot Gris",t:"weiss",h:"Elsass (FR)/Norditalien",k:"mittel–kräftig",s:"mittel",e:"Pilze, Kürbis, Trüffel, Münster, Curry",c:"schmelzig, rauchig, würzig"},
+  {n:"Riesling",t:"weiss",h:"Deutschland/Elsass",k:"leicht–mittel",s:"hoch",e:"Spargel, Ziegenkäse, Kräuterpesto, scharfe Gemüsegerichte",c:"mineralisch, zitrisch, langlebig"},
+  {n:"Rolle (Vermentino)",t:"weiss",h:"Provence/Sardinien",k:"mittel",s:"mittel–hoch",e:"Kräuterpasta, Grillgemüse, Pesto, Ziegenkäse",c:"salzig-kräuterig, mediterran",x:["rolle","vermentino"]},
+  {n:"Muscaris",t:"weiss",h:"Deutschland (PIWI)",k:"leicht–mittel",s:"mittel",e:"Apéro, fruchtige Salate, leichtes Gemüse",c:"Muskatduft, pilzresistent"},
+  {n:"Sauvignac",t:"weiss",h:"PIWI (CH/DE)",k:"leicht–mittel",s:"hoch",e:"Ziegenkäse, Spargel, Kräutergerichte, Salate",c:"Sauvignon-artig, frisch-grün"},
+  {n:"Marina Rión",t:"weiss",h:"Katalonien (ES)",k:"leicht",s:"mittel",e:"Apéro, Salate, leichtes Gemüse",c:"frisch, floral, PIWI"}
+];
+function rebNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();}
+const REB_SYN={"garnacha":"grenache"};
+let REB_IDX={};
+function rebBuildIndex(){REB_IDX={};REBSORTEN.forEach(g=>{REB_IDX[rebNorm(g.n)]=g;(g.x||[]).forEach(a=>{REB_IDX[rebNorm(a)]=g;});});}
+rebBuildIndex();
+async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,e:x.eignung,c:x.charakter};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();}catch(e){}}
+function rebLookup(token){let t=rebNorm(token);if(!t||t==='moelleux')return null;if(REB_SYN[t])t=REB_SYN[t];return REB_IDX[t]||null;}
+function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</span><i class="ti ti-info-circle" onclick="showRebsorteInfo('${id}')" title="Rebsorten-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:16px;"></i>`;}
+(function(){if(document.getElementById('rebiStyle'))return;const st=document.createElement('style');st.id='rebiStyle';st.textContent=`
+  #rebiOverlay{position:fixed;inset:0;z-index:99999;display:none;}
+  #rebiOverlay .rebi-back{position:absolute;inset:0;background:rgba(0,0,0,.5);}
+  #rebiOverlay .rebi-sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86vh;display:flex;flex-direction:column;background:var(--bg,#fff);color:var(--tx,#222);border:1px solid var(--bd,#ddd);border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);}
+  #rebiOverlay .rebi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:700;font-size:15px;border-bottom:1px solid var(--bd,#eee);}
+  #rebiOverlay .rebi-scroll{padding:14px 16px;overflow-y:auto;}
+  #rebiOverlay .rebi-card{border:1px solid var(--bd,#e2e2e2);border-left:5px solid var(--bd,#ccc);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  #rebiOverlay .rebi-card.rot{border-left-color:#7b1e3b;}
+  #rebiOverlay .rebi-card.weiss{border-left-color:#c8a04b;}
+  #rebiOverlay .rebi-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  #rebiOverlay .rebi-name{font-size:16px;font-weight:700;}
+  #rebiOverlay .rebi-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:999px;white-space:nowrap;}
+  #rebiOverlay .rebi-badge.rot{background:rgba(123,30,59,.14);color:#7b1e3b;}
+  #rebiOverlay .rebi-badge.weiss{background:rgba(200,160,75,.22);color:#8a6d1f;}
+  #rebiOverlay .rebi-row{display:flex;gap:10px;font-size:13px;padding:2px 0;line-height:1.45;}
+  #rebiOverlay .rebi-row span{color:var(--ts,#888);min-width:96px;flex-shrink:0;}
+  #rebiOverlay .rebi-row b{font-weight:600;color:var(--tx,#222);}
+  #rebiOverlay .rebi-miss{font-size:12px;color:var(--ts,#888);padding:6px 2px;}
+`;document.head.appendChild(st);})();
+function showRebsorteInfo(id){
+  const w=wines.find(x=>x.id===id);if(!w)return;
+  const tokens=(w.sorte||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const seen=new Set(),matched=[],missing=[];
+  tokens.forEach(tok=>{const g=rebLookup(tok);if(g){if(!seen.has(g.n)){seen.add(g.n);matched.push(g);}}else if(rebNorm(tok)!=='moelleux'){missing.push(tok);}});
+  const cards=matched.map(g=>{const lbl=g.t==='rot'?'Rotwein':'Weisswein';return `<div class="rebi-card ${g.t}">
+    <div class="rebi-top"><span class="rebi-name">${g.n}</span><span class="rebi-badge ${g.t}">${lbl}</span></div>
+    <div class="rebi-row"><span>Herkunft</span><b>${g.h}</b></div>
+    <div class="rebi-row"><span>Körper</span><b>${g.k}</b></div>
+    <div class="rebi-row"><span>Säure</span><b>${g.s}</b></div>
+    <div class="rebi-row"><span>Charakter</span><b>${g.c}</b></div>
+    <div class="rebi-row"><span>Veg. Eignung</span><b>${g.e}</b></div>
+  </div>`;}).join('');
+  const miss=missing.length?`<div class="rebi-miss">Keine Detailinfo zu: ${missing.join(', ')}</div>`:'';
+  const body=matched.length?cards+miss:(miss||'<div class="rebi-miss">Keine Rebsorten-Info verfügbar.</div>');
+  let ov=document.getElementById('rebiOverlay');
+  if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}
+  ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div>
+    <div class="rebi-sheet" role="dialog" aria-label="Rebsorten-Info">
+      <div class="rebi-head"><span>Rebsorten &middot; ${w.name}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div>
+      <div class="rebi-scroll">${body}</div>
+    </div>`;
+  ov.style.display='block';document.body.style.overflow='hidden';
+}
+function closeRebInfo(){const ov=document.getElementById('rebiOverlay');if(ov)ov.style.display='none';document.body.style.overflow='';}
 function buildDetailHTML(id,w){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
-  const wR=[['Typ',w.typ],['Rebsorte',w.sorte],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
+  const wR=[['Typ',w.typ],['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
   const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
   const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
