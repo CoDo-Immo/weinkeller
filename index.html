@@ -243,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.5</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.6</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -256,7 +256,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.5</span>
+      <span class="version-badge">v2.6</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
@@ -545,7 +545,7 @@ async function doLogin(){
 async function doLogout(){await db.auth.signOut();wines=[];showLogin();}
 
 /* ── Data Layer ── */
-async function loadWines(){loadRebsorten();
+async function loadWines(){loadRebsorten();loadWeingueter();
   const el=document.getElementById('wineList');
   el.innerHTML='<div class="empty"><i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i><p style="margin-top:8px;">Weine werden geladen…</p></div>';
   const {data,error}=await db.from('wines').select('*').order('name');
@@ -741,6 +741,13 @@ let REB_IDX={};
 function rebBuildIndex(){REB_IDX={};REBSORTEN.forEach(g=>{REB_IDX[rebNorm(g.n)]=g;(g.x||[]).forEach(a=>{REB_IDX[rebNorm(a)]=g;});});}
 rebBuildIndex();
 async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,e:x.eignung,c:x.charakter};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();}catch(e){}}
+function wgNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+let WEINGUETER=[],WG_IDX={};
+function wgBuildIndex(){WG_IDX={};WEINGUETER.forEach(g=>{WG_IDX[wgNorm(g.name)]=g;(g.aliase?String(g.aliase).split(',').map(a=>a.trim()).filter(Boolean):[]).forEach(a=>{WG_IDX[wgNorm(a)]=g;});});}
+function wgLookup(name){const t=wgNorm(name);if(!t)return null;return WG_IDX[t]||null;}
+async function loadWeingueter(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('weingueter').select('*');if(r.error||!r.data||!r.data.length)return;WEINGUETER=r.data;wgBuildIndex();}catch(e){}}
+function weingutInfoIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-info-circle" onclick="showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:15px;"></i>`;}
+function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${g.charakter?`<div class="wgi-block"><span class="wgi-label">Charakter</span><p>${g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>';let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
 function rebLookup(token){let t=rebNorm(token);if(!t||t==='moelleux')return null;if(REB_SYN[t])t=REB_SYN[t];return REB_IDX[t]||null;}
 function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</span><i class="ti ti-info-circle" onclick="showRebsorteInfo('${id}')" title="Rebsorten-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:16px;"></i>`;}
 (function(){if(document.getElementById('rebiStyle'))return;const st=document.createElement('style');st.id='rebiStyle';st.textContent=`
@@ -773,6 +780,18 @@ function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</s
     #rebiOverlay .rebi-row span{color:#b3a79f;}
     #rebiOverlay .rebi-row b{color:#efe7e0;}
     #rebiOverlay .rebi-miss{color:#b3a79f;}
+  }
+  #rebiOverlay .rebi-card.weingut{border-left-color:#7b1e3b;}
+  #rebiOverlay .rebi-badge.weingut{background:#f3d9de;color:#6b2737;}
+  #rebiOverlay .wgi-block{margin-top:9px;}
+  #rebiOverlay .wgi-block:first-of-type{margin-top:0;}
+  #rebiOverlay .wgi-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a7d76;margin-bottom:2px;}
+  #rebiOverlay .wgi-block p{margin:0;font-size:13px;line-height:1.5;color:#2b2320;}
+  @media (prefers-color-scheme: dark){
+    #rebiOverlay .rebi-card.weingut{border-left-color:#c76b7e;}
+    #rebiOverlay .rebi-badge.weingut{background:rgba(199,107,126,.22);color:#eab8c2;}
+    #rebiOverlay .wgi-label{color:#b3a79f;}
+    #rebiOverlay .wgi-block p{color:#efe7e0;}
   }
 `;document.head.appendChild(st);})();
 function showRebsorteInfo(id){
@@ -811,7 +830,7 @@ function buildDetailHTML(id,w){
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px;">
       <div style="flex:1;min-width:0;">
         <div class="big-name">${w.name}</div>
-        ${w.weingut?`<div class="big-gut">${w.weingut}</div>`:''}
+        ${w.weingut?`<div class="big-gut">${w.weingut}${weingutInfoIcon(w)}</div>`:''}
         <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px;">
