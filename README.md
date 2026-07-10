@@ -1,3 +1,37 @@
+# Mein Weinkeller – Release Notes v2.7
+
+**Datum:** 10.07.2026
+**Vorherige Version:** v2.6
+
+---
+
+## Übersicht
+
+Version 2.7 ergänzt zwei neue Felder: **Marktpreis** (Anzeige direkt unter dem Kaufpreis) und **Dekantierung** (neues Freitextfeld direkt nach der Trinktemperatur). Einmalig muss `add_dekantierung_column.sql` in Supabase ausgeführt werden.
+
+---
+
+## 💰 Neu: Marktpreis-Anzeige
+
+In der Detailansicht erscheint neu der **Marktpreis** direkt unterhalb des Kaufpreises (Rubrik «Keller») – eine unverbindliche Einschätzung des aktuellen Werts, getrennt vom tatsächlich bezahlten Kaufpreis. Neues Zahlenfeld «Marktpreis (CHF)» in der Erfassungsmaske, im CSV-Export mitgeführt. Die Datenbankspalte `marktpreis` existierte bereits (vom Enricher genutzt), war aber bisher nicht in der App sichtbar.
+
+---
+
+## 🍷 Neues Feld: Dekantierung
+
+Neues Freitextfeld **Dekantierung** in der Erfassungsmaske, direkt nach «Trinktemperatur» (z. B. «90 Minuten», «60–90 Minuten», «nicht empfohlen»). In der Detailansicht erscheint es ebenfalls direkt nach der Trinktemperatur. Für alle 68 bestehenden Weine wurde der Wert anhand der bisherigen Dekantier-Einschätzungen befüllt (45 mit konkreter Zeitangabe, 23 mit «nicht empfohlen»).
+
+**Supabase-Migration (einmalig):** `add_dekantierung_column.sql` im SQL Editor ausführen.
+
+---
+
+## 🚀 Bereitstellung
+
+1. `add_dekantierung_column.sql` im Supabase SQL Editor ausführen (einmalig)
+2. `index.html` auf GitHub aktualisieren – fertig
+
+---
+
 # Mein Weinkeller – Release Notes v2.4
 
 **Datum:** 29.06.2026
