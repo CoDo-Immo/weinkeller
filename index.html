@@ -460,10 +460,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
               <button type="button" class="si-clear" onclick="setFormBew('gian',0)" title="Bewertung Gian löschen">✕</button>
             </div>
           </div>
-          <div style="flex:0 0 82px;">
-            <div style="font-size:11px;color:var(--tm);margin-bottom:3px;">Falstaff</div>
-            <input id="f-falstaff" type="number" placeholder="0–100" min="0" max="100" step="1">
-          </div>
         </div>
         <input type="hidden" id="f-bewertung-gian" value="">
         <input type="hidden" id="f-bewertung-jill" value="">
@@ -610,7 +606,6 @@ function bewertungCell(w){
   const parts=[];
   if(w.bewertung_jill)parts.push(`<span style="color:var(--tm);">Jill</span> <span style="color:#4C9A5B;letter-spacing:1px;">${stars(w.bewertung_jill)}</span>`);
   if(w.bewertung_gian)parts.push(`<span style="color:var(--tm);">Gian</span> <span style="color:#C9971C;letter-spacing:1px;">${stars(w.bewertung_gian)}</span>`);
-  if(w.falstaff)parts.push(`<span style="color:var(--tm);">Falstaff</span> ${w.falstaff}`);
   return parts.length?parts.join(' &nbsp;&middot;&nbsp; '):null;
 }
 function trinkStatus(w){const now=new Date().getFullYear(),ab=w.trinkreife_ab,bis=w.trinkreife;if(ab&&now<ab)return'lagern';if(bis&&now>bis)return'over';if(ab||bis)return'ok';return null;}
@@ -697,7 +692,6 @@ function clearForm(){
   document.getElementById('f-anbau').value='';
   document.getElementById('f-preis').value='';
   document.getElementById('f-marktpreis').value='';
-  document.getElementById('f-falstaff').value='';
   document.getElementById('f-status').value='Aktiv';
   setFormBew('gian',0);
   setFormBew('jill',0);
@@ -711,8 +705,6 @@ function readForm(){
   INT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)w[f]=parseInt(e.value)||null;});
   w.bewertung_gian=parseInt(document.getElementById('f-bewertung-gian').value)||null;
   w.bewertung_jill=parseInt(document.getElementById('f-bewertung-jill').value)||null;
-  w.falstaff=parseInt(document.getElementById('f-falstaff').value)||null;
-  if(w.falstaff!=null)w.falstaff=Math.min(100,Math.max(0,w.falstaff));
   w.trinkreife_ab=parseInt(document.getElementById('f-trinkreife-ab').value)||null;
   w.trinkreife=parseInt(document.getElementById('f-trinkreife').value)||null;
   w.preis=parseFloat(document.getElementById('f-preis').value)||0;
@@ -937,7 +929,6 @@ function fillFormFromWine(w){
   document.getElementById('f-trinkreife').value=w.trinkreife||'';
   document.getElementById('f-preis').value=w.preis||'';
   document.getElementById('f-marktpreis').value=w.marktpreis||'';
-  document.getElementById('f-falstaff').value=w.falstaff||'';
   document.getElementById('f-typ').value=w.typ||'Rotwein';
   document.getElementById('f-anbau').value=w.anbau||'';
   document.getElementById('f-status').value=w.status||'Aktiv';
@@ -1015,8 +1006,8 @@ function importJSON(input){
 
 /* ── CSV Export ── */
 function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','anbau','status','anzahl','preis','marktpreis','bewertung_jill','bewertung_gian','falstaff','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Dekantierung,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Marktpreis CHF,Bewertung Jill,Bewertung Gian,Falstaff,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','anbau','status','anzahl','preis','marktpreis','bewertung_jill','bewertung_gian','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Dekantierung,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Marktpreis CHF,Bewertung Jill,Bewertung Gian,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
   const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv=[hdr,...rows].join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();

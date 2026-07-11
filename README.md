@@ -7,19 +7,13 @@
 
 ## Übersicht
 
-Version 2.9 teilt die bisherige einheitliche **Bewertung** in zwei getrennte Bewertungen auf: **Bewertung Jill** und **Bewertung Gian**, beide neu auf einer **4-Sterne-Skala** (vorher 5). Dazu kommt ein neues Zahlenfeld **Falstaff** (0–100 Punkte) für die offizielle Falstaff-Punktzahl. In der Weinübersicht erscheinen beide Bewertungen jetzt immer – auch unbewertet – farbig auf derselben Zeile wie der Weinname: **grün für Jill**, **gelb/gold für Gian**. Einmalig muss `add_bewertung_jill_falstaff.sql` in Supabase ausgeführt werden – dabei werden **alle bestehenden Bewertungen zurückgesetzt** (Skalenwechsel 5 → 4 Sterne lässt sich nicht verlustfrei übertragen).
+Version 2.9 teilt die bisherige einheitliche **Bewertung** in zwei getrennte Bewertungen auf: **Bewertung Jill** und **Bewertung Gian**, beide neu auf einer **4-Sterne-Skala** (vorher 5). In der Weinübersicht erscheinen beide Bewertungen jetzt immer – auch unbewertet – farbig auf derselben Zeile wie der Weinname: **grün für Jill**, **gelb/gold für Gian**. Einmalig muss `add_bewertung_jill_falstaff.sql` in Supabase ausgeführt werden – dabei werden **alle bestehenden Bewertungen zurückgesetzt** (Skalenwechsel 5 → 4 Sterne lässt sich nicht verlustfrei übertragen).
 
 ---
 
 ## ⭐ Neu: Bewertung Jill / Gian getrennt, 4-Sterne-Skala
 
-Die bisherige Spalte `bewertung` wurde in `bewertung_gian` umbenannt, dazu kommt die neue Spalte `bewertung_jill`. Beide laufen neu auf einer 1–4-Skala statt 1–5. In der Erfassungsmaske (Abschnitt Keller) stehen Jill, Gian und Falstaff nebeneinander in einer Zeile: Jill und Gian je als 4-Sterne-Auswahl mit Lösch-Symbol (✕), Falstaff als Zahlenfeld. In der Detailansicht erscheinen alle drei zusammengefasst in der Zeile «Bewertung».
-
----
-
-## 🍇 Neu: Falstaff-Punktzahl
-
-Neues Zahlenfeld **Falstaff** (0–100 Punkte) in der Erfassungsmaske und im CSV-Export. Optional, unabhängig von den beiden Sterne-Bewertungen.
+Die bisherige Spalte `bewertung` wurde in `bewertung_gian` umbenannt, dazu kommt die neue Spalte `bewertung_jill`. Beide laufen neu auf einer 1–4-Skala statt 1–5. In der Erfassungsmaske (Abschnitt Keller) stehen Jill und Gian nebeneinander in einer Zeile, je als 4-Sterne-Auswahl mit Lösch-Symbol (✕). In der Detailansicht erscheinen beide zusammengefasst in der Zeile «Bewertung».
 
 ---
 
@@ -37,7 +31,7 @@ Der Mindest-Bewertung-Filter im Filterpanel erfüllt sich neu, sobald **eine der
 
 ## 🚀 Bereitstellung
 
-1. `add_bewertung_jill_falstaff.sql` im Supabase SQL Editor ausführen (einmalig – **setzt alle bestehenden Bewertungen zurück**, benennt `bewertung` in `bewertung_gian` um, legt `bewertung_jill` und `falstaff` an)
+1. `add_bewertung_jill_falstaff.sql` im Supabase SQL Editor ausführen (einmalig – **setzt alle bestehenden Bewertungen zurück**, benennt `bewertung` in `bewertung_gian` um, legt `bewertung_jill` an und entfernt eine allfällig vorhandene Spalte `falstaff` wieder)
 2. `index.html` auf GitHub aktualisieren
 3. `Weinkeller_Bedienungsanleitung_v2.9.html` (gleicher Dateiname!) zusätzlich ins Repo hochladen – sonst 404 beim Hilfe-Symbol
 

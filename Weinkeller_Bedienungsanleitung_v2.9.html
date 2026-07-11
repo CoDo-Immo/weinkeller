@@ -76,9 +76,9 @@ Skripte betreibst.</p>
 <div class="box tip"><div class="lbl">Neu in Version 2.9</div>
 Aus der einen <strong>Bewertung</strong> wurden zwei getrennte Bewertungen: <strong>Bewertung Jill</strong> (grün)
 und <strong>Bewertung Gian</strong> (gelb/gold), beide neu auf einer <strong>4-Sterne-Skala</strong> (vorher 5) und
-in der Übersicht immer sichtbar auf derselben Zeile wie der Weinname. Dazu neu ein Zahlenfeld
-<strong>Falstaff</strong> (0–100 Punkte). Der Mindest-Bewertung-Filter berücksichtigt neu Jill <em>oder</em> Gian.
-Details siehe B1–B3. Wichtig: Beim Datenbank-Update wurden alle bisherigen Bewertungen zurückgesetzt (Skalenwechsel).</div>
+in der Übersicht immer sichtbar auf derselben Zeile wie der Weinname. Der Mindest-Bewertung-Filter berücksichtigt
+neu Jill <em>oder</em> Gian. Details siehe B1–B3. Wichtig: Beim Datenbank-Update wurden alle bisherigen Bewertungen
+zurückgesetzt (Skalenwechsel).</div>
 
 <div class="box tip"><div class="lbl">Neu in Version 2.8</div>
 Die Weingut-Info (B6) hat jetzt einen <strong>Google-Maps-Link</strong> zur Lage des Weinguts. Im Header –
@@ -206,12 +206,11 @@ darauf öffnet diese Bedienungsanleitung in einem neuen Browser-Tab.</div>
   <tr><td>Wein</td><td>Name, Weingut, Jahrgang, Typ, Rebsorte</td></tr>
   <tr><td>Herkunft</td><td>Land (Dropdown), Gebiet, Region</td></tr>
   <tr><td>Charakter</td><td>Degustation, Eignung, Trinktemperatur, Dekantierung, Ausbau, Anbau, Boden</td></tr>
-  <tr><td>Keller</td><td>Anzahl Flaschen, Kaufpreis (CHF), Marktpreis (CHF), Bewertung Jill (1–4 ★), Bewertung Gian (1–4 ★), Falstaff (0–100 Punkte), Status, Trinkreife ab/bis, Notizen, Lieferant</td></tr>
+  <tr><td>Keller</td><td>Anzahl Flaschen, Kaufpreis (CHF), Marktpreis (CHF), Bewertung Jill (1–4 ★), Bewertung Gian (1–4 ★), Status, Trinkreife ab/bis, Notizen, Lieferant</td></tr>
 </table>
-<div class="box tip"><div class="lbl">Bewertung Jill / Gian / Falstaff <span class="pill">neu in v2.9</span></div>
-Im Abschnitt Keller stehen drei Bewertungsfelder nebeneinander in einer Zeile: <strong>Jill</strong> und
-<strong>Gian</strong> je als 4-Sterne-Auswahl (Tipp auf einen Stern setzt die Bewertung, das ✕ löscht sie), dazu
-<strong>Falstaff</strong> als Zahlenfeld für die offizielle Falstaff-Punktzahl (0–100). Alle drei sind optional.</div>
+<div class="box tip"><div class="lbl">Bewertung Jill / Gian <span class="pill">neu in v2.9</span></div>
+Im Abschnitt Keller stehen zwei Bewertungsfelder nebeneinander in einer Zeile: <strong>Jill</strong> und
+<strong>Gian</strong> je als 4-Sterne-Auswahl (Tipp auf einen Stern setzt die Bewertung, das ✕ löscht sie). Beide sind optional.</div>
 <div class="box tip"><div class="lbl">Marktpreis vs. Kaufpreis <span class="pill">neu in v2.7</span></div>
 Der <strong>Kaufpreis</strong> ist, was du tatsächlich bezahlt hast. Der <strong>Marktpreis</strong> ist eine
 unverbindliche Einschätzung des aktuellen Werts (z. B. via Enricher) – bei kleineren Produzenten bleibt er oft leer,
@@ -229,7 +228,7 @@ Schreibe ein Weingut immer gleich (z. B. immer „Paul Buecher"). Die Weingut-In
 <h3 id="b4">B4 · Detailansicht</h3>
 <p>Ein Tipp auf eine Weinkarte zeigt alle Felder übersichtlich, gruppiert in Wein, Herkunft, Degustation und Keller.
 Oben findest du die Aktions-Symbole: Bearbeiten (Stift), Abbuchen (Minus), Duplizieren (Kopie), Löschen (Papierkorb) und Schliessen (X).
-In der Zeile <strong>Bewertung</strong> stehen Jill, Gian und Falstaff zusammengefasst (nur die vorhandenen Werte).</p>
+In der Zeile <strong>Bewertung</strong> stehen Jill und Gian zusammengefasst (nur die vorhandenen Werte).</p>
 
 <h3 id="b5">B5 · Rebsorten-Info <span class="pill">neu in v2.5</span></h3>
 <p>Neben jeder Rebsorte – sowohl in der Liste als auch in der Detailansicht – steht ein kleines
@@ -388,17 +387,18 @@ erscheint das Weingut-Info-Icon in der App.</p>
 </ol>
 <p><strong>Neu in v2.8:</strong> keine neue Tabelle/Spalte nötig – der Google-Maps-Link wird zur Laufzeit aus
 bestehenden Feldern (<code>weingut</code>, <code>region</code>, <code>gebiet</code>, <code>land</code>) gebaut.</p>
-<p><strong>Bewertung Jill / Gian / Falstaff anlegen (einmalig, neu in v2.9):</strong></p>
+<p><strong>Bewertung Jill / Gian anlegen (einmalig, neu in v2.9):</strong></p>
 <ol class="steps">
   <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
   <li>Inhalt von <code>add_bewertung_jill_falstaff.sql</code> einfügen → <strong>Run</strong>.</li>
   <li>Benennt die Spalte <code>bewertung</code> in <code>bewertung_gian</code> um, legt <code>bewertung_jill</code>
-    und <code>falstaff</code> an und setzt die Check-Constraints auf 1–4 (Bewertungen) bzw. 0–100 (Falstaff).</li>
+    an, entfernt eine allfällig vorhandene Spalte <code>falstaff</code> (Feature wurde wieder verworfen) und setzt
+    die Check-Constraints auf 1–4.</li>
 </ol>
 <div class="box warn"><div class="lbl">Achtung: setzt alle Bewertungen zurück</div>
 Das Skript setzt <code>bewertung_gian</code> und <code>bewertung_jill</code> für <strong>alle</strong> Weine auf
-leer, weil die alte 5-Sterne-Skala nicht verlustfrei auf die neue 4-Sterne-Skala übertragbar ist. Falstaff ist davon
-nicht betroffen. Das Skript ist nicht wiederholbar ohne erneuten Reset – nur einmal ausführen.</div>
+leer, weil die alte 5-Sterne-Skala nicht verlustfrei auf die neue 4-Sterne-Skala übertragbar ist. Das Skript ist
+nicht wiederholbar ohne erneuten Reset – nur einmal ausführen.</div>
 
 <h3 id="e3">E3 · App veröffentlichen / aktualisieren (GitHub Pages)</h3>
 <p><strong>Erstveröffentlichung:</strong></p>
