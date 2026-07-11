@@ -243,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.8</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v2.9</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -256,9 +256,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="topbar">
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
-      <span class="version-badge">v2.8</span>
+      <span class="version-badge">v2.9</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.8.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:6px;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.9.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:6px;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
@@ -297,14 +297,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </select>
     </div>
     <div class="fp-row">
-      <div class="fp-lbl">Mindest-Bewertung</div>
+      <div class="fp-lbl">Mindest-Bewertung (Jill oder Gian)</div>
       <div class="star-filter">
         <span style="font-size:12px;color:var(--tm);margin-right:4px;">ab</span>
         <button class="star-btn" onclick="setMinBew(1)" id="sb1">★</button>
         <button class="star-btn" onclick="setMinBew(2)" id="sb2">★</button>
         <button class="star-btn" onclick="setMinBew(3)" id="sb3">★</button>
         <button class="star-btn" onclick="setMinBew(4)" id="sb4">★</button>
-        <button class="star-btn" onclick="setMinBew(5)" id="sb5">★</button>
         <button class="fab-clear" style="margin-left:8px;" onclick="setMinBew(0)">zurücksetzen</button>
       </div>
     </div>
@@ -440,15 +439,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="fg"><label>Marktpreis (CHF)</label><input id="f-marktpreis" type="number" placeholder="0.00" step="0.01"></div>
       <div class="fg full">
         <label>Bewertung</label>
-        <div class="star-input">
-          <button type="button" class="si-star" onclick="setFormBew(1)" id="fsb1">★</button>
-          <button type="button" class="si-star" onclick="setFormBew(2)" id="fsb2">★</button>
-          <button type="button" class="si-star" onclick="setFormBew(3)" id="fsb3">★</button>
-          <button type="button" class="si-star" onclick="setFormBew(4)" id="fsb4">★</button>
-          <button type="button" class="si-star" onclick="setFormBew(5)" id="fsb5">★</button>
-          <button type="button" class="si-clear" onclick="setFormBew(0)" title="Bewertung löschen">✕</button>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:11px;color:var(--tm);margin-bottom:3px;">Jill</div>
+            <div class="star-input" style="gap:0;">
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('jill',1)" id="fsbj1">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('jill',2)" id="fsbj2">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('jill',3)" id="fsbj3">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('jill',4)" id="fsbj4">★</button>
+              <button type="button" class="si-clear" onclick="setFormBew('jill',0)" title="Bewertung Jill löschen">✕</button>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:11px;color:var(--tm);margin-bottom:3px;">Gian</div>
+            <div class="star-input" style="gap:0;">
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('gian',1)" id="fsbg1">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('gian',2)" id="fsbg2">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('gian',3)" id="fsbg3">★</button>
+              <button type="button" class="si-star" style="font-size:20px;color:var(--bd);" onclick="setFormBew('gian',4)" id="fsbg4">★</button>
+              <button type="button" class="si-clear" onclick="setFormBew('gian',0)" title="Bewertung Gian löschen">✕</button>
+            </div>
+          </div>
+          <div style="flex:0 0 82px;">
+            <div style="font-size:11px;color:var(--tm);margin-bottom:3px;">Falstaff</div>
+            <input id="f-falstaff" type="number" placeholder="0–100" min="0" max="100" step="1">
+          </div>
         </div>
-        <input type="hidden" id="f-bewertung" value="">
+        <input type="hidden" id="f-bewertung-gian" value="">
+        <input type="hidden" id="f-bewertung-jill" value="">
       </div>
       <div class="fg"><label>Status</label>
         <select id="f-status"><option value="Aktiv">Aktiv</option><option value="Bestellt">Bestellt</option><option value="Bestellen">Bestellen</option><option value="Inaktiv">Inaktiv</option></select>
@@ -582,7 +600,19 @@ async function migrateData(){
   await loadWines();
 }
 function uid(){return Math.random().toString(36).slice(2,10);}
-function stars(n){if(!n)return'';let s='';for(let i=1;i<=5;i++)s+=i<=n?'★':'☆';return s;}
+function stars(n){if(!n)return'';let s='';for(let i=1;i<=4;i++)s+=i<=n?'★':'☆';return s;}
+function starBar(n,color){
+  n=n||0;let s='';
+  for(let i=1;i<=4;i++)s+=`<span style="color:${i<=n?color:'var(--bd)'};">★</span>`;
+  return `<span style="font-size:12px;letter-spacing:1px;">${s}</span>`;
+}
+function bewertungCell(w){
+  const parts=[];
+  if(w.bewertung_jill)parts.push(`<span style="color:var(--tm);">Jill</span> <span style="color:#4C9A5B;letter-spacing:1px;">${stars(w.bewertung_jill)}</span>`);
+  if(w.bewertung_gian)parts.push(`<span style="color:var(--tm);">Gian</span> <span style="color:#C9971C;letter-spacing:1px;">${stars(w.bewertung_gian)}</span>`);
+  if(w.falstaff)parts.push(`<span style="color:var(--tm);">Falstaff</span> ${w.falstaff}`);
+  return parts.length?parts.join(' &nbsp;&middot;&nbsp; '):null;
+}
 function trinkStatus(w){const now=new Date().getFullYear(),ab=w.trinkreife_ab,bis=w.trinkreife;if(ab&&now<ab)return'lagern';if(bis&&now>bis)return'over';if(ab||bis)return'ok';return null;}
 function trinkLabel(s){return s==='ok'?'✅ Trinkbereit':s==='lagern'?'⏳ Noch lagern':s==='over'?'⚠️ Überfällig':null;}
 const ANBAU_META={'BIO':['🌿','tag-bio','bio-c'],'NACHHALTIG':['♻️','tag-nach','nach-c'],'Biodynamisch':['🌙','tag-bio','bio-c'],'Demeter':['🌱','tag-bio','bio-c'],'Konventionell':['🚜','tag-inaktiv','']};
@@ -592,8 +622,8 @@ function anbauDV(a){const m=ANBAU_META[a];if(!m)return a;return`<span class="${m
 /* ── Filter ── */
 function toggleFilter(){const p=document.getElementById('filterPanel'),btn=document.getElementById('filterToggle');btn.classList.toggle('active',p.classList.toggle('open'));}
 function toggleChip(el,group,val){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');if(group==='typ')fTyp=val;else if(group==='status')fStatus=val;else if(group==='trink')fTrink=val;else if(group==='anbau')fAnbau=val;renderList();}
-function setMinBew(n){fMinBew=n;for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.toggle('on',i<=n&&n>0);renderList();}
-function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';fLand='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('fc-land-select').value='';document.getElementById('f-sorte-filter').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=5;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
+function setMinBew(n){fMinBew=n;for(let i=1;i<=4;i++)document.getElementById('sb'+i).classList.toggle('on',i<=n&&n>0);renderList();}
+function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';fLand='';document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('fc-land-select').value='';document.getElementById('f-sorte-filter').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=4;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
 function hasActiveFilters(){return fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||fLand||document.getElementById('f-sorte-filter').value;}
 
 function populateLandFilter(){var sel=document.getElementById("fc-land-select");var prev=sel.value;var lands=[...new Set(wines.map(function(w){return w.land||""}).filter(function(l){return l}))].sort(function(a,b){return a.localeCompare(b,"de")});sel.innerHTML="<option value=\"\">(Alle)</option>"+lands.map(function(l){return "<option value=\""+l+"\">"+(FLAGS[l]||"")+" "+l+"</option>"}).join("");if(lands.indexOf(prev)>=0)sel.value=prev;}
@@ -607,7 +637,7 @@ function renderList(){
     if(fTyp&&w.typ!==fTyp)return false;
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
     if(fAnbau&&w.anbau!==fAnbau)return false;
-    if(fMinBew>0&&(w.bewertung||0)<fMinBew)return false;
+    if(fMinBew>0&&(w.bewertung_gian||0)<fMinBew&&(w.bewertung_jill||0)<fMinBew)return false;
     if(fEignung){const terms=fEignung.split(/[\s,;]+/).filter(t=>t.length>0);const el=(w.eignung||'').toLowerCase();if(!terms.some(t=>el.includes(t)))return false;}
     if(sorteF&&!(w.sorte||'').toLowerCase().includes(sorteF.toLowerCase()))return false;
     if(fTrink){const s=trinkStatus(w);if(s!==fTrink)return false;}
@@ -634,7 +664,7 @@ function renderList(){
         <div style="flex:1">
           <div class="wc-name">${w.name}</div>
         </div>
-        ${w.bewertung?`<div style="color:${dotColor(w.typ)};font-size:12px;letter-spacing:1px;flex-shrink:0;margin-right:4px;">${stars(w.bewertung)}</div>`:''}
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-right:4px;">${starBar(w.bewertung_jill,'#4C9A5B')}${starBar(w.bewertung_gian,'#C9971C')}</div>
         <div class="wc-cnt">${w.anzahl} Fl.</div>
       </div>
       ${meta?`<div class="wc-meta">${meta}</div>`:''}
@@ -646,10 +676,13 @@ function renderList(){
 }
 
 /* ── Star Input (Form) ── */
-function setFormBew(n){
+function setFormBew(who,n){
   const val=n>0?n:null;
-  document.getElementById('f-bewertung').value=val||'';
-  for(let i=1;i<=5;i++)document.getElementById('fsb'+i).classList.toggle('on',i<=n&&n>0);
+  const fieldId=who==='jill'?'f-bewertung-jill':'f-bewertung-gian';
+  const prefix=who==='jill'?'fsbj':'fsbg';
+  const color=who==='jill'?'#4C9A5B':'#C9971C';
+  document.getElementById(fieldId).value=val||'';
+  for(let i=1;i<=4;i++)document.getElementById(prefix+i).style.color=(i<=n&&n>0)?color:'var(--bd)';
 }
 
 /* ── Form helpers ── */
@@ -664,8 +697,10 @@ function clearForm(){
   document.getElementById('f-anbau').value='';
   document.getElementById('f-preis').value='';
   document.getElementById('f-marktpreis').value='';
+  document.getElementById('f-falstaff').value='';
   document.getElementById('f-status').value='Aktiv';
-  setFormBew(0);
+  setFormBew('gian',0);
+  setFormBew('jill',0);
   setLand('');
 }
 function openAdd(){editingId=null;document.getElementById('modalTitle').innerHTML='<i class="ti ti-plus"></i> Erfassen';clearForm();document.getElementById('addModal').classList.add('open');}
@@ -674,7 +709,10 @@ function readForm(){
   const w={};
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)w[f]=e.value.trim();});
   INT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)w[f]=parseInt(e.value)||null;});
-  w.bewertung=parseInt(document.getElementById('f-bewertung').value)||null;
+  w.bewertung_gian=parseInt(document.getElementById('f-bewertung-gian').value)||null;
+  w.bewertung_jill=parseInt(document.getElementById('f-bewertung-jill').value)||null;
+  w.falstaff=parseInt(document.getElementById('f-falstaff').value)||null;
+  if(w.falstaff!=null)w.falstaff=Math.min(100,Math.max(0,w.falstaff));
   w.trinkreife_ab=parseInt(document.getElementById('f-trinkreife-ab').value)||null;
   w.trinkreife=parseInt(document.getElementById('f-trinkreife').value)||null;
   w.preis=parseFloat(document.getElementById('f-preis').value)||0;
@@ -828,7 +866,7 @@ function closeRebInfo(){const ov=document.getElementById('rebiOverlay');if(ov)ov
 function buildDetailHTML(id,w){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
-  const wR=[['Typ',w.typ],['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',w.bewertung?`<span style="color:var(--wr);letter-spacing:1px;">${stars(w.bewertung)}</span>`:null]].filter(r=>r[1]);
+  const wR=[['Typ',w.typ],['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',bewertungCell(w)]].filter(r=>r[1]);
   const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
   const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Dekantierung',w.dekantierung]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Marktpreis',w.marktpreis?'CHF '+Number(w.marktpreis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
@@ -899,10 +937,12 @@ function fillFormFromWine(w){
   document.getElementById('f-trinkreife').value=w.trinkreife||'';
   document.getElementById('f-preis').value=w.preis||'';
   document.getElementById('f-marktpreis').value=w.marktpreis||'';
+  document.getElementById('f-falstaff').value=w.falstaff||'';
   document.getElementById('f-typ').value=w.typ||'Rotwein';
   document.getElementById('f-anbau').value=w.anbau||'';
   document.getElementById('f-status').value=w.status||'Aktiv';
-  setFormBew(w.bewertung||0);
+  setFormBew('gian',w.bewertung_gian||0);
+  setFormBew('jill',w.bewertung_jill||0);
   setLand(w.land||'');
 }
 function editWine(id){
@@ -975,8 +1015,8 @@ function importJSON(input){
 
 /* ── CSV Export ── */
 function exportCSV(){
-  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','anbau','status','anzahl','preis','marktpreis','bewertung','trinkreife_ab','trinkreife','notizen','lieferant'];
-  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Dekantierung,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Marktpreis CHF,Bewertung,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
+  const cols=['name','weingut','jahr','typ','sorte','land','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','anbau','status','anzahl','preis','marktpreis','bewertung_jill','bewertung_gian','falstaff','trinkreife_ab','trinkreife','notizen','lieferant'];
+  const hdr='Name,Weingut,Jahrgang,Typ,Rebsorte,Land,Gebiet,Region,Degustation,Eignung,Trinktemperatur,Dekantierung,Ausbau,Boden,Anbau,Status,Flaschen,Preis CHF,Marktpreis CHF,Bewertung Jill,Bewertung Gian,Falstaff,Trinkreife ab,Trinkreife bis,Notizen,Lieferant';
   const rows=wines.map(w=>cols.map(c=>`"${(w[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv=[hdr,...rows].join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);a.download='weinkeller.csv';a.click();
