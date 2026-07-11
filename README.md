@@ -1,3 +1,36 @@
+# Mein Weinkeller – Release Notes v2.8
+
+**Datum:** 11.07.2026
+**Vorherige Version:** v2.7
+
+---
+
+## Übersicht
+
+Version 2.8 ergänzt einen **Google-Maps-Link** in der Weingut-Info sowie ein **Hilfe-Symbol im Header**, das direkt auf die Bedienungsanleitung verlinkt. Keine Datenbank-Migration nötig – zusätzlich zur `index.html` muss aber `Weinkeller_Bedienungsanleitung_v2.8.html` mit exakt diesem Namen mit hochgeladen werden, sonst führt der neue Hilfe-Link ins Leere.
+
+---
+
+## 📍 Neu: Google-Maps-Link in der Weingut-Info
+
+Im Weingut-Info-Fenster (🏰-Icon) gibt es jetzt einen Link **«Auf Google Maps anzeigen»**. Er öffnet eine Kartensuche aus Weingut-Name + Region/Gebiet/Land des jeweiligen Weins im Browser bzw. in der Maps-App des Geräts. Keine exakte Adresse, aber die Gegend wird zuverlässig gezeigt.
+
+---
+
+## ❓ Neu: Hilfe-Symbol im Header
+
+Links vom Abmelde-Symbol im Header erscheint ein neues Hilfe-Symbol, das die Bedienungsanleitung in einem neuen Tab öffnet (`Weinkeller_Bedienungsanleitung_v2.8.html`, auf GitHub Pages neben der `index.html`).
+
+---
+
+## 🚀 Bereitstellung
+
+1. `index.html` auf GitHub aktualisieren
+2. `Weinkeller_Bedienungsanleitung_v2.8.html` (gleicher Dateiname!) zusätzlich ins Repo hochladen – sonst 404 beim Hilfe-Symbol
+3. Fertig, keine Supabase-Migration nötig
+
+---
+
 # Mein Weinkeller – Release Notes v2.7
 
 **Datum:** 10.07.2026
