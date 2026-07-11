@@ -1,3 +1,30 @@
+# Mein Weinkeller – Release Notes v2.10
+
+**Datum:** 11.07.2026
+**Vorherige Version:** v2.9
+
+---
+
+## Übersicht
+
+Version 2.10 ergänzt ein neues **🍽 Weinkombinationen-Symbol** im Header, zwischen Hilfe- und Abmelde-Symbol. Es verlinkt auf eine separat gehostete Seite (`Weinkeller_weinkombinationen.html`) mit fertig zusammengestellten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü aus dem eigenen Keller. Keine Datenbank-Migration nötig.
+
+---
+
+## 🍽 Neu: Weinkombinationen-Symbol im Header
+
+Drittes Icon im Header (nach Hilfe-Symbol, vor Abmelde-Symbol) öffnet in einem neuen Tab eine statische Seite mit fünf Wein-Kombinationen (A–E), je aufgebaut nach Weincharakteristik (Säure, Körper, Tannin, Holzeinsatz, Süsse) statt nach den Datenbankfeldern „Bewertung"/„Eignung". Pro Kombination eine Tabelle mit Gang, Wein, Bestand, Trinkreife-Status, Eigenschaft und passendem Gericht.
+
+---
+
+## 🚀 Bereitstellung
+
+1. Keine Supabase-Migration nötig.
+2. `index.html` auf GitHub aktualisieren.
+3. `Weinkeller_Bedienungsanleitung_v2.10.html` UND `Weinkeller_weinkombinationen.html` (beide mit exakt diesem Dateinamen) zusätzlich ins Repo hochladen – sonst führen Hilfe- bzw. Weinkombinationen-Symbol ins Leere.
+
+---
+
 # Mein Weinkeller – Release Notes v2.9
 
 **Datum:** 11.07.2026
