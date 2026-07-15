@@ -40,7 +40,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* ── Topbar ── */
 .topbar{background:var(--cb);box-shadow:0 1px 0 var(--bd),var(--shadow-sm);padding:14px 16px 10px;position:sticky;top:0;z-index:10;}
-.topbar-title{display:flex;align-items:center;justify-content:space-between;}
+.topbar-title{display:flex;align-items:center;}
 .topbar h1{font-size:18px;font-weight:700;color:var(--tx);display:flex;align-items:center;gap:8px;letter-spacing:-0.3px;}
 .topbar h1 i{color:var(--wr);font-size:22px;}
 .version-badge{font-size:10px;font-weight:600;color:var(--wr);background:var(--wrl);border:0.5px solid var(--wrm);border-radius:20px;padding:2px 7px;letter-spacing:.02em;opacity:0.85;}
@@ -258,8 +258,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span class="version-badge">v2.10</span>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.10.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:6px;"><i class="ti ti-help" aria-hidden="true"></i></a>
-      <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><i class="ti ti-grape" aria-hidden="true"></i></button>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.10.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><i class="ti ti-cherry" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
@@ -386,7 +386,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 <div class="overlay" id="rebModal">
   <div class="sheet">
-    <h2><i class="ti ti-grape"></i> Rebsorten <span id="rebCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <button class="cx" onclick="closeRebsorten()"><i class="ti ti-x"></i></button></h2>
+    <h2><i class="ti ti-cherry"></i> Rebsorten <span id="rebCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <button class="cx" onclick="closeRebsorten()"><i class="ti ti-x"></i></button></h2>
     <div class="reb-toolbar">
       <input type="text" id="rebSearch" class="reb-search" placeholder="Sorte, Herkunft oder Charakter suchen ..." oninput="renderRebsorten()">
       <div class="reb-chips">
@@ -1081,3 +1081,4 @@ initAuth();
 </script>
 </body>
 </html>
+                           
