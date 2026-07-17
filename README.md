@@ -1,27 +1,78 @@
+# Mein Weinkeller – Release Notes v3.0
+
+**Datum:** 16.07.2026
+**Vorherige Version:** v2.10
+
+---
+
+## Übersicht
+
+Version 3.0 macht die **Rebsortenübersicht bearbeitbar**: Rebsorten lassen sich neu direkt in der App **hinzufügen, bearbeiten und löschen**. Dafür gibt es ein neues Freitextfeld **Beschreibung**, das später erfasst werden kann. Zusätzlich wurde die Kopfzeile entlastet – die **Versionsbezeichnung** wanderte in eine neue **Fusszeile** zusammen mit der **Anzahl Weine**. Einmalig muss `add_beschreibung_und_crud_policies.sql` in Supabase ausgeführt werden.
+
+---
+
+## 🍇 Rebsorten bearbeiten, hinzufügen, löschen
+
+In der Rebsortenübersicht (Trauben-Symbol im Header) gibt es für angemeldete Admins neu einen **+ Neu**-Button in der Filterleiste sowie pro Rebsortenkarte die Symbole **✏️ Bearbeiten** und **🗑 Löschen**. Das Formular umfasst Name, Typ (Rot/Weiss), Herkunft, Körper, Säure, Passt zu (Eignung), Charakter, Aliase und das neue Feld Beschreibung. Änderungen werden direkt in der Supabase-Tabelle `rebsorten` gespeichert und die Übersicht sofort aktualisiert. **Viewer** sehen die Rebsorten weiterhin nur lesend – die Bearbeiten-/Neu-/Löschen-Schaltflächen sind ausgeblendet und serverseitig per RLS blockiert.
+
+---
+
+## 📝 Neues Feld: Beschreibung
+
+Rebsorten erhalten ein mehrzeiliges Freitextfeld **Beschreibung** für ausführlichere Angaben. Ist ein Wert erfasst, erscheint er als eigener Absatz unten auf der Rebsortenkarte. Das Feld kann leer bleiben und jederzeit später ergänzt werden.
+
+**Supabase-Migration nötig (einmalig):**
+```sql
+ALTER TABLE public.rebsorten ADD COLUMN IF NOT EXISTS beschreibung text;
+```
+Vollständig inkl. Schreibrechte (Insert/Update/Delete für Nicht-Viewer) in Datei: `add_beschreibung_und_crud_policies.sql`
+
+---
+
+## 📐 Kopfzeile & Fusszeile
+
+Da der Platz in der Kopfzeile knapp ist, wurde die **Versionsbezeichnung aus der Kopfzeile entfernt**. Sie steht neu in einer schlichten **Fusszeile** am unteren Rand – zusammen mit der **Anzahl Weine** im Keller (z.B. «124 Weine · v3.0»). Der Zähler aktualisiert sich automatisch.
+
+---
+
+## 🚀 Bereitstellung
+
+1. `add_beschreibung_und_crud_policies.sql` im Supabase SQL Editor ausführen (einmalig) – **ohne diesen Schritt schlägt das Speichern/Löschen von Rebsorten fehl**.
+2. `index.html` (v3.0) auf GitHub aktualisieren.
+3. `Weinkeller_Bedienungsanleitung_v3.0.html` (gleicher Dateiname wie im Hilfe-Link!) zusätzlich ins Repo hochladen – sonst führt das Hilfe-Symbol ins Leere.
+
+---
+
 # Mein Weinkeller – Release Notes v2.10
 
-**Datum:** 11.07.2026
+**Datum:** 11.07.2026 (Rebsorten-Übersicht ergänzt 15.07.2026)
 **Vorherige Version:** v2.9
 
 ---
 
 ## Übersicht
 
-Version 2.10 ergänzt ein neues **🍽 Weinkombinationen-Symbol** im Header, zwischen Hilfe- und Abmelde-Symbol. Es verlinkt auf eine separat gehostete Seite (`Weinkeller_weinkombinationen.html`) mit fertig zusammengestellten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü aus dem eigenen Keller. Keine Datenbank-Migration nötig.
+Version 2.10 ergänzt zwei neue Header-Symbole. Das **🍇 Rebsorten-Symbol** (rechts vom Hilfe-Symbol) öffnet direkt in der App eine Übersicht aller im Keller erfassten und beschriebenen Rebsorten. Das **🍽 Weinkombinationen-Symbol** verlinkt auf eine separat gehostete Seite (`Weinkeller_weinkombinationen.html`) mit fertig zusammengestellten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü aus dem eigenen Keller. Keine Datenbank-Migration nötig.
+
+---
+
+## 🍇 Neu: Rebsorten-Übersicht im Header
+
+Neues Icon im Header direkt **rechts vom Hilfe-Symbol**. Ein Tipp darauf öffnet – ohne neuen Tab, als Overlay in der App – eine Übersicht **aller Rebsorten**, die im Keller erfasst und beschrieben sind (Supabase-Tabelle `rebsorten`). Mit Suchfeld (Name, Herkunft, Charakter) und Filter nach **Rot/Weiss**. Pro Sorte werden Herkunft, Körper, Säure, Charakter, passende (vegetarische) Gerichte und bekannte Synonyme angezeigt. Die Daten sind bereits beim App-Start geladen – es entsteht keine zusätzliche Datenbank-Abfrage. Im Unterschied zum Trauben-Icon bei einem einzelnen Wein (B5) zeigt dieses Fenster alle Sorten auf einmal.
 
 ---
 
 ## 🍽 Neu: Weinkombinationen-Symbol im Header
 
-Drittes Icon im Header (nach Hilfe-Symbol, vor Abmelde-Symbol) öffnet in einem neuen Tab eine statische Seite mit fünf Wein-Kombinationen (A–E), je aufgebaut nach Weincharakteristik (Säure, Körper, Tannin, Holzeinsatz, Süsse) statt nach den Datenbankfeldern „Bewertung"/„Eignung". Pro Kombination eine Tabelle mit Gang, Wein, Bestand, Trinkreife-Status, Eigenschaft und passendem Gericht.
+Icon im Header (nach dem Rebsorten-Symbol, vor dem Abmelde-Symbol) öffnet in einem neuen Tab eine statische Seite mit fünf Wein-Kombinationen (A–E), je aufgebaut nach Weincharakteristik (Säure, Körper, Tannin, Holzeinsatz, Süsse) statt nach den Datenbankfeldern „Bewertung"/„Eignung". Pro Kombination eine Tabelle mit Gang, Wein, Bestand, Trinkreife-Status, Eigenschaft und passendem Gericht.
 
 ---
 
 ## 🚀 Bereitstellung
 
-1. Keine Supabase-Migration nötig.
+1. Keine Supabase-Migration nötig – die Rebsorten-Übersicht liest die bereits vorhandene Tabelle `rebsorten`.
 2. `index.html` auf GitHub aktualisieren.
-3. `Weinkeller_Bedienungsanleitung_v2.10.html` UND `Weinkeller_weinkombinationen.html` (beide mit exakt diesem Dateinamen) zusätzlich ins Repo hochladen – sonst führen Hilfe- bzw. Weinkombinationen-Symbol ins Leere.
+3. `Weinkeller_Bedienungsanleitung_v2.10.html` UND `Weinkeller_weinkombinationen.html` (beide mit exakt diesem Dateinamen) zusätzlich ins Repo hochladen – sonst führen Hilfe- bzw. Weinkombinationen-Symbol ins Leere. (Die Rebsorten-Übersicht selbst braucht keine zusätzliche Datei, sie steckt in der `index.html`.)
 
 ---
 
