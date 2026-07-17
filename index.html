@@ -425,7 +425,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- Rebsorte bearbeiten / neu -->
 <div class="overlay" id="rebEditModal">
   <div class="sheet">
-    <h2><i class="ti ti-pencil"></i> <span id="rebEditTitle">Rebsorte bearbeiten</span> <button class="cx" onclick="closeRebEdit()"><i class="ti ti-x"></i></button></h2>
+    <div class="sheet-head">
+      <h2><i class="ti ti-pencil" aria-hidden="true"></i> <span id="rebEditTitle">Rebsorte bearbeiten</span></h2>
+      <div class="head-actions">
+        <button class="head-ico save" id="rebf-savebtn" onclick="saveRebEdit()" title="Speichern"><i class="ti ti-check"></i></button>
+        <button class="head-ico" onclick="closeRebEdit()" title="Abbrechen"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
     <div class="rebf-grid">
       <input type="hidden" id="rebf-id">
       <div class="rebf-row">
@@ -443,11 +449,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-field"><label>Beschreibung</label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
     </div>
     <div class="rebf-err" id="rebf-err"></div>
-    <div class="rebf-actions">
-      <button class="rebf-btn danger" id="rebf-delbtn" onclick="deleteRebsorte(document.getElementById('rebf-id').value)" title="Löschen" style="display:none;"><i class="ti ti-trash"></i></button>
-      <button class="rebf-btn" onclick="closeRebEdit()">Abbrechen</button>
-      <button class="rebf-btn primary" id="rebf-savebtn" onclick="saveRebEdit()">Speichern</button>
-    </div>
   </div>
 </div>
 
@@ -911,7 +912,6 @@ function openRebEdit(id){
   document.getElementById('rebf-charakter').value=g?(g.c||''):'';
   document.getElementById('rebf-aliase').value=g?(g.raw||(g.x?g.x.join(', '):'')):'';
   document.getElementById('rebf-beschreibung').value=g?(g.b||''):'';
-  document.getElementById('rebf-delbtn').style.display=isNew?'none':'inline-flex';
   document.getElementById('rebEditModal').classList.add('open');
 }
 function closeRebEdit(){document.getElementById('rebEditModal').classList.remove('open');}
@@ -924,7 +924,7 @@ async function saveRebEdit(){
   const id=document.getElementById('rebf-id').value;
   const val=x=>{const v=document.getElementById(x).value.trim();return v||null;};
   const payload={name:name,typ:typ,herkunft:val('rebf-herkunft'),koerper:val('rebf-koerper'),saeure:val('rebf-saeure'),eignung:val('rebf-eignung'),charakter:val('rebf-charakter'),aliase:val('rebf-aliase'),beschreibung:val('rebf-beschreibung')};
-  const btn=document.getElementById('rebf-savebtn');btn.disabled=true;btn.textContent='Speichert …';
+  const btn=document.getElementById('rebf-savebtn');if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
   try{
     if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
     let r;
@@ -935,7 +935,7 @@ async function saveRebEdit(){
     renderRebsorten();
     closeRebEdit();
   }catch(e){err.textContent='Fehler: '+((e&&e.message)||e);}
-  finally{btn.disabled=false;btn.textContent='Speichern';}
+  finally{if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i>';}}
 }
 async function deleteRebsorte(id){
   if(isViewer||!id)return;
