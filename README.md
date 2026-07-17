@@ -1,3 +1,44 @@
+# Mein Weinkeller – Release Notes v3.1
+
+**Datum:** 17.07.2026
+**Vorherige Version:** v3.0
+
+---
+
+## Übersicht
+
+Version 3.1 ergänzt bei den Weingütern ein Feld **Webseite** und bringt den **Google-Maps-Link direkt in die Weinliste**. Neben jedem Weingut erscheinen neu kleine Icons: ein **Globus** (öffnet die offizielle Weingut-Webseite) und ein **Pin** (Google-Maps-Suche) – sowohl in der Weinliste als auch im Weingut-Info-Fenster. Der farbige Akzentbalken der Weingut-Karten (Übersicht und Info-Fenster) wechselt von Weinrot auf **Grün**. Einmalig muss `add_weingut_webseite.sql` in Supabase ausgeführt werden; die Webseiten der 34 bestehenden Weingüter sind bereits erfasst.
+
+---
+
+## 🌐 Neues Feld: Webseite (Weingut)
+
+Die Tabelle `weingueter` erhält die Spalte `webseite`. Ist eine URL hinterlegt, erscheint neben dem Weingut – in der Weinliste, in der Weingut-Übersicht und im Weingut-Info-Fenster – ein Globus-Icon bzw. ein «Webseite öffnen»-Link, der die offizielle Seite in einem neuen Tab öffnet. Die Webseiten der bestehenden 34 Weingüter wurden recherchiert und eingetragen (5 ohne eigene Seite: Calendal, Capolavoro, Château Lafon La Tuilerie, Château Roc Mignon, Josep Girones Llop).
+
+**Supabase-Migration (einmalig):** `add_weingut_webseite.sql` im SQL Editor ausführen.
+
+---
+
+## 📍 Google-Maps-Link in der Weinliste
+
+Der bisher nur im Weingut-Info-Fenster verfügbare Google-Maps-Link (Namenssuche aus Weingut + Region/Gebiet/Land) erscheint neu als Pin-Icon **direkt in der Weinliste** neben dem Weingut – ohne dass zuerst das Info-Fenster geöffnet werden muss.
+
+---
+
+## 🟢 Weingut-Karten in Grün
+
+Der farbige Balken links an den Weingut-Karten – in der Weingut-Übersicht wie im Info-Fenster – ist neu **grün** (hell `#3B6D11`, dunkel `#97C459`) statt weinrot. Die «Weingut»-Plakette im Info-Fenster ist entsprechend grün. Rebsorten-Karten bleiben unverändert.
+
+---
+
+## 🚀 Bereitstellung
+
+1. `add_weingut_webseite.sql` im Supabase SQL Editor ausführen (einmalig).
+2. `index.html` (v3.1) auf GitHub aktualisieren.
+3. `Weinkeller_Bedienungsanleitung_v3.1.html` (gleicher Dateiname wie im Hilfe-Link!) zusätzlich ins Repo hochladen – sonst führt das Hilfe-Symbol ins Leere.
+
+---
+
 # Mein Weinkeller – Release Notes v3.0
 
 **Datum:** 16.07.2026
