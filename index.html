@@ -261,6 +261,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v3.0.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
+      <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
@@ -405,6 +406,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rebf-btn.primary{background:var(--wr);border-color:var(--wr);color:#fff;}
 .rebf-btn.danger{flex:none;width:44px;color:#C25A7C;border-color:#E4B7C4;background:var(--cb);}
 .rebf-err{color:#C25A7C;font-size:12px;margin-top:8px;min-height:16px;}
+.reb-gap{font-size:13px;padding:5px 12px;border-radius:20px;border:1px solid #E4C4CE;background:var(--cb);color:var(--wr);cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;}
+.reb-gap:hover{background:var(--wrl);}
+.rebf-lblrow{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.wiki-btn{font-size:11.5px;font-weight:600;color:var(--wr);border:1px solid #E4C4CE;border-radius:7px;padding:3px 8px;background:var(--cb);cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.wiki-btn:hover{background:var(--wrl);}
+.wiki-btn:disabled{opacity:.6;cursor:default;}
+#gapModal .sheet{max-width:560px;margin:0 auto;}
+.gap-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.gap-row{display:flex;align-items:center;gap:10px;border:1px solid var(--bd);border-radius:var(--br-lg);padding:10px 12px;}
+.gap-meta{flex:1;min-width:0;}
+.gap-name{font-weight:700;font-size:14px;color:var(--tx);}
+.gap-sub{font-size:11.5px;color:var(--tm);margin-top:1px;}
+.gap-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.02em;flex:none;}
+.gap-tag.miss{color:#A32D2D;background:#FCEBEB;}
+.gap-tag.nodesc{color:#8a6d1a;background:#FBF3D9;}
+.gap-act{flex:none;font-size:12px;font-weight:600;color:var(--wr);border:1px solid #E4C4CE;border-radius:8px;padding:6px 11px;background:var(--cb);cursor:pointer;}
+.gap-act:hover{background:var(--wr);color:#fff;border-color:var(--wr);}
+.gap-empty{text-align:center;color:var(--tm);padding:24px 10px;font-size:13px;line-height:1.5;}
 </style>
 <div class="overlay" id="rebModal">
   <div class="sheet">
@@ -416,6 +435,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <button class="reb-chip" data-t="rot" onclick="setRebFilter('rot')"><span style="color:#8B2E4A;">&#9679;</span> Rot</button>
         <button class="reb-chip" data-t="weiss" onclick="setRebFilter('weiss')"><span style="color:#C9A227;">&#9679;</span> Weiss</button>
         <button class="reb-chip reb-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
+        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;"><i class="ti ti-alert-triangle"></i> Lücken</button>
       </div>
     </div>
     <div class="reb-grid" id="rebList"></div>
@@ -446,9 +466,57 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-field"><label>Passt zu (Eignung)</label><input type="text" id="rebf-eignung" placeholder="z.B. Pilzrisotto, Weichkäse"></div>
       <div class="rebf-field"><label>Charakter</label><input type="text" id="rebf-charakter" placeholder="z.B. rund, weich, zugänglich"></div>
       <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="rebf-aliase" placeholder="z.B. blauburgunder"></div>
-      <div class="rebf-field"><label>Beschreibung</label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
+      <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="rebf-wikibtn" onclick="wikiFill('reb')"><i class="ti ti-download"></i> Aus Wikipedia</button></label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
     </div>
     <div class="rebf-err" id="rebf-err"></div>
+  </div>
+</div>
+
+<!-- Lücken (fehlende Referenzeinträge) -->
+<div class="overlay" id="gapModal">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2><i class="ti ti-alert-triangle" aria-hidden="true"></i> <span id="gapTitle">Lücken</span></h2>
+      <div class="head-actions"><button class="head-ico" onclick="closeGaps()" title="Schliessen"><i class="ti ti-x"></i></button></div>
+    </div>
+    <div id="gapList" class="gap-list"></div>
+  </div>
+</div>
+
+<!-- Weingut-Übersicht + Bearbeiten -->
+<style>#wgModal .sheet{max-width:640px;margin:0 auto;}#wgEditModal .sheet{max-width:560px;margin:0 auto;}</style>
+<div class="overlay" id="wgModal">
+  <div class="sheet">
+    <h2><i class="ti ti-building-castle" aria-hidden="true" style="vertical-align:-3px;"></i> Weingüter <span id="wgCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <button class="cx" onclick="closeWeingueter()"><i class="ti ti-x"></i></button></h2>
+    <div class="reb-toolbar">
+      <input type="text" id="wgSearch" class="reb-search" placeholder="Weingut, Charakter oder Anbau suchen ..." oninput="renderWeingueter()">
+      <div class="reb-chips">
+        <button class="reb-chip reb-new" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
+        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;"><i class="ti ti-alert-triangle"></i> Lücken</button>
+      </div>
+    </div>
+    <div class="reb-grid" id="wgList"></div>
+  </div>
+</div>
+
+<div class="overlay" id="wgEditModal">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2><i class="ti ti-pencil" aria-hidden="true"></i> <span id="wgEditTitle">Weingut bearbeiten</span></h2>
+      <div class="head-actions">
+        <button class="head-ico save" id="wgf-savebtn" onclick="saveWgEdit()" title="Speichern"><i class="ti ti-check"></i></button>
+        <button class="head-ico" onclick="closeWgEdit()" title="Abbrechen"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
+    <div class="rebf-grid">
+      <input type="hidden" id="wgf-id">
+      <div class="rebf-field"><label>Name *</label><input type="text" id="wgf-name" placeholder="Exakt wie im Wein-Feld «Weingut»"></div>
+      <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="wgf-aliase" placeholder="Schreibvarianten / korrekte Schreibweise"></div>
+      <div class="rebf-field"><label>Charakter</label><textarea id="wgf-charakter" placeholder="Charakterisierung des Weinguts"></textarea></div>
+      <div class="rebf-field"><label>Anbau</label><textarea id="wgf-anbau" placeholder="Charakterisierung des Anbaus"></textarea></div>
+      <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="wgf-wikibtn" onclick="wikiFill('wg')"><i class="ti ti-download"></i> Aus Wikipedia</button></label><textarea id="wgf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
+    </div>
+    <div class="rebf-err" id="wgf-err"></div>
   </div>
 </div>
 
@@ -895,8 +963,9 @@ function renderRebsorten(){
       +'</div>';
   }).join('');
   const nb=document.getElementById('rebNewBtn');if(nb)nb.style.display=isViewer?'none':'inline-flex';
+  const gb=document.getElementById('rebGapBtn');if(gb)gb.style.display=isViewer?'none':'inline-flex';
 }
-function openRebEdit(id){
+function openRebEdit(id, prefill){
   if(isViewer)return;
   const isNew=(id==null||id===''||id==='null');
   document.getElementById('rebEditTitle').textContent=isNew?'Neue Rebsorte':'Rebsorte bearbeiten';
@@ -912,6 +981,7 @@ function openRebEdit(id){
   document.getElementById('rebf-charakter').value=g?(g.c||''):'';
   document.getElementById('rebf-aliase').value=g?(g.raw||(g.x?g.x.join(', '):'')):'';
   document.getElementById('rebf-beschreibung').value=g?(g.b||''):'';
+  if(isNew&&prefill){if(prefill.n)document.getElementById('rebf-name').value=prefill.n;if(prefill.t)document.getElementById('rebf-typ').value=prefill.t;}
   document.getElementById('rebEditModal').classList.add('open');
 }
 function closeRebEdit(){document.getElementById('rebEditModal').classList.remove('open');}
@@ -950,11 +1020,175 @@ async function deleteRebsorte(id){
     closeRebEdit();
   }catch(e){alert('Fehler beim Löschen: '+((e&&e.message)||e));}
 }
+/* ── Wikipedia-Vorabfüllung ── */
+async function wikiSummary(title){
+  const t=String(title||'').trim();if(!t)return null;
+  for(const base of ['https://de.wikipedia.org','https://en.wikipedia.org']){
+    try{
+      const r=await fetch(base+'/api/rest_v1/page/summary/'+encodeURIComponent(t.replace(/ /g,'_')),{headers:{accept:'application/json'}});
+      if(!r.ok)continue;
+      const j=await r.json();
+      if(j&&j.type!=='disambiguation'&&j.extract&&j.extract.trim().length>20){
+        return {extract:j.extract.trim(),lang:base.indexOf('de.')>=0?'de':'en'};
+      }
+    }catch(e){}
+  }
+  return null;
+}
+async function wikiFill(kind){
+  const map={reb:['rebf-name','rebf-beschreibung','rebf-wikibtn','rebf-err'],wg:['wgf-name','wgf-beschreibung','wgf-wikibtn','wgf-err']};
+  const [nameId,descId,btnId,errId]=map[kind];
+  const name=(document.getElementById(nameId).value||'').trim();
+  const err=document.getElementById(errId);if(err)err.textContent='';
+  if(!name){if(err)err.textContent='Bitte zuerst den Namen eingeben.';return;}
+  const btn=document.getElementById(btnId),orig=btn?btn.innerHTML:'';
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i> lädt …';}
+  try{
+    const sres=await wikiSummary(name);
+    if(!sres){if(err)err.textContent='Kein Wikipedia-Eintrag zu «'+name+'» gefunden.';}
+    else{const ta=document.getElementById(descId);ta.value=sres.extract+(sres.lang==='en'?'\n\n(Quelle: englische Wikipedia)':'');ta.focus();}
+  }catch(e){if(err)err.textContent='Wikipedia-Abruf fehlgeschlagen (offline?).';}
+  finally{if(btn){btn.disabled=false;btn.innerHTML=orig;}}
+}
+/* ── Lücken (fehlende Referenzeinträge) ── */
+let GAP_ITEMS=[];
+function closeGaps(){document.getElementById('gapModal').classList.remove('open');}
+function gapRow(name,sub,tagcls,tagtxt,btn,idx){
+  return '<div class="gap-row"><div class="gap-meta"><div class="gap-name">'+rebEsc(name)+'</div><div class="gap-sub">'+rebEsc(sub)+'</div></div><span class="gap-tag '+tagcls+'">'+tagtxt+'</span><button class="gap-act" onclick="gapAct('+idx+')">'+btn+' &rarr;</button></div>';
+}
+function gapAct(i){
+  const it=GAP_ITEMS[i];if(!it)return;closeGaps();
+  if(it.kind==='reb-new')openRebEdit(null,{n:it.name,t:it.typ||'rot'});
+  else if(it.kind==='reb-edit')openRebEdit(it.id);
+  else if(it.kind==='wg-new')openWgEdit(null,{n:it.name});
+  else if(it.kind==='wg-edit')openWgEdit(it.id);
+}
+function wineCount(n){return 'in '+n+' '+(n===1?'Wein':'Weinen');}
+function computeRebGaps(){
+  const missing={},nodesc={};
+  (wines||[]).forEach(w=>{
+    const toks=(w.sorte||'').split(',').map(x=>x.trim()).filter(Boolean);
+    const wtyp=(w.typ==='Rotwein')?'rot':(w.typ==='Weisswein')?'weiss':'';
+    toks.forEach(tok=>{
+      if(rebNorm(tok)==='moelleux')return;
+      const g=rebLookup(tok);
+      if(!g){const k=rebNorm(tok);if(!k)return;if(!missing[k])missing[k]={name:tok,typ:wtyp,count:0};missing[k].count++;}
+      else if(!g.b||!String(g.b).trim()){if(!nodesc[g.id])nodesc[g.id]={name:g.n,id:g.id,count:0};nodesc[g.id].count++;}
+    });
+  });
+  const by=(a,b)=>b.count-a.count;
+  return {missing:Object.values(missing).sort(by),nodesc:Object.values(nodesc).sort(by)};
+}
+function openRebGaps(){
+  if(isViewer)return;
+  document.getElementById('gapTitle').textContent='Fehlende Rebsorten';
+  const {missing,nodesc}=computeRebGaps();
+  GAP_ITEMS=[];let h='';
+  missing.forEach(m=>{const i=GAP_ITEMS.push({kind:'reb-new',name:m.name,typ:m.typ})-1;h+=gapRow(m.name,wineCount(m.count),'miss','fehlt ganz','Anlegen',i);});
+  nodesc.forEach(m=>{const i=GAP_ITEMS.push({kind:'reb-edit',id:m.id})-1;h+=gapRow(m.name,wineCount(m.count),'nodesc','Beschreibung fehlt','Ergänzen',i);});
+  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine Lücken – alle Rebsorten aus deinen Weinen sind erfasst und beschrieben.</div>';
+  document.getElementById('gapModal').classList.add('open');
+}
 function wgNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
 let WEINGUETER=[],WG_IDX={};
 function wgBuildIndex(){WG_IDX={};WEINGUETER.forEach(g=>{WG_IDX[wgNorm(g.name)]=g;(g.aliase?String(g.aliase).split(',').map(a=>a.trim()).filter(Boolean):[]).forEach(a=>{WG_IDX[wgNorm(a)]=g;});});}
 function wgLookup(name){const t=wgNorm(name);if(!t)return null;return WG_IDX[t]||null;}
 async function loadWeingueter(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('weingueter').select('*');if(r.error||!r.data||!r.data.length)return;WEINGUETER=r.data;wgBuildIndex();}catch(e){}}
+function openWeingueter(){document.getElementById('wgModal').classList.add('open');renderWeingueter();}
+function closeWeingueter(){document.getElementById('wgModal').classList.remove('open');}
+function renderWeingueter(){
+  const q=wgNorm((document.getElementById('wgSearch')||{}).value||'');
+  let list=(WEINGUETER||[]).slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','de'));
+  if(q)list=list.filter(g=>[g.name,g.charakter,g.anbau,g.beschreibung,g.aliase].map(x=>wgNorm(x||'')).join(' ').includes(q));
+  const cnt=document.getElementById('wgCount');if(cnt)cnt.textContent=list.length+' Weing\u00fcter';
+  const box=document.getElementById('wgList');if(box){
+    if(!list.length){box.innerHTML='<div style="text-align:center;color:var(--tm);padding:24px;font-size:13px;">Kein Weingut gefunden.</div>';}
+    else{box.innerHTML=list.map(g=>{
+      const acts=(!isViewer&&g.id!=null)?'<span class="reb-actions"><button class="reb-act" onclick="openWgEdit('+g.id+')" title="Bearbeiten"><i class="ti ti-pencil"></i></button><button class="reb-act reb-act-del" onclick="deleteWeingut('+g.id+')" title="L\u00f6schen"><i class="ti ti-trash"></i></button></span>':'';
+      const alias=(g.aliase&&String(g.aliase).trim())?'<div class="reb-line"><span class="reb-lbl">Auch: </span>'+rebEsc(g.aliase)+'</div>':'';
+      return '<div class="reb-card" style="border-left-color:var(--wr);">'
+        +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.name)+'</span>'+acts+'</div>'
+        +(g.charakter?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.charakter)+'</div>':'')
+        +(g.anbau?'<div class="reb-line"><span class="reb-lbl">Anbau: </span>'+rebEsc(g.anbau)+'</div>':'')
+        +alias
+        +(g.beschreibung?'<div class="reb-line reb-desc"><span class="reb-lbl">Beschreibung: </span>'+rebEsc(g.beschreibung)+'</div>':'')
+        +'</div>';
+    }).join('');}
+  }
+  const nb=document.getElementById('wgNewBtn');if(nb)nb.style.display=isViewer?'none':'inline-flex';
+  const gb=document.getElementById('wgGapBtn');if(gb)gb.style.display=isViewer?'none':'inline-flex';
+}
+function openWgEdit(id, prefill){
+  if(isViewer)return;
+  const isNew=(id==null||id===''||id==='null');
+  document.getElementById('wgEditTitle').textContent=isNew?'Neues Weingut':'Weingut bearbeiten';
+  document.getElementById('wgf-err').textContent='';
+  const g=isNew?null:(WEINGUETER||[]).find(x=>String(x.id)===String(id));
+  document.getElementById('wgf-id').value=isNew?'':id;
+  document.getElementById('wgf-name').value=g?(g.name||''):'';
+  document.getElementById('wgf-aliase').value=g?(g.aliase||''):'';
+  document.getElementById('wgf-charakter').value=g?(g.charakter||''):'';
+  document.getElementById('wgf-anbau').value=g?(g.anbau||''):'';
+  document.getElementById('wgf-beschreibung').value=g?(g.beschreibung||''):'';
+  if(isNew&&prefill){if(prefill.n)document.getElementById('wgf-name').value=prefill.n;}
+  document.getElementById('wgEditModal').classList.add('open');
+}
+function closeWgEdit(){document.getElementById('wgEditModal').classList.remove('open');}
+async function saveWgEdit(){
+  if(isViewer)return;
+  const err=document.getElementById('wgf-err');err.textContent='';
+  const name=document.getElementById('wgf-name').value.trim();
+  if(!name){err.textContent='Name ist erforderlich.';return;}
+  const id=document.getElementById('wgf-id').value;
+  const val=x=>{const v=document.getElementById(x).value.trim();return v||null;};
+  const payload={name:name,aliase:val('wgf-aliase'),charakter:val('wgf-charakter'),anbau:val('wgf-anbau'),beschreibung:val('wgf-beschreibung')};
+  const btn=document.getElementById('wgf-savebtn');if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
+  try{
+    if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
+    let r;
+    if(id){r=await db.from('weingueter').update(payload).eq('id',id);}
+    else{r=await db.from('weingueter').insert(payload);}
+    if(r.error)throw r.error;
+    await loadWeingueter();
+    renderWeingueter();
+    closeWgEdit();
+  }catch(e){err.textContent='Fehler: '+((e&&e.message)||e);}
+  finally{if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i>';}}
+}
+async function deleteWeingut(id){
+  if(isViewer||!id)return;
+  const g=(WEINGUETER||[]).find(x=>String(x.id)===String(id));
+  if(!confirm('Weingut \u00ab'+(g?g.name:'')+'\u00bb wirklich l\u00f6schen?'))return;
+  try{
+    if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
+    const r=await db.from('weingueter').delete().eq('id',id);
+    if(r.error)throw r.error;
+    await loadWeingueter();
+    renderWeingueter();
+    closeWgEdit();
+  }catch(e){alert('Fehler beim L\u00f6schen: '+((e&&e.message)||e));}
+}
+function computeWgGaps(){
+  const missing={},nodesc={};
+  (wines||[]).forEach(w=>{
+    const name=(w.weingut||'').trim();if(!name)return;
+    const g=wgLookup(name);
+    if(!g){const k=wgNorm(name);if(!k)return;if(!missing[k])missing[k]={name:name,count:0};missing[k].count++;}
+    else if(!g.beschreibung||!String(g.beschreibung).trim()){if(!nodesc[g.name])nodesc[g.name]={name:g.name,id:g.id,count:0};nodesc[g.name].count++;}
+  });
+  const by=(a,b)=>b.count-a.count;
+  return {missing:Object.values(missing).sort(by),nodesc:Object.values(nodesc).sort(by)};
+}
+function openWgGaps(){
+  if(isViewer)return;
+  document.getElementById('gapTitle').textContent='Fehlende Weing\u00fcter';
+  const g=computeWgGaps();
+  GAP_ITEMS=[];let h='';
+  g.missing.forEach(m=>{const i=GAP_ITEMS.push({kind:'wg-new',name:m.name})-1;h+=gapRow(m.name,wineCount(m.count),'miss','fehlt ganz','Anlegen',i);});
+  g.nodesc.forEach(m=>{const i=GAP_ITEMS.push({kind:'wg-edit',id:m.id})-1;h+=gapRow(m.name,wineCount(m.count),'nodesc','Beschreibung fehlt','Erg\u00e4nzen',i);});
+  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine L\u00fccken \u2013 alle Weing\u00fcter aus deinen Weinen sind erfasst und beschrieben.</div>';
+  document.getElementById('gapModal').classList.add('open');
+}
 function weingutInfoIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:16px;"></i>`;}
 function weingutListIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="event.stopPropagation();showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:5px;vertical-align:middle;font-size:15px;"></i>`;}
 function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const mapsQ=[w.weingut,w.region,w.gebiet,w.land].filter(Boolean).join(', ');const mapsLink=mapsQ?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQ)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;margin:2px 0 12px;color:var(--wr);text-decoration:none;font-size:.9rem;font-weight:600;"><i class="ti ti-map-pin" style="font-size:16px;"></i> Auf Google Maps anzeigen</a>`:'';const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${mapsLink}${g.charakter?`<div class="wgi-block"><span class="wgi-label">Charakter</span><p>${g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:(mapsLink?`<div class="rebi-card weingut">${mapsLink}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>');let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
