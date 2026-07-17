@@ -74,11 +74,14 @@ technisch (Entwicklung/Betrieb) und nur nötig, wenn du die App selbst aufsetzt,
 Skripte betreibst.</p>
 
 <div class="box tip"><div class="lbl">Neu in Version 3.0</div>
-Die <strong>Rebsortenübersicht ist neu bearbeitbar</strong>: Rebsorten lassen sich direkt in der App
-<strong>hinzufügen, bearbeiten und löschen</strong> (nur als Admin). Dazu kommt das neue Freitextfeld
-<strong>Beschreibung</strong>, das du später erfassen kannst. Ausserdem steht die <strong>Versionsangabe</strong>
-neu in einer <strong>Fusszeile</strong> zusammen mit der <strong>Anzahl Weine</strong>. Details siehe B1 und B5.
-Einmalig ist eine Datenbank-Migration nötig (Teil E2).</div>
+<strong>Rebsorten- und Weingut-Übersicht sind neu bearbeitbar</strong>: beide lassen sich direkt in der App
+<strong>hinzufügen, bearbeiten und löschen</strong> (nur als Admin), je mit einem Freitextfeld
+<strong>Beschreibung</strong>. Ein <strong>«Lücken»-Button</strong> zeigt fehlende bzw. unbeschriebene Einträge
+aus deinen Weinen, und <strong>«Aus Wikipedia laden»</strong> füllt die Beschreibung als Entwurf. Weingüter
+erhalten dafür ein neues 🏰-Symbol im Header; deren bisheriges Feld «Charakter» wurde mit der Beschreibung
+zusammengeführt. Ausserdem steht die <strong>Versionsangabe</strong> neu in einer <strong>Fusszeile</strong>
+zusammen mit der <strong>Anzahl Weine</strong>. Details siehe B1, B5–B6 und Teil C. Einmalig sind zwei
+Datenbank-Migrationen nötig (Teil E2).</div>
 
 <div class="box tip"><div class="lbl">Neu in Version 2.10</div>
 Zwei neue Header-Symbole. Das <strong>🍇 Rebsorten-Symbol</strong> (rechts vom Hilfe-Symbol) öffnet direkt in der App
@@ -204,9 +207,17 @@ Mit Suchfeld (Name, Herkunft, Charakter) und Filter nach Rot/Weiss; pro Sorte we
 Charakter, passende (vegetarische) Gerichte und bekannte Synonyme angezeigt. Im Unterschied zum Trauben-Icon bei
 einem einzelnen Wein (B5) zeigt dieses Fenster <em>alle</em> Sorten auf einmal.
 <br><span class="pill">neu in v3.0</span> Als Admin kannst du hier Rebsorten direkt <strong>hinzufügen, bearbeiten
-und löschen</strong> – inklusive dem neuen Feld <strong>Beschreibung</strong>. Details siehe B5.</div>
+und löschen</strong> – inklusive dem neuen Feld <strong>Beschreibung</strong>. Zusätzlich gibt es den
+<strong>«Lücken»-Button</strong> (fehlende/unbeschriebene Sorten aus deinen Weinen) und im Formular
+<strong>«Aus Wikipedia laden»</strong>. Details siehe B5 und Teil C.</div>
+<div class="box tip"><div class="lbl">Weingut-Symbol im Header <span class="pill">neu in v3.0</span></div>
+Rechts vom Rebsorten-Symbol findest du ein <strong>🏰 Weingut-Symbol</strong>. Es öffnet – analog zur
+Rebsortenübersicht – eine <strong>Übersicht aller Weingüter</strong> mit Suche. Als Admin kannst du hier
+Weingüter <strong>hinzufügen, bearbeiten und löschen</strong>, den <strong>«Lücken»-Button</strong> nutzen und
+die Beschreibung <strong>«Aus Wikipedia laden»</strong>. Pro Weingut werden Beschreibung und Anbau angezeigt.
+Details siehe B6 und Teil C.</div>
 <div class="box tip"><div class="lbl">Weinkombinationen-Symbol im Header <span class="pill">neu in v2.10</span></div>
-Zwischen Rebsorten- und Abmelde-Symbol findest du ein <strong>🍽 Weinkombinationen-Symbol</strong>. Ein Tipp darauf
+Zwischen Weingut- und Abmelde-Symbol findest du ein <strong>🍽 Weinkombinationen-Symbol</strong>. Ein Tipp darauf
 öffnet in einem neuen Tab eine Seite mit vorbereiteten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü
 aus deinem Keller (Gang, Wein, Bestand, Trinkreife-Status, Eigenschaft, passendes Gericht).</div>
 
@@ -312,8 +323,11 @@ Weiterverarbeitung. Das empfiehlt sich regelmässig.</p>
 Rebsortenübersicht (🍇-Symbol im Header) und tippe auf <strong>+ Neu</strong>. Fülle Name und Typ (Pflicht) sowie
 optional Herkunft, Körper, Säure, Eignung, Charakter, Aliase und die <strong>Beschreibung</strong> aus und tippe auf
 <strong>Speichern</strong>. Zum Ändern oder Entfernen bestehender Sorten nutzt du die Symbole ✏️ und 🗑 auf der
-jeweiligen Karte. Kein Terminal, keine Supabase-Anmeldung nötig. (Nur als Admin sichtbar – Viewer sehen die Liste
-nur lesend.)</p>
+jeweiligen Karte. Über den <strong>«Lücken»-Button</strong> siehst du auf einen Blick, welche Sorten aus deinen
+Weinen noch <em>ganz fehlen</em> oder <em>keine Beschreibung</em> haben (mit Anzahl Weine) – ein Tipp öffnet die
+vorausgefüllte Maske. Der Button <strong>«Aus Wikipedia laden»</strong> beim Beschreibungsfeld holt einen
+Textentwurf (du prüfst/kürzt vor dem Speichern). Kein Terminal, keine Supabase-Anmeldung nötig. (Nur als Admin
+sichtbar – Viewer sehen die Liste nur lesend.)</p>
 <p><strong>Variante B – von Hand in Supabase (ohne App):</strong> In Supabase → <strong>Table Editor</strong> → Tabelle
 <code>rebsorten</code> → <strong>Insert row</strong>, Felder ausfüllen (name, typ <code>rot</code>/<code>weiss</code>,
 herkunft, koerper, saeure, eignung, charakter, aliase optional). Beim nächsten Laden erscheint die Info automatisch.</p>
@@ -334,15 +348,22 @@ im Anschluss an einen Lauf des Wein-Enrichers, wenn neue Rebsorten dazugekommen 
 <h3>Neues Weingut ergänzen <span class="pill">neu in v2.6</span></h3>
 <p>Erfasst du einen Wein mit einem Weingut, zu dem noch keine Beschreibung hinterlegt ist, fehlt beim
 Weingut-Namen das Info-Icon. So ergänzt du es:</p>
-<p><strong>Variante A – von Hand:</strong> In Supabase → <strong>Table Editor</strong> → Tabelle
+<p><strong>Variante A – direkt in der App <span class="pill">neu in v3.0, empfohlen</span>:</strong> Öffne die
+Weingut-Übersicht (🏰-Symbol im Header) und tippe auf <strong>+ Neu</strong> – oder nutze den
+<strong>«Lücken»-Button</strong>, der dir fehlende bzw. unbeschriebene Weingüter aus deinen Weinen auflistet
+(«Anlegen»/«Ergänzen»). Fülle Name (Pflicht) sowie Beschreibung, Anbau und Aliase aus; <strong>«Aus Wikipedia
+laden»</strong> holt einen Beschreibungs-Entwurf. Ändern/Löschen über ✏️ und 🗑 auf der Karte. <em>Hinweis:</em> Das
+frühere Feld «Charakter» wurde mit der Beschreibung zusammengeführt – bestehende Charakter-Texte stehen automatisch
+in der Beschreibung.</p>
+<p><strong>Variante B – von Hand in Supabase:</strong> In Supabase → <strong>Table Editor</strong> → Tabelle
 <code>weingueter</code> → <strong>Insert row</strong>. Felder: <code>name</code> (exakt wie im Wein-Feld
-„Weingut"), <code>charakter</code>, <code>anbau</code>, <code>aliase</code> (optional, kommagetrennte
+„Weingut"), <code>beschreibung</code>, <code>anbau</code>, <code>aliase</code> (optional, kommagetrennte
 Schreibvarianten). Beim nächsten Laden erscheint das Icon automatisch.</p>
-<p><strong>Variante B – automatisch via Enricher (Terminal):</strong> im Ordner <code>skript</code>
+<p><strong>Variante C – automatisch via Enricher (Terminal):</strong> im Ordner <code>skript</code>
 <code>node weingut_enricher.mjs</code> ausführen. Ablauf wie beim Rebsorten-Enricher: OneDrive pausieren →
 HTML-Bericht prüfen → im Terminal mit <code>j</code> freigeben → OneDrive fortsetzen. Der Enricher findet
 selbstständig alle Weingüter, die noch nicht in <code>weingueter</code> stehen.</p>
-<p><strong>Variante C – Claude Skill „weinkeller-weingut" <span class="pill">neu</span>:</strong> Kein Terminal
+<p><strong>Variante D – Claude Skill „weinkeller-weingut" <span class="pill">neu</span>:</strong> Kein Terminal
 nötig. Sag Claude im Chat (Cowork) einfach z. B. „Weingüter ergänzen" oder „Weingut-Enricher laufen lassen" –
 der Skill übernimmt automatisch dieselben vier Schritte (Analyse, Vorschläge von Claude AI mit Herkunfts-Kontext,
 Bericht zum Prüfen, Freigabe im Chat mit „j"/„n") und trägt die neuen Weingüter nach deiner Bestätigung in
@@ -360,6 +381,8 @@ Supabase ein.</p>
   <tr><th>Problem</th><th>Lösung</th></tr>
   <tr><td>Nach dem Update fehlt die neue Funktion</td><td>Seite auf dem Handy neu laden, Browser-Cache leeren. In der <strong>Fusszeile</strong> prüfen, ob v3.0 aktiv ist.</td></tr>
   <tr><td>Rebsorte lässt sich nicht speichern/löschen</td><td><code>add_beschreibung_und_crud_policies.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne Spalte <code>beschreibung</code> und Schreibrechte schlägt das Speichern fehl. Als Viewer sind Änderungen bewusst gesperrt.</td></tr>
+  <tr><td>Weingut lässt sich nicht speichern/löschen</td><td><code>add_weingut_beschreibung_und_crud_policies.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne Spalte <code>beschreibung</code> und Schreibrechte in <code>weingueter</code> schlägt das Speichern fehl. Als Viewer sind Änderungen bewusst gesperrt.</td></tr>
+  <tr><td>«Aus Wikipedia laden» bringt keinen Text</td><td>Zu diesem Namen gibt es keinen (deutschen/englischen) Wikipedia-Artikel – häufig bei kleinen Weingütern. Beschreibung dann von Hand erfassen. Bei ganz fehlender Reaktion Internetverbindung prüfen.</td></tr>
   <tr><td>Hilfe-Symbol im Header führt zu einer 404-Seite</td><td><code>Weinkeller_Bedienungsanleitung_v3.0.html</code> wurde noch nicht mit exakt diesem Dateinamen ins GitHub-Repo hochgeladen (Teil E3).</td></tr>
   <tr><td>Weinkombinationen-Symbol im Header führt zu einer 404-Seite</td><td><code>Weinkeller_weinkombinationen.html</code> wurde noch nicht mit exakt diesem Dateinamen ins GitHub-Repo hochgeladen (Teil E3).</td></tr>
   <tr><td>Bewertungen sind plötzlich leer</td><td>Erwartet nach dem v2.9-Update: die Migration <code>add_bewertung_jill_falstaff.sql</code> setzt wegen des Skalenwechsels (5 → 4 Sterne) einmalig alle Bewertungen (Jill und Gian) zurück. Neu bewerten.</td></tr>
@@ -443,6 +466,16 @@ separat gehostete HTML-Datei ohne eigenen Datenbankzugriff.</p>
 </ol>
 <p>Kontrolle: <code>select column_name from information_schema.columns where table_name='rebsorten';</code> → enthält
 <strong>beschreibung</strong>. Ohne diesen Schritt schlägt das Speichern von Rebsorten in der App fehl.</p>
+<p><strong>Weingut: Spalte <code>beschreibung</code> + Schreibrechte + Charakter-Übernahme (einmalig, neu in v3.0):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_weingut_beschreibung_und_crud_policies.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalte <code>beschreibung</code> in <code>weingueter</code> an, <strong>übernimmt bestehende
+    <code>charakter</code>-Texte in die Beschreibung</strong> (Zusammenführung) und erteilt Schreibrechte (ausser
+    Viewer). Idempotent.</li>
+</ol>
+<p>Kontrolle: <code>select column_name from information_schema.columns where table_name='weingueter';</code> → enthält
+<strong>beschreibung</strong>. Ohne diesen Schritt schlägt das Speichern von Weingütern in der App fehl.</p>
 
 <h3 id="e3">E3 · App veröffentlichen / aktualisieren (GitHub Pages)</h3>
 <p><strong>Erstveröffentlichung:</strong></p>
@@ -489,5 +522,49 @@ und <code>Weinkeller_weinkombinationen.html</code> mit exakt diesen Dateinamen a
 <code>https://DEIN-BENUTZERNAME.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.10.html</code> bzw.
 <code>https://DEIN-BENUTZERNAME.github.io/weinkeller/Weinkeller_weinkombinationen.html</code> gesetzt.</div>
 <div class="box warn"><div class="lbl">Bei v3.0 zusätzlich nötig</div>
-Zuerst einmalig <code>add_beschreibung_und_crud_policies.sql</code> in Supabase ausführen (E2) – legt die Spalte
-<code>beschreibung</code> und die Schreibrechte an; ohne diesen Schritt schlägt das Bearbeiten/Hin
+Zuerst einmalig <strong>beide</strong> SQL-Dateien in Supabase ausführen (E2): <code>add_beschreibung_und_crud_policies.sql</code>
+(Rebsorten) und <code>add_weingut_beschreibung_und_crud_policies.sql</code> (Weingüter, inkl. Übernahme der
+Charakter-Texte in die Beschreibung). Ohne diese Schritte schlägt das Bearbeiten/Hinzufügen/Löschen von Rebsorten
+bzw. Weingütern fehl. Danach wie gewohnt <code>index.html</code> (v3.0) aktualisieren und zusätzlich
+<code>Weinkeller_Bedienungsanleitung_v3.0.html</code> mit exakt diesem Dateinamen hochladen – der Hilfe-Link in
+<code>index.html</code> zeigt neu auf diese Datei.</div>
+
+<h3 id="e4">E4 · Skripte: Wein-, Rebsorten- & Weingut-Enricher</h3>
+<p>Alle Skripte liegen im Ordner <code>skript/</code> und nutzen dieselbe <code>.env</code>
+(<code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>ANTHROPIC_API_KEY</code>) sowie dieselben
+Pakete.</p>
+<div class="box dev"><div class="lbl">Einmalige Einrichtung</div>
+Node.js von <a href="https://nodejs.org">nodejs.org</a> installieren. Dann im Ordner <code>skript</code> ein
+Terminal öffnen und <code>npm install</code> ausführen (lädt die Pakete). <code>.env</code> mit den drei
+Schlüsseln ausfüllen (Service-Role- und Anon-Keys aus Supabase → API Keys).</div>
+<table>
+  <tr><th>Skript</th><th>Zweck</th><th>Aufruf (im Ordner <code>skript</code>)</th></tr>
+  <tr><td><code>enricher.js</code></td><td>Ergänzt leere/kurze Felder der Weine (Eignung, Ausbau, Anbau, Sorte, Trinkreife, Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis).</td><td><code>node enricher.js</code></td></tr>
+  <tr><td><code>rebsorten_enricher.mjs</code></td><td>Findet Rebsorten in den Weinen, die noch nicht in <code>rebsorten</code> stehen, und schlägt Attribute vor.</td><td><code>node rebsorten_enricher.mjs</code></td></tr>
+  <tr><td><code>weingut_enricher.mjs</code></td><td>Findet Weingüter in den Weinen, die noch nicht in <code>weingueter</code> stehen, und schlägt Charakter, Anbau und Aliase vor (mit Herkunfts-Kontext aus dem Weinkeller).</td><td><code>node weingut_enricher.mjs</code></td></tr>
+</table>
+<p>Ablauf jeweils: OneDrive pausieren → Skript ausführen → HTML-Bericht prüfen → im Terminal mit <code>j</code>
+freigeben → OneDrive fortsetzen. Optionen ohne Rückfrage und mit schnellerem Modell:</p>
+<pre><code>MODEL=claude-haiku-4-5-20251001 AUTO_APPLY=j node weingut_enricher.mjs</code></pre>
+<div class="box warn"><div class="lbl">OneDrive zwingend pausieren</div>
+Die Skripte schreiben nach <code>skript/output/</code>. Läuft OneDrive dabei, kann es das Skript während der
+Ausführung überschreiben und der Lauf schlägt fehl.</div>
+
+<div class="box tip"><div class="lbl">Alternative: Claude Skills <span class="pill">neu</span></div>
+Für alle drei Skripte gibt es passende <strong>Claude Skills</strong> (<code>weinkeller-enricher</code>,
+<code>weinkeller-rebsorten</code>, <code>weinkeller-weingut</code>), die Claude in Cowork direkt ausführen kann –
+ohne dass du selbst ein Terminal öffnest. Du sagst z. B. „Weine anreichern", „Rebsorten ergänzen" oder „Weingüter
+ergänzen", Claude führt das passende Skript aus, zeigt dir Bericht und SQL-Backup zum Prüfen und schreibt erst
+nach deiner Freigabe („j"/„n") in Supabase. Ablauf und Ergebnis sind identisch zur Terminal-Variante, nur ohne
+manuelle Schritte. Für die Weinkombinationen gibt es den Skill <code>weinkeller-weinkombinationen</code>, der die
+gespeicherte Seite bei Bedarf direkt im Chat wieder anzeigt.</div>
+
+<footer>
+  Weinkeller-App · Bedienungs- & Installationsanleitung · Version 2.10 · Stand 15.07.2026<br>
+  App-Code auf GitHub Pages, Daten in Supabase. Teile A–D für Benutzer, Teil E für Entwicklung/Betrieb.
+  Diese Anleitung kannst du über den Button oben als PDF drucken.
+</footer>
+
+</div>
+</body>
+</html>

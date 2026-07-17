@@ -7,7 +7,7 @@
 
 ## Übersicht
 
-Version 3.0 macht die **Rebsortenübersicht bearbeitbar**: Rebsorten lassen sich neu direkt in der App **hinzufügen, bearbeiten und löschen**. Dafür gibt es ein neues Freitextfeld **Beschreibung**, das später erfasst werden kann. Zusätzlich wurde die Kopfzeile entlastet – die **Versionsbezeichnung** wanderte in eine neue **Fusszeile** zusammen mit der **Anzahl Weine**. Einmalig muss `add_beschreibung_und_crud_policies.sql` in Supabase ausgeführt werden.
+Version 3.0 macht **Rebsorten- und Weingut-Übersicht bearbeitbar**: beide lassen sich neu direkt in der App **hinzufügen, bearbeiten und löschen**, je mit einem neuen Freitextfeld **Beschreibung**. Ein **«Lücken»-Button** zeigt fehlende bzw. unbeschriebene Einträge aus dem eigenen Weinbestand, und **«Aus Wikipedia laden»** füllt die Beschreibung als Entwurf. Zusätzlich wurde die Kopfzeile entlastet – die **Versionsbezeichnung** wanderte in eine neue **Fusszeile** zusammen mit der **Anzahl Weine**. Einmalig müssen `add_beschreibung_und_crud_policies.sql` (Rebsorten) und `add_weingut_beschreibung_und_crud_policies.sql` (Weingüter) in Supabase ausgeführt werden.
 
 ---
 
@@ -35,9 +35,27 @@ Da der Platz in der Kopfzeile knapp ist, wurde die **Versionsbezeichnung aus der
 
 ---
 
+## 🏰 Weingut-Verwaltung (analog Rebsorten)
+
+Neu gibt es im Header ein **🏰 Weingut-Symbol**, das eine **Weingut-Übersicht** öffnet – analog zur Rebsortenübersicht, mit Suche sowie (als Admin) **+ Neu**, **✏️ Bearbeiten** und **🗑 Löschen**. Das Bearbeiten-Formular umfasst Name, **Beschreibung** (führendes Feld), Anbau und Aliase. Das frühere Feld **Charakter** wurde mit der Beschreibung zusammengeführt: bestehende Charakter-Texte wandern per Migration in die Beschreibung, und in der Kartenansicht erscheint die Beschreibung ohne Label zuoberst. Änderungen gehen direkt in die Supabase-Tabelle `weingueter`. Dafür ist einmalig `add_weingut_beschreibung_und_crud_policies.sql` auszuführen (Spalte `beschreibung` + Datenübernahme aus `charakter` + Schreibrechte für Nicht-Viewer).
+
+---
+
+## 🔎 «Lücken»-Button: fehlende Beschreibungen finden
+
+In beiden Übersichten (Rebsorten und Weingüter) gibt es für Admins einen **«Lücken»-Button**. Er scannt alle Weine im Keller und listet zwei Gruppen: Einträge, die **ganz fehlen** (in Weinen verwendet, aber ohne Referenzzeile → «Anlegen»), und Einträge **ohne Beschreibung** (→ «Ergänzen»). Jede Zeile zeigt, in wie vielen Weinen der Eintrag vorkommt; ein Tipp öffnet die vorausgefüllte Bearbeiten-Maske. So sieht man auf einen Blick, wo noch Pflege nötig ist.
+
+---
+
+## 🌐 «Aus Wikipedia laden»
+
+Im Bearbeiten-Formular (Rebsorte wie Weingut) gibt es beim Beschreibungsfeld einen Button **«Aus Wikipedia laden»**. Er holt die Zusammenfassung der deutschen (ersatzweise englischen) Wikipedia direkt aus der App und setzt sie als **Entwurf** ins Beschreibungsfeld – du prüfst und kürzt vor dem Speichern. Bei Rebsorten meist ein Treffer; bei kleinen Weingütern oft kein Eintrag (dann ein Hinweis). Strukturierte Felder (Körper, Säure, Herkunft, Charakter) füllt Wikipedia nicht – dafür bleibt der bestehende Enricher (`weinkeller-rebsorten` / `weinkeller-enricher`) zuständig. Ein direkter Claude-KI-Abruf aus der App ist wegen CORS/Key-Schutz nicht möglich.
+
+---
+
 ## 🚀 Bereitstellung
 
-1. `add_beschreibung_und_crud_policies.sql` im Supabase SQL Editor ausführen (einmalig) – **ohne diesen Schritt schlägt das Speichern/Löschen von Rebsorten fehl**.
+1. `add_beschreibung_und_crud_policies.sql` (Rebsorten) **und** `add_weingut_beschreibung_und_crud_policies.sql` (Weingüter) im Supabase SQL Editor ausführen (je einmalig) – **ohne diese Schritte schlägt das Speichern/Löschen fehl**.
 2. `index.html` (v3.0) auf GitHub aktualisieren.
 3. `Weinkeller_Bedienungsanleitung_v3.0.html` (gleicher Dateiname wie im Hilfe-Link!) zusätzlich ins Repo hochladen – sonst führt das Hilfe-Symbol ins Leere.
 
