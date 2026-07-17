@@ -516,6 +516,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="wgf-wikibtn" onclick="wikiFill('wg')"><i class="ti ti-download"></i> Aus Wikipedia</button></label><textarea id="wgf-beschreibung" placeholder="Beschreibung des Weinguts …"></textarea></div>
       <div class="rebf-field"><label>Anbau</label><textarea id="wgf-anbau" placeholder="Charakterisierung des Anbaus"></textarea></div>
       <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="wgf-aliase" placeholder="Schreibvarianten / korrekte Schreibweise"></div>
+      <div class="rebf-field"><label>Webseite</label><input type="url" id="wgf-webseite" placeholder="https://www.weingut.ch" inputmode="url"></div>
     </div>
     <div class="rebf-err" id="wgf-err"></div>
   </div>
@@ -1132,6 +1133,7 @@ function openWgEdit(id, prefill){
   document.getElementById('wgf-aliase').value=g?(g.aliase||''):'';
   document.getElementById('wgf-anbau').value=g?(g.anbau||''):'';
   document.getElementById('wgf-beschreibung').value=g?(g.beschreibung||g.charakter||''):'';
+  document.getElementById('wgf-webseite').value=g?(g.webseite||''):'';
   if(isNew&&prefill){if(prefill.n)document.getElementById('wgf-name').value=prefill.n;}
   document.getElementById('wgEditModal').classList.add('open');
 }
@@ -1143,7 +1145,7 @@ async function saveWgEdit(){
   if(!name){err.textContent='Name ist erforderlich.';return;}
   const id=document.getElementById('wgf-id').value;
   const val=x=>{const v=document.getElementById(x).value.trim();return v||null;};
-  const payload={name:name,aliase:val('wgf-aliase'),anbau:val('wgf-anbau'),beschreibung:val('wgf-beschreibung'),charakter:null};
+  const payload={name:name,aliase:val('wgf-aliase'),anbau:val('wgf-anbau'),beschreibung:val('wgf-beschreibung'),webseite:val('wgf-webseite'),charakter:null};
   const btn=document.getElementById('wgf-savebtn');if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
   try{
     if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
