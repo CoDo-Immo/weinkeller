@@ -436,8 +436,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <button class="reb-chip active" data-t="all" onclick="setRebFilter('all')">Alle</button>
         <button class="reb-chip" data-t="rot" onclick="setRebFilter('rot')"><span style="color:#8B2E4A;">&#9679;</span> Rot</button>
         <button class="reb-chip" data-t="weiss" onclick="setRebFilter('weiss')"><span style="color:#C9A227;">&#9679;</span> Weiss</button>
-        <button class="reb-chip reb-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
-        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;"><i class="ti ti-file-search"></i> Lücken</button>
+        <button class="reb-chip reb-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;" title="Neue Rebsorte" aria-label="Neue Rebsorte"><i class="ti ti-plus"></i></button>
+        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button>
       </div>
     </div>
     <div class="reb-grid" id="rebList"></div>
@@ -493,8 +493,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="reb-toolbar">
       <input type="text" id="wgSearch" class="reb-search" placeholder="Weingut, Charakter oder Anbau suchen ..." oninput="renderWeingueter()">
       <div class="reb-chips">
-        <button class="reb-chip reb-new" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
-        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;"><i class="ti ti-file-search"></i> Lücken</button>
+        <button class="reb-chip reb-new" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;" title="Neues Weingut" aria-label="Neues Weingut"><i class="ti ti-plus"></i></button>
+        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button>
       </div>
     </div>
     <div class="reb-grid" id="wgList"></div>
