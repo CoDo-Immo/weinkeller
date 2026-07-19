@@ -49,7 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .search-row{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
 .search-row input{flex:1;height:38px;padding:0 12px;font-size:14px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;transition:border-color .15s,box-shadow .15s;}
 .search-row input:focus{border-color:var(--wr);box-shadow:0 0 0 3px rgba(139,46,74,0.12);}
-.icon-btn{width:38px;height:38px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cb);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:18px;flex-shrink:0;transition:background .15s,border-color .15s,color .15s;}
+.icon-btn{width:38px;height:38px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cb);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:20px;flex-shrink:0;transition:background .15s,border-color .15s,color .15s;}
 .icon-btn:active{background:var(--cs);}
 .icon-btn.active{background:var(--wrl);border-color:var(--wrm);color:var(--wr);}
 
@@ -64,9 +64,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip.on{background:var(--wrl);border-color:var(--wrm);color:var(--wr);font-weight:700;}
 .fp-select{height:38px;padding:0 10px;font-size:13px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);width:100%;cursor:pointer;outline:none;transition:border-color .15s;}
 .fp-select:focus{border-color:var(--wr);}
-.filter-active-bar{display:none;background:#f0ece8;border-bottom:1px solid #d4cdc9;padding:7px 16px;align-items:center;justify-content:space-between;}
+.filter-active-bar{display:none;background:#faf8f8;border-bottom:1px solid rgba(0,0,0,0.06);padding:7px 16px;align-items:center;justify-content:space-between;}
 .filter-active-bar.show{display:flex;}
-.filter-active-bar span{font-size:12px;color:var(--tm);font-weight:500;}
+.filter-active-bar span{font-size:12.5px;color:var(--wr);font-weight:500;}
 .fab-clear{font-size:12px;color:var(--wr);background:none;border:none;cursor:pointer;font-weight:700;padding:0;}
 .star-filter{display:flex;gap:4px;align-items:center;}
 .star-btn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--bd);padding:0 2px;line-height:1;transition:color .1s,transform .1s;}
@@ -88,13 +88,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wc-top{display:flex;align-items:flex-start;gap:10px;}
 .cdot{width:11px;height:11px;border-radius:50%;flex-shrink:0;margin-top:3px;}
 .d-rot{background:#8B2E4A;}.d-weis{background:#C8A93B;}.d-rose{background:#E8889E;}.d-schau{background:#7BBBD8;}.d-suss{background:#9B75C8;}.d-brand{background:#C07A4A;}
-.wc-name{font-size:14px;font-weight:650;color:var(--tx);line-height:1.3;flex:1;letter-spacing:-0.1px;}
-.wc-gut{font-size:12px;font-weight:700;color:#ffffff;margin-top:1px;}
+.wc-name{font-size:16px;font-weight:650;color:var(--tx);line-height:1.3;flex:1;letter-spacing:-0.1px;}
+.wc-gut{font-size:14px;font-weight:700;color:#ffffff;margin-top:1px;}
 .wc-gut-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:1px;}
 .wc-gut-row .wc-gut{margin-top:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.wc-jahr{font-size:12px;color:#ffffff;font-weight:700;white-space:nowrap;flex-shrink:0;}
-.wc-cnt{font-size:13px;font-weight:700;color:var(--wr);white-space:nowrap;}
-.wc-meta{font-size:12px;color:var(--tm);margin-top:4px;margin-left:21px;}
+.wc-jahr{font-size:14px;color:#ffffff;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.wc-cnt{font-size:15px;font-weight:700;color:var(--wr);white-space:nowrap;}
+.wc-meta{font-size:14px;color:var(--tm);margin-top:4px;margin-left:21px;}
 .wc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;margin-left:21px;}
 .tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--cs);color:var(--tm);border:0.5px solid var(--bd);}
 .tag-bio{background:#EAF3DE;color:#3B6D11;border-color:#97C459;}
@@ -161,7 +161,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;}
 .sheet-head h2{margin-bottom:0;flex:1;min-width:0;}
 .head-actions{display:flex;gap:8px;flex-shrink:0;}
-.head-ico{width:38px;height:38px;border-radius:var(--br-md);border:1px solid var(--bd);background:var(--cs);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;transition:opacity .12s,transform .1s;}
+.head-ico{width:38px;height:38px;border-radius:var(--br-md);border:1px solid var(--bd);background:var(--cs);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:21px;transition:opacity .12s,transform .1s;}
 .head-ico:active{opacity:.75;transform:scale(0.94);}
 .head-ico:disabled{opacity:.6;cursor:default;}
 .head-ico.save{background:var(--wr);color:#fff;border-color:var(--wr);}
@@ -173,7 +173,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* ── Detail View ── */
 .drows{display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:var(--br-md);overflow:hidden;margin-bottom:14px;}
-.drow{display:flex;justify-content:space-between;padding:9px 12px;font-size:13px;border-bottom:1px solid var(--bd);gap:12px;align-items:baseline;}
+.drow{display:flex;justify-content:space-between;padding:9px 12px;font-size:15px;border-bottom:1px solid var(--bd);gap:12px;align-items:baseline;}
 .drow:last-child{border-bottom:none;}
 .drow .dl{color:var(--tm);white-space:nowrap;font-weight:500;}
 .drow .dv{color:var(--tx);text-align:right;}
@@ -190,9 +190,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .empty i{font-size:44px;display:block;margin-bottom:12px;color:var(--ts);}
 .empty p{font-size:14px;line-height:1.5;}
 .cx{float:right;background:none;border:none;cursor:pointer;color:var(--tm);font-size:20px;padding:2px;}
-.big-name{font-size:19px;font-weight:700;color:var(--tx);margin-bottom:1px;letter-spacing:-0.3px;}
-.big-gut{font-size:13px;color:var(--tm);margin-bottom:2px;}
-.big-sub{font-size:13px;color:var(--tm);margin-bottom:14px;}
+.big-name{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:1px;letter-spacing:-0.3px;}
+.big-gut{font-size:14px;color:var(--tm);margin-bottom:2px;}
+.big-sub{font-size:14px;color:var(--tm);margin-bottom:14px;}
 .bio-c{color:#3B6D11;}.nach-c{color:#0F6E56;}
 .status-aktiv{color:#3B6D11;font-weight:600;}.status-bestellt{color:#185FA5;font-weight:600;}.status-inaktiv{color:var(--tm);}.status-bestellen{color:#B45309;font-weight:600;}
 
@@ -245,7 +245,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v3.1</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v3.2</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -270,7 +270,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="display:flex;gap:8px;">
         <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()" style="flex:1;">
         <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
-        <button class="icon-btn" onclick="openSync()" title="Import / Export"><i class="ti ti-arrows-transfer-down" aria-hidden="true"></i></button>
+        <button class="icon-btn" onclick="openSync()" title="Import / Export"><i class="ti ti-arrows-transfer-down" aria-hidden="true"></i></button><button class="icon-btn" id="wineGapBtn" onclick="openWineGaps()" title="Weinlücken"><i class="ti ti-file-search" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
@@ -364,7 +364,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v3.1</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v3.2</span></footer>
 </div>
 
 
@@ -382,12 +382,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .reb-card.wg-green{border-left-color:#3B6D11;}
 @media(prefers-color-scheme:dark){.reb-card.wg-green{border-left-color:#97C459;}}
 .reb-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
-.reb-name{font-weight:700;font-size:15px;color:var(--tx);}
-.reb-herk{font-size:12px;color:var(--tm);}
+.reb-name{font-weight:700;font-size:16px;color:var(--tx);}
+.reb-herk{font-size:13px;color:var(--tm);}
 .reb-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;}
 .reb-tag{font-size:12px;background:var(--cs);border:1px solid var(--bd);border-radius:6px;padding:3px 9px;color:var(--tx);}
 .reb-tag b{font-weight:500;}
-.reb-line{font-size:13px;color:var(--tx);line-height:1.65;}
+.reb-line{font-size:15px;color:var(--tx);line-height:1.65;white-space:pre-line;}
 .reb-lbl{color:var(--tm);}
 .reb-desc{white-space:pre-line;}
 .reb-actions{margin-left:auto;display:flex;gap:4px;flex:none;}
@@ -414,12 +414,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wiki-btn{font-size:11.5px;font-weight:600;color:var(--wr);border:1px solid #E4C4CE;border-radius:7px;padding:3px 8px;background:var(--cb);cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
 .wiki-btn:hover{background:var(--wrl);}
 .wiki-btn:disabled{opacity:.6;cursor:default;}
-#gapModal .sheet{max-width:560px;margin:0 auto;}
+#gapModal{z-index:40;}#gapModal .sheet{max-width:560px;margin:0 auto;}
 .gap-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .gap-row{display:flex;align-items:center;gap:10px;border:1px solid var(--bd);border-radius:var(--br-lg);padding:10px 12px;}
 .gap-meta{flex:1;min-width:0;}
-.gap-name{font-weight:700;font-size:14px;color:var(--tx);}
-.gap-sub{font-size:11.5px;color:var(--tm);margin-top:1px;}
+.gap-name{font-weight:700;font-size:15px;color:var(--tx);}
+.gap-sub{font-size:12.5px;color:var(--tm);margin-top:1px;}
 .gap-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.02em;flex:none;}
 .gap-tag.miss{color:#A32D2D;background:#FCEBEB;}
 .gap-tag.nodesc{color:#8a6d1a;background:#FBF3D9;}
@@ -437,7 +437,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <button class="reb-chip" data-t="rot" onclick="setRebFilter('rot')"><span style="color:#8B2E4A;">&#9679;</span> Rot</button>
         <button class="reb-chip" data-t="weiss" onclick="setRebFilter('weiss')"><span style="color:#C9A227;">&#9679;</span> Weiss</button>
         <button class="reb-chip reb-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
-        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;"><i class="ti ti-alert-triangle"></i> Lücken</button>
+        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;"><i class="ti ti-file-search"></i> Lücken</button>
       </div>
     </div>
     <div class="reb-grid" id="rebList"></div>
@@ -468,7 +468,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-field"><label>Passt zu (Eignung)</label><input type="text" id="rebf-eignung" placeholder="z.B. Pilzrisotto, Weichkäse"></div>
       <div class="rebf-field"><label>Charakter</label><input type="text" id="rebf-charakter" placeholder="z.B. rund, weich, zugänglich"></div>
       <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="rebf-aliase" placeholder="z.B. blauburgunder"></div>
-      <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="rebf-wikibtn" onclick="wikiFill('reb')"><i class="ti ti-download"></i> Aus Wikipedia</button></label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
+      <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="rebf-wikibtn" onclick="delinatOpen()"><i class="ti ti-external-link"></i> Auf Delinat</button></label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
     </div>
     <div class="rebf-err" id="rebf-err"></div>
   </div>
@@ -478,7 +478,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="overlay" id="gapModal">
   <div class="sheet">
     <div class="sheet-head">
-      <h2><i class="ti ti-alert-triangle" aria-hidden="true"></i> <span id="gapTitle">Lücken</span></h2>
+      <h2><i class="ti ti-file-search" aria-hidden="true"></i> <span id="gapTitle">Lücken</span></h2>
       <div class="head-actions"><button class="head-ico" onclick="closeGaps()" title="Schliessen"><i class="ti ti-x"></i></button></div>
     </div>
     <div id="gapList" class="gap-list"></div>
@@ -494,7 +494,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <input type="text" id="wgSearch" class="reb-search" placeholder="Weingut, Charakter oder Anbau suchen ..." oninput="renderWeingueter()">
       <div class="reb-chips">
         <button class="reb-chip reb-new" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;"><i class="ti ti-plus"></i> Neu</button>
-        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;"><i class="ti ti-alert-triangle"></i> Lücken</button>
+        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;"><i class="ti ti-file-search"></i> Lücken</button>
       </div>
     </div>
     <div class="reb-grid" id="wgList"></div>
@@ -688,6 +688,7 @@ function showApp(){
   isViewer=(currentUser?.user_metadata?.role==='viewer');
   document.getElementById('viewerBadge').style.display=isViewer?'inline-flex':'none';
   document.getElementById('fab').style.display=isViewer?'none':'flex';
+  {const _wg=document.getElementById('wineGapBtn');if(_wg)_wg.style.display=isViewer?'none':'flex';}
   if(isViewer)document.getElementById('migrationSection').style.display='none';
 }
 let authMode='login';
@@ -959,7 +960,7 @@ function renderRebsorten(){
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
       +(tags?'<div class="reb-tags">'+tags+'</div>':'')
       +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+'</div>':'')
-      +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span>'+rebEsc(g.e)+'</div>':'')
+      +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebEsc(g.e)+'</span></div>':'')
       +alias
       +(g.b?'<div class="reb-line reb-desc"><span class="reb-lbl">Beschreibung: </span>'+rebEsc(g.b)+'</div>':'')
       +'</div>';
@@ -1037,6 +1038,8 @@ async function wikiSummary(title){
   }
   return null;
 }
+function delinatSlug(name){let s=String(name||'').trim().toLowerCase();s=s.replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');s=s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');s=s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');return s;}
+function delinatOpen(){const name=(document.getElementById('rebf-name').value||'').trim();const err=document.getElementById('rebf-err');if(err)err.textContent='';if(!name){if(err)err.textContent='Bitte zuerst den Namen eingeben.';return;}const slug=delinatSlug(name);if(!slug){if(err)err.textContent='Kein gültiger Name.';return;}window.open('https://www.delinat.com/'+slug+'.html','_blank','noopener');}
 async function wikiFill(kind){
   const map={reb:['rebf-name','rebf-beschreibung','rebf-wikibtn','rebf-err'],wg:['wgf-name','wgf-beschreibung','wgf-wikibtn','wgf-err']};
   const [nameId,descId,btnId,errId]=map[kind];
@@ -1064,6 +1067,7 @@ function gapAct(i){
   else if(it.kind==='reb-edit')openRebEdit(it.id);
   else if(it.kind==='wg-new')openWgEdit(null,{n:it.name});
   else if(it.kind==='wg-edit')openWgEdit(it.id);
+  else if(it.kind==='wine-edit')editWine(it.id);
 }
 function wineCount(n){return 'in '+n+' '+(n===1?'Wein':'Weinen');}
 function computeRebGaps(){
@@ -1193,12 +1197,16 @@ function openWgGaps(){
   document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine L\u00fccken \u2013 alle Weing\u00fcter aus deinen Weinen sind erfasst und beschrieben.</div>';
   document.getElementById('gapModal').classList.add('open');
 }
-function weingutInfoIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:16px;"></i>`;}
-function weingutListIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="event.stopPropagation();showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:5px;vertical-align:middle;font-size:15px;"></i>`;}
+const WINE_GAP_FIELDS=[['degustation','Degustation'],['eignung','Eignung'],['ausbau','Ausbau'],['anbau','Anbau'],['sorte','Rebsorte'],['trinkreife_ab','Trinkreife ab'],['trinkreife','Trinkreife bis'],['trinktemperatur','Trinktemperatur'],['dekantierung','Dekantierung'],['gebiet','Gebiet'],['region','Region'],['marktpreis','Marktpreis']];
+function wineFieldEmpty(w,f){const v=w[f];if(v===null||v===undefined||v==='')return true;if(typeof v==='string'&&!v.trim())return true;if((f==='degustation'||f==='eignung')&&typeof v==='string'&&v.trim().length<40)return true;return false;}
+function computeWineGaps(){const rows=[];(wines||[]).forEach(w=>{if((w.status||'')==='Inaktiv')return;const miss=WINE_GAP_FIELDS.filter(fp=>wineFieldEmpty(w,fp[0])).map(fp=>fp[1]);if(miss.length)rows.push({id:w.id,name:w.name||'(ohne Name)',weingut:w.weingut||'',jahr:w.jahr,miss:miss});});rows.sort((a,b)=>b.miss.length-a.miss.length);return rows;}
+function openWineGaps(){if(isViewer)return;document.getElementById('gapTitle').textContent='Weine mit L\u00fccken';const rows=computeWineGaps();GAP_ITEMS=[];let h='';rows.forEach(r=>{const i=GAP_ITEMS.push({kind:'wine-edit',id:r.id})-1;const jahr=r.jahr?(' \u00b7 '+r.jahr):' \u00b7 o. J.';const sub=(r.weingut?r.weingut:'')+jahr+' \u00b7 fehlt: '+r.miss.join(', ');const n=r.miss.length;const tagcls=n>=3?'miss':'nodesc';const tagtxt=n+' '+(n===1?'L\u00fccke':'L\u00fccken');h+='<div class="gap-row"><div class="gap-meta"><div class="gap-name">'+rebEsc(r.name)+'</div><div class="gap-sub">'+rebEsc(sub)+'</div></div><span class="gap-tag '+tagcls+'">'+tagtxt+'</span><button class="gap-act" onclick="gapAct('+i+')">Erg\u00e4nzen &rarr;</button></div>';});document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine L\u00fccken \u2013 alle aktiven Weine sind vollst\u00e4ndig beschrieben.</div>';document.getElementById('gapModal').classList.add('open');}
+function weingutInfoIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:7px;vertical-align:middle;font-size:18px;"></i>`;}
+function weingutListIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';return `<i class="ti ti-building-castle" onclick="event.stopPropagation();showWeingutInfo('${w.id}')" title="Weingut-Info" style="cursor:pointer;color:var(--wr);margin-left:5px;vertical-align:middle;font-size:17px;"></i>`;}
 function wgWebUrl(g){if(!g||!g.webseite)return '';let u=String(g.webseite).trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return u.replace(/"/g,'%22');}
 function wgMapsUrl(w){const q=[w&&w.weingut,w&&w.region,w&&w.gebiet,w&&w.land].filter(Boolean).join(', ');return q?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`:'';}
 function weingutLinkIcons(w,inList){if(!w||!w.weingut)return '';const g=wgLookup(w.weingut);const stop=inList?'event.stopPropagation();':'';const fs=inList?'15px':'16px';const ml=inList?'5px':'7px';const stl=`color:var(--wr);margin-left:${ml};vertical-align:middle;font-size:${fs};text-decoration:none;`;let out='';const mu=wgMapsUrl(w);if(mu)out+=`<a href="${mu}" target="_blank" rel="noopener" onclick="${stop}" title="Google Maps" style="${stl}"><i class="ti ti-map-pin"></i></a>`;const wu=wgWebUrl(g);if(wu)out+=`<a href="${wu}" target="_blank" rel="noopener" onclick="${stop}" title="Webseite" style="${stl}"><i class="ti ti-world"></i></a>`;return out;}
-function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const mapsQ=[w.weingut,w.region,w.gebiet,w.land].filter(Boolean).join(', ');const _ls='display:inline-flex;align-items:center;gap:5px;color:var(--wr);text-decoration:none;font-size:.9rem;font-weight:600;';const _mapsA=mapsQ?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQ)}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-map-pin" style="font-size:16px;"></i> Auf Google Maps anzeigen</a>`:'';const _webU=wgWebUrl(g);const _webA=_webU?`<a href="${_webU}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-world" style="font-size:16px;"></i> Webseite öffnen</a>`:'';const mapsLink=(_mapsA||_webA)?`<div style="display:flex;flex-wrap:wrap;gap:16px;margin:4px 0 14px;">${_webA}${_mapsA}</div>`:'';const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${mapsLink}${(g.beschreibung||g.charakter)?`<div class="wgi-block"><p>${g.beschreibung||g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:(mapsLink?`<div class="rebi-card weingut">${mapsLink}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>');let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
+function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const mapsQ=[w.weingut,w.region,w.gebiet,w.land].filter(Boolean).join(', ');const _ls='display:inline-flex;align-items:center;gap:5px;color:var(--wr);text-decoration:none;font-size:1rem;font-weight:600;';const _mapsA=mapsQ?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQ)}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-map-pin" style="font-size:18px;"></i> Auf Google Maps anzeigen</a>`:'';const _webU=wgWebUrl(g);const _webA=_webU?`<a href="${_webU}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-world" style="font-size:18px;"></i> Webseite öffnen</a>`:'';const mapsLink=(_mapsA||_webA)?`<div style="display:flex;flex-wrap:wrap;gap:16px;margin:4px 0 14px;">${_webA}${_mapsA}</div>`:'';const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${mapsLink}${(g.beschreibung||g.charakter)?`<div class="wgi-block"><p>${g.beschreibung||g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:(mapsLink?`<div class="rebi-card weingut">${mapsLink}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>');let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
 function rebLookup(token){let t=rebNorm(token);if(!t||t==='moelleux')return null;if(REB_SYN[t])t=REB_SYN[t];return REB_IDX[t]||null;}
 function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</span><svg onclick="showRebsorteInfo('${id}')" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--wr)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;margin-left:7px;vertical-align:middle;"><title>Rebsorten-Info</title><path d="M12 3.5v3"/><path d="M12.2 6.2c1.4 -1.3 3.5 -.7 3.3 1.1"/><circle cx="8.5" cy="9.7" r="2.1"/><circle cx="12" cy="9.7" r="2.1"/><circle cx="15.5" cy="9.7" r="2.1"/><circle cx="10.25" cy="13.2" r="2.1"/><circle cx="13.75" cy="13.2" r="2.1"/><circle cx="12" cy="16.7" r="2.1"/></svg>`;}
 (function(){if(document.getElementById('rebiStyle'))return;const st=document.createElement('style');st.id='rebiStyle';st.textContent=`
@@ -1215,7 +1223,7 @@ function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</s
   #rebiOverlay .rebi-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:999px;white-space:nowrap;}
   #rebiOverlay .rebi-badge.rot{background:#f3d9de;color:#6b2737;}
   #rebiOverlay .rebi-badge.weiss{background:#f2e7c8;color:#7a5c12;}
-  #rebiOverlay .rebi-row{display:flex;gap:10px;font-size:13px;padding:2px 0;line-height:1.45;}
+  #rebiOverlay .rebi-row{display:flex;gap:10px;font-size:14px;padding:2px 0;line-height:1.45;}
   #rebiOverlay .rebi-row span{color:#8a7d76;min-width:96px;flex-shrink:0;}
   #rebiOverlay .rebi-row b{font-weight:600;color:#2b2320;}
   #rebiOverlay .rebi-miss{font-size:12px;color:#8a7d76;padding:6px 2px;}
@@ -1237,7 +1245,7 @@ function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</s
   #rebiOverlay .wgi-block{margin-top:9px;}
   #rebiOverlay .wgi-block:first-of-type{margin-top:0;}
   #rebiOverlay .wgi-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a7d76;margin-bottom:2px;}
-  #rebiOverlay .wgi-block p{margin:0;font-size:13px;line-height:1.5;color:#2b2320;}
+  #rebiOverlay .wgi-block p{margin:0;font-size:14px;line-height:1.55;color:#2b2320;white-space:pre-line;}
   @media (prefers-color-scheme: dark){
     #rebiOverlay .rebi-card.weingut{border-left-color:#97C459;}
     #rebiOverlay .rebi-badge.weingut{background:rgba(151,196,89,.22);color:#bfe08f;}
