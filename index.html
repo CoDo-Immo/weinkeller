@@ -158,7 +158,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-s{background:transparent;color:var(--tx);}
 
 /* Sheet header with action icons */
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;position:sticky;top:0;background:var(--cb);z-index:5;padding:4px 0 8px;}
 .sheet-head h2{margin-bottom:0;flex:1;min-width:0;}
 .head-actions{display:flex;gap:8px;flex-shrink:0;}
 .head-ico{width:38px;height:38px;border-radius:var(--br-md);border:1px solid var(--bd);background:var(--cs);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:21px;transition:opacity .12s,transform .1s;}
@@ -395,13 +395,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .reb-act:hover{border-color:var(--wr);color:var(--wr);}
 .reb-act-del:hover{border-color:#C25A7C;color:#C25A7C;}
 .reb-new{margin-left:auto;background:var(--wr)!important;border-color:var(--wr)!important;color:#fff!important;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
-#rebEditModal .sheet{max-width:560px;margin:0 auto;}
+#rebEditModal .sheet{max-width:560px;margin:0 auto;min-height:88vh;}
 .rebf-grid{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
 .rebf-row{display:flex;gap:10px;}
 .rebf-field{display:flex;flex-direction:column;gap:5px;flex:1;}
 .rebf-field label{font-size:12px;font-weight:600;color:var(--tm);}
-.rebf-field input,.rebf-field select,.rebf-field textarea{width:100%;padding:9px 11px;font-size:14px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;font-family:inherit;box-sizing:border-box;}
-.rebf-field textarea{min-height:88px;resize:vertical;line-height:1.5;}
+.rebf-field input,.rebf-field select,.rebf-field textarea{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--bd);border-radius:var(--br-md);background:var(--cs);color:var(--tx);outline:none;font-family:inherit;box-sizing:border-box;}
+.rebf-field textarea{min-height:150px;resize:vertical;line-height:1.55;}
 .rebf-field input:focus,.rebf-field select:focus,.rebf-field textarea:focus{border-color:var(--wr);box-shadow:0 0 0 3px rgba(139,46,74,0.12);}
 .rebf-actions{display:flex;gap:8px;margin-top:18px;align-items:center;}
 .rebf-btn{flex:1;height:44px;border-radius:var(--br-md);border:1px solid var(--bd);background:var(--cb);color:var(--tx);font-size:14px;font-weight:600;cursor:pointer;}
@@ -429,15 +429,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 <div class="overlay" id="rebModal">
   <div class="sheet">
-    <h2><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg> Rebsorten <span id="rebCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <button class="cx" onclick="closeRebsorten()"><i class="ti ti-x"></i></button></h2>
+    <h2><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg> Rebsorten <span id="rebCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <span style="margin-left:auto;display:flex;gap:6px;align-items:center;"><button class="icon-btn" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;" title="Neue Rebsorte" aria-label="Neue Rebsorte"><i class="ti ti-plus"></i></button><button class="icon-btn" id="rebGapBtn" onclick="openRebGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button><button class="icon-btn" onclick="closeRebsorten()" title="Schliessen" aria-label="Schliessen"><i class="ti ti-x"></i></button></span></h2>
     <div class="reb-toolbar">
       <input type="text" id="rebSearch" class="reb-search" placeholder="Sorte, Herkunft oder Charakter suchen ..." oninput="renderRebsorten()">
       <div class="reb-chips">
         <button class="reb-chip active" data-t="all" onclick="setRebFilter('all')">Alle</button>
         <button class="reb-chip" data-t="rot" onclick="setRebFilter('rot')"><span style="color:#8B2E4A;">&#9679;</span> Rot</button>
         <button class="reb-chip" data-t="weiss" onclick="setRebFilter('weiss')"><span style="color:#C9A227;">&#9679;</span> Weiss</button>
-        <button class="reb-chip reb-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;" title="Neue Rebsorte" aria-label="Neue Rebsorte"><i class="ti ti-plus"></i></button>
-        <button class="reb-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button>
       </div>
     </div>
     <div class="reb-grid" id="rebList"></div>
@@ -486,15 +484,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- Weingut-Übersicht + Bearbeiten -->
-<style>#wgModal .sheet{max-width:640px;margin:0 auto;}#wgEditModal .sheet{max-width:560px;margin:0 auto;}</style>
+<style>#wgModal .sheet{max-width:640px;margin:0 auto;}#wgEditModal .sheet{max-width:560px;margin:0 auto;min-height:88vh;}</style>
 <div class="overlay" id="wgModal">
   <div class="sheet">
-    <h2><i class="ti ti-building-castle" aria-hidden="true" style="vertical-align:-3px;"></i> Weingüter <span id="wgCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <button class="cx" onclick="closeWeingueter()"><i class="ti ti-x"></i></button></h2>
+    <h2><i class="ti ti-building-castle" aria-hidden="true" style="vertical-align:-3px;"></i> Weingüter <span id="wgCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <span style="margin-left:auto;display:flex;gap:6px;align-items:center;"><button class="icon-btn" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;" title="Neues Weingut" aria-label="Neues Weingut"><i class="ti ti-plus"></i></button><button class="icon-btn" id="wgGapBtn" onclick="openWgGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button><button class="icon-btn" onclick="closeWeingueter()" title="Schliessen" aria-label="Schliessen"><i class="ti ti-x"></i></button></span></h2>
     <div class="reb-toolbar">
       <input type="text" id="wgSearch" class="reb-search" placeholder="Weingut, Charakter oder Anbau suchen ..." oninput="renderWeingueter()">
       <div class="reb-chips">
-        <button class="reb-chip reb-new" id="wgNewBtn" onclick="openWgEdit(null)" style="display:none;" title="Neues Weingut" aria-label="Neues Weingut"><i class="ti ti-plus"></i></button>
-        <button class="reb-gap" id="wgGapBtn" onclick="openWgGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button>
       </div>
     </div>
     <div class="reb-grid" id="wgList"></div>
@@ -1117,7 +1113,7 @@ function renderWeingueter(){
       return '<div class="reb-card wg-green">'
         +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.name)+'</span>'+acts+'</div>'
         +(wdesc?'<div class="reb-line reb-desc">'+rebEsc(wdesc)+'</div>':'')
-        +(g.anbau?'<div class="reb-line"><span class="reb-lbl">Anbau: </span>'+rebEsc(g.anbau)+'</div>':'')
+        +(g.anbau?'<div class="reb-line" style="margin-top:10px;"><span class="reb-lbl">Anbau: </span>'+rebEsc(g.anbau)+'</div>':'')
         +wgweb
         +alias
         +'</div>';
@@ -1206,7 +1202,7 @@ function weingutListIcon(w){if(!w||!w.weingut||!wgLookup(w.weingut))return '';re
 function wgWebUrl(g){if(!g||!g.webseite)return '';let u=String(g.webseite).trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return u.replace(/"/g,'%22');}
 function wgMapsUrl(w){const q=[w&&w.weingut,w&&w.region,w&&w.gebiet,w&&w.land].filter(Boolean).join(', ');return q?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`:'';}
 function weingutLinkIcons(w,inList){if(!w||!w.weingut)return '';const g=wgLookup(w.weingut);const stop=inList?'event.stopPropagation();':'';const fs=inList?'15px':'16px';const ml=inList?'5px':'7px';const stl=`color:var(--wr);margin-left:${ml};vertical-align:middle;font-size:${fs};text-decoration:none;`;let out='';const mu=wgMapsUrl(w);if(mu)out+=`<a href="${mu}" target="_blank" rel="noopener" onclick="${stop}" title="Google Maps" style="${stl}"><i class="ti ti-map-pin"></i></a>`;const wu=wgWebUrl(g);if(wu)out+=`<a href="${wu}" target="_blank" rel="noopener" onclick="${stop}" title="Webseite" style="${stl}"><i class="ti ti-world"></i></a>`;return out;}
-function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const mapsQ=[w.weingut,w.region,w.gebiet,w.land].filter(Boolean).join(', ');const _ls='display:inline-flex;align-items:center;gap:5px;color:var(--wr);text-decoration:none;font-size:1rem;font-weight:600;';const _mapsA=mapsQ?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQ)}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-map-pin" style="font-size:18px;"></i> Auf Google Maps anzeigen</a>`:'';const _webU=wgWebUrl(g);const _webA=_webU?`<a href="${_webU}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-world" style="font-size:18px;"></i> Webseite öffnen</a>`:'';const mapsLink=(_mapsA||_webA)?`<div style="display:flex;flex-wrap:wrap;gap:16px;margin:4px 0 14px;">${_webA}${_mapsA}</div>`:'';const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${mapsLink}${(g.beschreibung||g.charakter)?`<div class="wgi-block"><p>${g.beschreibung||g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:(mapsLink?`<div class="rebi-card weingut">${mapsLink}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>');let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
+function showWeingutInfo(id){const w=wines.find(x=>x.id===id);if(!w)return;const g=wgLookup(w.weingut||'');const mapsQ=[w.weingut,w.region,w.gebiet,w.land].filter(Boolean).join(', ');const _ls='display:inline-flex;align-items:center;gap:5px;color:var(--wr);text-decoration:none;font-size:1rem;font-weight:600;';const _mapsA=mapsQ?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQ)}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-map-pin" style="font-size:18px;"></i> Auf Google Maps anzeigen</a>`:'';const _webU=wgWebUrl(g);const _webA=_webU?`<a href="${_webU}" target="_blank" rel="noopener" style="${_ls}"><i class="ti ti-world" style="font-size:18px;"></i> Webseite öffnen</a>`:'';const mapsLink=(_mapsA||_webA)?`<div style="display:flex;flex-wrap:wrap;gap:16px;margin:4px 0 14px;">${_webA}${_mapsA}</div>`:'';const body=g?`<div class="rebi-card weingut"><div class="rebi-top"><span class="rebi-name">${g.name}</span><span class="rebi-badge weingut">Weingut</span></div>${mapsLink}${(g.beschreibung||g.charakter)?`<div class="wgi-block"><p>${g.beschreibung||g.charakter}</p></div>`:''}${g.anbau?`<div class="wgi-block" style="margin-top:18px;"><span class="wgi-label">Anbau</span><p>${g.anbau}</p></div>`:''}</div>`:(mapsLink?`<div class="rebi-card weingut">${mapsLink}</div>`:'<div class="rebi-miss">Keine Weingut-Info verf\u00fcgbar.</div>');let ov=document.getElementById('rebiOverlay');if(!ov){ov=document.createElement('div');ov.id='rebiOverlay';document.body.appendChild(ov);}ov.innerHTML=`<div class="rebi-back" onclick="closeRebInfo()"></div><div class="rebi-sheet" role="dialog" aria-label="Weingut-Info"><div class="rebi-head"><span>Weingut &middot; ${w.weingut}</span><i class="ti ti-x" onclick="closeRebInfo()" style="cursor:pointer;font-size:20px;"></i></div><div class="rebi-scroll">${body}</div></div>`;ov.style.display='block';document.body.style.overflow='hidden';}
 function rebLookup(token){let t=rebNorm(token);if(!t||t==='moelleux')return null;if(REB_SYN[t])t=REB_SYN[t];return REB_IDX[t]||null;}
 function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</span><svg onclick="showRebsorteInfo('${id}')" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--wr)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;margin-left:7px;vertical-align:middle;"><title>Rebsorten-Info</title><path d="M12 3.5v3"/><path d="M12.2 6.2c1.4 -1.3 3.5 -.7 3.3 1.1"/><circle cx="8.5" cy="9.7" r="2.1"/><circle cx="12" cy="9.7" r="2.1"/><circle cx="15.5" cy="9.7" r="2.1"/><circle cx="10.25" cy="13.2" r="2.1"/><circle cx="13.75" cy="13.2" r="2.1"/><circle cx="12" cy="16.7" r="2.1"/></svg>`;}
 (function(){if(document.getElementById('rebiStyle'))return;const st=document.createElement('style');st.id='rebiStyle';st.textContent=`
