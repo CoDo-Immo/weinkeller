@@ -950,7 +950,7 @@ function renderRebsorten(){
     const rot=(g.t||'').toLowerCase().startsWith('rot');
     const bar=rot?'#C25A7C':'#C9A227';
     const tags=[g.k?['Körper',g.k]:null,g.s?['Säure',g.s]:null].filter(Boolean).map(p=>'<span class="reb-tag">'+p[0]+': <b>'+rebEsc(p[1])+'</b></span>').join('');
-    const alias=(g.x&&g.x.length)?'<div class="reb-line"><span class="reb-lbl">Auch: </span>'+rebEsc(g.x.join(', '))+'</div>':'';
+    const alias=(g.x&&g.x.length)?'<div class="reb-line"><span class="reb-lbl">Alias: </span>'+rebEsc(g.x.join(', '))+'</div>':'';
     const acts=(!isViewer&&g.id!=null)?'<span class="reb-actions"><button class="reb-act" onclick="openRebEdit('+g.id+')" title="Bearbeiten"><i class="ti ti-pencil"></i></button><button class="reb-act reb-act-del" onclick="deleteRebsorte('+g.id+')" title="Löschen"><i class="ti ti-trash"></i></button></span>':'';
     return '<div class="reb-card" style="border-left-color:'+bar+'">'
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
