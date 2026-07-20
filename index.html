@@ -639,10 +639,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <input type="file" id="f-bildfile" accept="image/*" style="display:none;" onchange="handleBildUpload(this)">
         <div class="img-box">
           <div id="bildPrevWrap"><div class="img-ph"><i class="ti ti-bottle"></i></div></div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
-            <button type="button" class="btn-s" id="bildPickBtn" onclick="document.getElementById('f-bildfile').click()"><i class="ti ti-camera"></i> Foto wählen</button>
-            <button type="button" class="btn-s" id="bildDelBtn" onclick="removeBild()" style="display:none;"><i class="ti ti-trash"></i> Bild entfernen</button>
-            <span id="bildHint" style="font-size:11px;color:var(--ts);">Wird automatisch auf 500 px verkleinert.</span>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="icon-btn" id="bildPickBtn" title="Foto wählen" aria-label="Foto wählen" onclick="document.getElementById('f-bildfile').click()"><i class="ti ti-camera"></i></button>
+              <button type="button" class="icon-btn" id="bildDelBtn" title="Bild entfernen" aria-label="Bild entfernen" onclick="removeBild()" style="display:none;color:var(--ts);"><i class="ti ti-trash"></i></button>
+            </div>
+            <span id="bildHint" style="font-size:11px;color:var(--ts);">Foto wählen · wird auf 500 px verkleinert.</span>
           </div>
         </div>
       </div>
@@ -891,7 +893,8 @@ function renderBildPreview(){
   document.getElementById('bildPrevWrap').innerHTML=u
     ?`<img class="img-prev" src="${u}" alt="Vorschau">`
     :`<div class="img-ph"><i class="ti ti-bottle"></i></div>`;
-  document.getElementById('bildDelBtn').style.display=u?'inline-flex':'none';
+  document.getElementById('bildDelBtn').style.display=u?'flex':'none';
+  document.getElementById('bildHint').textContent=u?'Bild gesetzt.':'Foto wählen · wird auf 500 px verkleinert.';
 }
 function removeBild(){
   document.getElementById('f-bild_url').value='';
@@ -920,6 +923,7 @@ async function handleBildUpload(input){
   const hint=document.getElementById('bildHint');
   const btn=document.getElementById('bildPickBtn');
   hint.textContent='Wird hochgeladen…';btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';
   try{
     const blob=await resizeImage(file,500);
     const path=(editingId||'neu')+'-'+Date.now()+'.jpg';
@@ -932,7 +936,7 @@ async function handleBildUpload(input){
   }catch(e){
     hint.textContent='Fehler: '+e.message;
   }finally{
-    btn.disabled=false;input.value='';
+    btn.disabled=false;btn.innerHTML='<i class="ti ti-camera"></i>';input.value='';
   }
 }
 function readForm(){
