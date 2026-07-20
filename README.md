@@ -1,3 +1,61 @@
+# Mein Weinkeller – Release Notes v3.2
+
+**Datum:** 19.07.2026
+**Vorherige Version:** v3.1
+
+---
+
+## Übersicht
+
+Version 3.2 bringt einen **Weinlücken-Finder** und räumt die Rebsorten- und Weingut-Ansichten optisch auf. Ein neues Symbol in der Suchzeile listet alle Weine mit fehlenden Angaben auf. Die Aktions-Buttons **Neu** und **Lücken** wandern bei Rebsorten und Weingütern nach oben in die Titelzeile und werden zu farbig getönten Symbol-Buttons. Bei den Rebsorten kommt die Beschreibungs-Quelle neu von **Delinat** statt Wikipedia. Dazu diverse Feinschliffe: grössere Schrift, grössere Bearbeiten-Fenster, Zeilenumbrüche in Beschreibungen, dezenterer Filter-Balken. **Keine Datenbank-Migration nötig.**
+
+---
+
+## 🔍 Neu: Weinlücken-Finder
+
+In der Suchzeile (neben Filter- und Import/Export-Symbol) gibt es ein neues **Lücken-Symbol** (`file-search`). Es öffnet die Liste **«Weine mit Lücken»**: alle aktiven Weine mit mindestens einem leeren Beschreibungsfeld, pro Wein mit den konkret fehlenden Feldern und deren Anzahl. **«Ergänzen»** öffnet den Wein direkt zum Bearbeiten. Geprüft werden dieselben Felder wie beim Wein-Enricher (Degustation, Eignung, Ausbau, Anbau, Rebsorte, Trinkreife ab/bis, Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis); Degustation und Eignung zählen auch als Lücke, wenn sie sehr kurz sind (<40 Zeichen). Inaktive Weine werden ausgeblendet, im Viewer-Modus ist das Symbol versteckt.
+
+---
+
+## 🧭 Kopfzeilen-Umbau: Rebsorten & Weingüter
+
+Die Buttons **Neu** und **Lücken** sitzen neu oben in der Titelzeile (statt in der Toolbar) und sind farbig getönte Symbol-Buttons im Stil der Wein-Detailansicht: **Neu** in Weinrot-Ton, **Lücken** in Blau-Ton, **Schliessen (X)** neutral. Bei den Rebsorten bleiben die Filter-Chips (Alle/Rot/Weiss) darunter; bei den Weingütern bleibt nur das Suchfeld.
+
+---
+
+## 🍇 Rebsorten: Delinat, «Passt zu» grün, «Alias»
+
+- **Quelle Delinat statt Wikipedia:** Der Button beim Beschreibungsfeld heisst neu **«Auf Delinat»** und öffnet die passende Delinat-Rebsortenseite (`delinat.com/<sorte>.html`) in einem neuen Tab zum Nachlesen und Kopieren. (Ein automatisches Ausfüllen aus Delinat ist wegen CORS nicht zuverlässig möglich – daher bewusst «Seite öffnen».)
+- **«Passt zu» in Grün:** Die Eignungs-Zeile ist neu grün (`#7A8B5A`) wie die Speisebegleitung in der Weinübersicht.
+- **«Alias» statt «Auch»:** Das Synonym-Label heisst neu «Alias».
+- **Zeilenumbrüche** in der Beschreibung werden angezeigt.
+
+Die Weingüter behalten den Wikipedia-Button.
+
+---
+
+## 🏰 Weingüter: Zeilenumbrüche & Leerzeile
+
+Beschreibung und Anbau zeigen neu **Zeilen- und Absatzumbrüche** – im Weingut-Info-Fenster wie in der Verwaltungsliste. Zwischen Beschreibung und Anbau steht neu eine **Leerzeile** zur besseren Lesbarkeit.
+
+---
+
+## 🔠 Feinschliff
+
+- **Grössere Schrift:** Fliesstext etwas grösser (Titel nur leicht), Link-Icons grösser – bessere Lesbarkeit auf dem Handy.
+- **Grössere Bearbeiten-Fenster:** Die Bearbeiten-Popups von Rebsorte und Weingut öffnen fast bildschirmhoch, mit **fixierter Kopfzeile** (Speichern/Abbrechen immer sichtbar) und höheren Textfeldern.
+- **Dezenter Filter-Balken:** Der Balken für aktive Filter hat einen fast neutralen Hintergrund mit **roter Schrift**.
+
+---
+
+## 🚀 Bereitstellung
+
+1. Keine Datenbank-Migration nötig.
+2. `index.html` (v3.2) auf GitHub aktualisieren.
+3. `Weinkeller_Bedienungsanleitung_v3.2.html` (gleicher Dateiname wie im Hilfe-Link!) zusätzlich ins Repo hochladen – sonst führt das Hilfe-Symbol ins Leere.
+
+---
+
 # Mein Weinkeller – Release Notes v3.1
 
 **Datum:** 17.07.2026
