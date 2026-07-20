@@ -89,7 +89,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wc-body{flex:1;min-width:0;}
 .wc-thumb{width:44px;height:100px;flex-shrink:0;border-radius:var(--br-sm);object-fit:cover;background:var(--cs);display:block;}
 .wc-thumb-ph{width:44px;height:100px;flex-shrink:0;border-radius:var(--br-sm);background:var(--cs);display:flex;align-items:center;justify-content:center;color:var(--ts);font-size:22px;}
-.d-img{width:100%;max-height:280px;object-fit:contain;border-radius:var(--br-md);background:var(--cs);margin-bottom:14px;display:block;}
+.d-img{width:100%;max-height:280px;object-fit:contain;border-radius:var(--br-md);background:var(--cs);margin-bottom:14px;display:block;cursor:zoom-in;}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:120;display:none;align-items:center;justify-content:center;overflow:hidden;touch-action:none;}
+.lb.open{display:flex;}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;will-change:transform;user-select:none;-webkit-user-drag:none;}
+.lb-close{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.16);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+.lb-hint{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,0.55);font-size:12px;pointer-events:none;transition:opacity .4s;}
 .img-box{display:flex;gap:12px;align-items:flex-start;}
 .img-prev{width:64px;height:96px;border-radius:var(--br-sm);object-fit:cover;background:var(--cs);flex-shrink:0;}
 .img-ph{width:64px;height:96px;border-radius:var(--br-sm);background:var(--cs);display:flex;align-items:center;justify-content:center;color:var(--ts);font-size:24px;flex-shrink:0;}
@@ -636,6 +641,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="fg full"><label>Lieferant</label><input id="f-lieferant" type="text" placeholder="z.B. Martel AG, Flaschenpost"></div>
       <div class="fg full"><label>Bild der Flasche</label>
         <input type="hidden" id="f-bild_url" value="">
+        <input type="hidden" id="f-bild_url_gross" value="">
         <input type="file" id="f-bildfile" accept="image/*" style="display:none;" onchange="handleBildUpload(this)">
         <div class="img-box">
           <div id="bildPrevWrap"><div class="img-ph"><i class="ti ti-bottle"></i></div></div>
@@ -644,7 +650,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
               <button type="button" class="icon-btn" id="bildPickBtn" title="Foto wählen" aria-label="Foto wählen" onclick="document.getElementById('f-bildfile').click()"><i class="ti ti-camera"></i></button>
               <button type="button" class="icon-btn" id="bildDelBtn" title="Bild entfernen" aria-label="Bild entfernen" onclick="removeBild()" style="display:none;color:var(--ts);"><i class="ti ti-trash"></i></button>
             </div>
-            <span id="bildHint" style="font-size:11px;color:var(--ts);">Foto wählen · wird auf 500 px verkleinert.</span>
+            <span id="bildHint" style="font-size:11px;color:var(--ts);">Foto wählen · wird automatisch verkleinert.</span>
           </div>
         </div>
       </div>
@@ -655,6 +661,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- Detail -->
 <div class="overlay" id="detailModal">
   <div class="sheet" id="detailSheet"></div>
+</div>
+
+<!-- Bild-Vollansicht -->
+<div class="lb" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Schliessen"><i class="ti ti-x"></i></button>
+  <img id="lbImg" alt="">
+  <div class="lb-hint" id="lbHint">Zwei Finger zum Zoomen · Doppeltipp · nach unten wischen zum Schliessen</div>
 </div>
 
 <!-- Lösch-Bestätigung -->
@@ -863,7 +876,7 @@ function setFormBew(who,n){
 }
 
 /* ── Form helpers ── */
-const TXT_F=['name','weingut','sorte','bild_url','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','notizen','lieferant'];
+const TXT_F=['name','weingut','sorte','bild_url','bild_url_gross','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','notizen','lieferant'];
 const INT_F=['jahr','anzahl'];
 function clearForm(){
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)e.value='';});
@@ -882,6 +895,94 @@ function clearForm(){
 }
 function openAdd(){editingId=null;document.getElementById('modalTitle').innerHTML='<i class="ti ti-plus"></i> Erfassen';clearForm();document.getElementById('addModal').classList.add('open');}
 function closeAdd(){document.getElementById('addModal').classList.remove('open');}
+/* ── Bild-Vollansicht mit Zoom ── */
+let lbScale=1,lbX=0,lbY=0,lbPtr=new Map(),lbStart=null,lbLastTap=0;
+function lbApply(){
+  document.getElementById('lbImg').style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`;
+}
+function lbReset(){lbScale=1;lbX=0;lbY=0;lbApply();}
+function openLightbox(id){
+  const w=wines.find(x=>x.id===id);if(!w||!w.bild_url)return;
+  const img=document.getElementById('lbImg');
+  img.style.transition='none';
+  img.src=w.bild_url_gross||w.bild_url;
+  img.alt=w.name||'';
+  lbReset();
+  const hint=document.getElementById('lbHint');
+  hint.style.opacity='1';
+  setTimeout(()=>{hint.style.opacity='0';},2600);
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbImg').src='';
+}
+function lbDist(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+function lbInit(){
+  const lb=document.getElementById('lightbox'),img=document.getElementById('lbImg');
+  if(!lb)return;
+  lb.addEventListener('pointerdown',e=>{
+    lbPtr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    img.style.transition='none';
+    if(lbPtr.size===2){
+      const[a,b]=[...lbPtr.values()];
+      lbStart={d:lbDist(a,b),s:lbScale,x:lbX,y:lbY};
+    }else if(lbPtr.size===1){
+      lbStart={px:e.clientX,py:e.clientY,x:lbX,y:lbY,t:Date.now()};
+    }
+  });
+  lb.addEventListener('pointermove',e=>{
+    if(!lbPtr.has(e.pointerId))return;
+    lbPtr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(lbPtr.size===2&&lbStart&&lbStart.d){
+      const[a,b]=[...lbPtr.values()];
+      lbScale=Math.min(6,Math.max(1,lbStart.s*(lbDist(a,b)/lbStart.d)));
+      lbApply();
+    }else if(lbPtr.size===1&&lbStart&&lbStart.px!=null){
+      const dx=e.clientX-lbStart.px,dy=e.clientY-lbStart.py;
+      if(lbScale>1){lbX=lbStart.x+dx;lbY=lbStart.y+dy;lbApply();}
+      else if(dy>0){lbY=dy*0.6;img.style.opacity=String(Math.max(0.3,1-dy/400));lbApply();}
+    }
+  });
+  const end=e=>{
+    const had=lbPtr.size;
+    lbPtr.delete(e.pointerId);
+    img.style.transition='transform .2s ease-out,opacity .2s';
+    if(had===1&&lbStart&&lbStart.px!=null){
+      const dy=e.clientY-lbStart.py,dx=e.clientX-lbStart.px;
+      const moved=Math.hypot(dx,dy);
+      if(lbScale===1&&dy>110){closeLightbox();img.style.opacity='1';lbReset();return;}
+      if(lbScale===1){lbY=0;img.style.opacity='1';lbApply();}
+      if(moved<10&&Date.now()-lbStart.t<300){
+        const aufBild=e.target===img;
+        const now=Date.now();
+        if(aufBild&&now-lbLastTap<320){
+          if(lbScale>1){lbReset();}
+          else{lbScale=2.5;lbX=0;lbY=0;lbApply();}
+          lbLastTap=0;
+        }else if(aufBild){
+          lbLastTap=now;
+        }else if(e.target.closest('.lb-close')===null){
+          closeLightbox();
+        }
+      }
+    }
+    if(lbPtr.size===0)lbStart=null;
+    if(lbScale<=1){lbX=0;lbY=0;lbApply();}
+  };
+  lb.addEventListener('pointerup',end);
+  lb.addEventListener('pointercancel',e=>{lbPtr.delete(e.pointerId);lbStart=null;});
+  lb.addEventListener('wheel',e=>{
+    e.preventDefault();
+    lbScale=Math.min(6,Math.max(1,lbScale*(e.deltaY<0?1.12:0.89)));
+    if(lbScale<=1){lbX=0;lbY=0;}
+    lbApply();
+  },{passive:false});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('lightbox').classList.contains('open'))closeLightbox();
+});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',lbInit);else lbInit();
 function imgFallback(el){
   const d=document.createElement('div');
   d.className='wc-thumb-ph';
@@ -894,10 +995,11 @@ function renderBildPreview(){
     ?`<img class="img-prev" src="${u}" alt="Vorschau">`
     :`<div class="img-ph"><i class="ti ti-bottle"></i></div>`;
   document.getElementById('bildDelBtn').style.display=u?'flex':'none';
-  document.getElementById('bildHint').textContent=u?'Bild gesetzt.':'Foto wählen · wird auf 500 px verkleinert.';
+  document.getElementById('bildHint').textContent=u?'Bild gesetzt.':'Foto wählen · wird automatisch verkleinert.';
 }
 function removeBild(){
   document.getElementById('f-bild_url').value='';
+  document.getElementById('f-bild_url_gross').value='';
   document.getElementById('f-bildfile').value='';
   renderBildPreview();
 }
@@ -925,12 +1027,18 @@ async function handleBildUpload(input){
   hint.textContent='Wird hochgeladen…';btn.disabled=true;
   btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';
   try{
-    const blob=await resizeImage(file,500);
-    const path=(editingId||'neu')+'-'+Date.now()+'.jpg';
-    const {error}=await db.storage.from('weinbilder').upload(path,blob,{contentType:'image/jpeg',upsert:true});
-    if(error)throw error;
-    const {data}=db.storage.from('weinbilder').getPublicUrl(path);
-    document.getElementById('f-bild_url').value=data.publicUrl;
+    const base=(editingId||'neu')+'-'+Date.now();
+    const kleinBlob=await resizeImage(file,200);
+    const grossBlob=await resizeImage(file,1400);
+    const up=async(name,blob)=>{
+      const {error}=await db.storage.from('weinbilder').upload(name,blob,{contentType:'image/jpeg',upsert:true});
+      if(error)throw error;
+      return db.storage.from('weinbilder').getPublicUrl(name).data.publicUrl;
+    };
+    const kleinUrl=await up(base+'-thumb.jpg',kleinBlob);
+    const grossUrl=await up(base+'-gross.jpg',grossBlob);
+    document.getElementById('f-bild_url').value=kleinUrl;
+    document.getElementById('f-bild_url_gross').value=grossUrl;
     renderBildPreview();
     hint.textContent='Bild bereit – mit ✓ speichern.';
   }catch(e){
@@ -1365,7 +1473,7 @@ function buildDetailHTML(id,w){
   const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Dekantierung',w.dekantierung]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Marktpreis',w.marktpreis?'CHF '+Number(w.marktpreis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
   return`
-    ${w.bild_url?`<img class="d-img" src="${w.bild_url}" alt="${w.name}" onerror="this.style.display='none'">`:''}
+    ${w.bild_url?`<img class="d-img" src="${w.bild_url}" alt="${w.name}" title="Antippen zum Vergrössern" onclick="openLightbox('${id}')" onerror="this.style.display='none'">`:''}
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px;">
       <div style="flex:1;min-width:0;">
         <div class="big-name">${w.name}</div>
