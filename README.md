@@ -1,3 +1,73 @@
+# Mein Weinkeller – Release Notes v3.3
+
+**Datum:** 20.07.2026
+**Vorherige Version:** v3.2
+
+---
+
+## Übersicht
+
+Version 3.3 bringt **Weinbilder**: zu jedem Wein lässt sich ein Foto der Flasche hinterlegen. In der Weinübersicht erscheint es als schmales Bild links auf der Karte, in der Detailansicht gross – und ein Tipp darauf öffnet es formatfüllend mit **Pinch-Zoom** wie in der Fotos-App. Die Fotos liegen in einem neuen Supabase-Storage-Bucket. **Datenbank-Migration nötig** (`add_bild_url_und_storage.sql`).
+
+### Nachtrag 24.07.2026
+
+Der **Weinlücken-Finder** prüft neu auch das Feld **Boden** (bisher nicht abgedeckt). Passend dazu ergänzt der **Wein-Enricher** (`skript/enricher.js`) das Feld `boden` und zieht seit diesem Stand nach den Weinfeldern automatisch auch die **Rebsorten- und Weingut-Detailbeschreibungen** nach (Kombilauf). Keine Datenbank-Migration nötig (Spalte `boden` bestand bereits). Kein Versionssprung – Parity-Fix in v3.3.
+
+---
+
+## 📷 Neu: Bild pro Wein
+
+Im Erfassungs- und Bearbeiten-Formular steht zuunterst im Abschnitt Keller das Feld **Bild der Flasche**: eine Vorschau links, daneben zwei Symbol-Buttons im Stil der Kopfzeilen-Icons – **Kamera** (Foto wählen bzw. auf dem Handy direkt knipsen) und **Papierkorb** (Bild entfernen, erscheint nur wenn ein Bild gesetzt ist). Während des Uploads dreht sich das Kamera-Symbol als Spinner, darunter läuft ein kurzer Statustext. Nach dem Upload muss der Wein wie gewohnt mit dem Häkchen gespeichert werden.
+
+**In der Weinübersicht** steht das Bild links auf der Karte (44 × 100 px). Weine ohne Foto zeigen an derselben Stelle eine graue Flaschen-Silhouette, damit die Kartenhöhe einheitlich bleibt. Auch bei einem defekten Bild-Link springt die Karte auf diese Silhouette zurück.
+
+**In der Detailansicht** steht das Bild zuoberst über dem Weinnamen, maximal 280 px hoch.
+
+---
+
+## 🔍 Vergrössern mit Zoom
+
+Ein Tipp auf das Bild in der Detailansicht öffnet die Vollansicht auf schwarzem Grund:
+
+- **Zwei Finger** zum Zoomen, stufenlos bis 6-fach
+- **Doppeltipp** springt auf 2,5-fach und wieder zurück
+- **Ziehen** verschiebt den Ausschnitt (im gezoomten Zustand)
+- **Nach unten wischen**, neben das Bild tippen oder ✕ oben rechts schliesst
+- Am Computer: **Mausrad** zoomt, **Esc** schliesst
+
+Umgesetzt mit Pointer-Events und CSS-`transform`, ohne externe Bibliothek – die App bleibt eine einzige Datei.
+
+---
+
+## 🗜 Zwei Bildgrössen
+
+Aus jedem Foto entstehen beim Upload **zwei Dateien** im Bucket `weinbilder`:
+
+| Datei | Kante | ca. Grösse | Verwendung |
+|-------|-------|-----------|------------|
+| `…-thumb.jpg` | 200 px | ~10 KB | Liste und Detailansicht |
+| `…-gross.jpg` | 1400 px | ~200 KB | nur bei der Vollansicht |
+
+Das Verkleinern passiert im Browser (Canvas, JPEG-Qualität 0.82), bevor etwas hochgeladen wird – das spart Upload-Zeit und Speicher. Ohne diese Trennung würde das Blättern durch 75 Weine rund 15 MB laden.
+
+Dazu kommen zwei neue Spalten in `wines`: `bild_url` und `bild_url_gross`. Fehlt die grosse Fassung (Bilder aus einer Zwischenfassung), fällt die Vollansicht auf das kleine Bild zurück.
+
+---
+
+## 🔐 Rechte
+
+Der Bucket `weinbilder` ist **öffentlich lesbar** (nötig, damit die Bilder ohne Signatur angezeigt werden), Schreiben ist auf eingeloggte Nutzer beschränkt – der **Viewer-Demo-Zugang ist ausgenommen** und kann Bilder nur ansehen. Maximal 2 MB pro Datei, nur JPEG, PNG und WebP.
+
+---
+
+## 🚀 Bereitstellung
+
+1. `add_bild_url_und_storage.sql` im Supabase SQL-Editor ausführen (Spalten + Bucket + Policies, idempotent).
+2. `index.html` (v3.3) auf GitHub aktualisieren.
+3. `Weinkeller_Bedienungsanleitung_v3.3.html` (gleicher Dateiname wie im Hilfe-Link!) zusätzlich ins Repo hochladen.
+
+---
+
 # Mein Weinkeller – Release Notes v3.2
 
 **Datum:** 19.07.2026

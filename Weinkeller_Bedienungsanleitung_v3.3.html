@@ -240,7 +240,7 @@ Charakter, passende (vegetarische) Gerichte und bekannte Synonyme angezeigt. Im 
 einem einzelnen Wein (B5) zeigt dieses Fenster <em>alle</em> Sorten auf einmal.
 <br><span class="pill">neu in v3.0</span> Als Admin kannst du hier Rebsorten direkt <strong>hinzufügen, bearbeiten
 und löschen</strong> – inklusive dem neuen Feld <strong>Beschreibung</strong>. Zusätzlich gibt es den
-<strong>«Lücken»-Button</strong> (fehlende/unbeschriebene Sorten aus deinen Weinen) und im Formular
+<strong>«Lücken»-Button</strong> (fehlende oder in einzelnen Feldern unvollständige Sorten aus deinen Weinen – geprüft werden Typ, Herkunft, Körper, Säure, Eignung, Charakter und Beschreibung) und im Formular
 <strong>«Auf Delinat»</strong> (öffnet die passende Delinat-Rebsortenseite zum Nachlesen). <span class="pill">neu in v3.2</span> Die Symbole <strong>Neu</strong> und <strong>Lücken</strong> stehen jetzt oben in der Titelzeile. Details siehe B5 und Teil C.</div>
 <div class="box tip"><div class="lbl">Weingut-Symbol im Header <span class="pill">neu in v3.0</span></div>
 Rechts vom Rebsorten-Symbol findest du ein <strong>🏰 Weingut-Symbol</strong>. Es öffnet – analog zur
@@ -271,7 +271,7 @@ Rechts in der Suchzeile – neben dem <strong>Filter-Symbol</strong> und dem <st
 findest du ein <strong>🔍 Lücken-Symbol</strong>. Ein Tipp darauf öffnet die Liste <strong>«Weine mit Lücken»</strong>:
 alle aktiven Weine, bei denen mindestens ein beschreibendes Feld leer ist. Pro Wein siehst du die konkret
 fehlenden Felder und deren Anzahl; <strong>«Ergänzen»</strong> öffnet den Wein direkt zum Bearbeiten. Geprüft
-werden dieselben Felder wie beim Wein-Enricher (Degustation, Eignung, Ausbau, Anbau, Rebsorte, Trinkreife,
+werden dieselben Felder wie beim Wein-Enricher (Degustation, Eignung, Ausbau, Boden, Anbau, Rebsorte, Trinkreife,
 Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis); Degustation und Eignung gelten auch als Lücke, wenn
 sie sehr kurz sind. Nur als Admin sichtbar.</div>
 
@@ -423,7 +423,7 @@ im Anschluss an einen Lauf des Wein-Enrichers, wenn neue Rebsorten dazugekommen 
 Weingut-Namen das Info-Icon. So ergänzt du es:</p>
 <p><strong>Variante A – direkt in der App <span class="pill">neu in v3.0, empfohlen</span>:</strong> Öffne die
 Weingut-Übersicht (🏰-Symbol im Header) und tippe auf <strong>+ Neu</strong> – oder nutze den
-<strong>«Lücken»-Button</strong>, der dir fehlende bzw. unbeschriebene Weingüter aus deinen Weinen auflistet
+<strong>«Lücken»-Button</strong>, der dir fehlende oder unvollständige Weingüter aus deinen Weinen auflistet (geprüft werden Beschreibung und Anbau)
 («Anlegen»/«Ergänzen»). Fülle Name (Pflicht) sowie Beschreibung, Anbau, Aliase und – neu in v3.1 – die
 <strong>Webseite</strong> (Link zur offiziellen Weingut-Seite) aus; <strong>«Aus Wikipedia
 laden»</strong> holt einen Beschreibungs-Entwurf. Ändern/Löschen über ✏️ und 🗑 auf der Karte. <em>Hinweis:</em> Das
@@ -654,10 +654,11 @@ Terminal öffnen und <code>npm install</code> ausführen (lädt die Pakete). <co
 Schlüsseln ausfüllen (Service-Role- und Anon-Keys aus Supabase → API Keys).</div>
 <table>
   <tr><th>Skript</th><th>Zweck</th><th>Aufruf (im Ordner <code>skript</code>)</th></tr>
-  <tr><td><code>enricher.js</code></td><td>Ergänzt leere/kurze Felder der Weine (Eignung, Ausbau, Anbau, Sorte, Trinkreife, Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis).</td><td><code>node enricher.js</code></td></tr>
+  <tr><td><code>enricher.js</code></td><td>Ergänzt leere/kurze Felder der Weine (Eignung, Ausbau, Boden, Anbau, Sorte, Trinkreife, Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis). Zieht seit 24.07.2026 nach den Weinfeldern automatisch auch die Rebsorten- und Weingut-Detailbeschreibungen nach (Kombilauf; <code>NUR_WEINE=j</code> nur Weine).</td><td><code>node enricher.js</code></td></tr>
   <tr><td><code>rebsorten_enricher.mjs</code></td><td>Findet Rebsorten in den Weinen, die noch nicht in <code>rebsorten</code> stehen, und schlägt Attribute vor.</td><td><code>node rebsorten_enricher.mjs</code></td></tr>
   <tr><td><code>weingut_enricher.mjs</code></td><td>Findet Weingüter in den Weinen, die noch nicht in <code>weingueter</code> stehen, und schlägt Charakter, Anbau und Aliase vor (mit Herkunfts-Kontext aus dem Weinkeller).</td><td><code>node weingut_enricher.mjs</code></td></tr>
 </table>
+<p>Alle drei Enricher <strong>recherchieren standardmässig im Netz</strong> (Anthropic <code>web_search</code>), statt nur aus dem Modellwissen zu antworten – genauere Rebsorten, Herkunft, Ausbau, Boden und Preise. Abschalten mit <code>OHNE_WEBSUCHE=j</code>. Web-Suche ist langsamer, daher in kleinen Batches fahren (<code>BATCH_SIZE</code>/<code>LIMIT</code>).</p>
 <p>Ablauf jeweils: OneDrive pausieren → Skript ausführen → HTML-Bericht prüfen → im Terminal mit <code>j</code>
 freigeben → OneDrive fortsetzen. Optionen ohne Rückfrage und mit schnellerem Modell:</p>
 <pre><code>MODEL=claude-haiku-4-5-20251001 AUTO_APPLY=j node weingut_enricher.mjs</code></pre>

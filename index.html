@@ -1257,8 +1257,10 @@ function gapAct(i){
   else if(it.kind==='wine-edit')editWine(it.id);
 }
 function wineCount(n){return 'in '+n+' '+(n===1?'Wein':'Weinen');}
+const REB_REQ=[['t','Typ'],['h','Herkunft'],['k','Körper'],['s','Säure'],['e','Eignung'],['c','Charakter'],['b','Beschreibung']];
+function rebFieldEmpty(g,k){const v=g[k];return v===null||v===undefined||String(v).trim()==='';}
 function computeRebGaps(){
-  const missing={},nodesc={};
+  const missing={},incomplete={};
   (wines||[]).forEach(w=>{
     const toks=(w.sorte||'').split(',').map(x=>x.trim()).filter(Boolean);
     const wtyp=(w.typ==='Rotwein')?'rot':(w.typ==='Weisswein')?'weiss':'';
@@ -1266,20 +1268,21 @@ function computeRebGaps(){
       if(rebNorm(tok)==='moelleux')return;
       const g=rebLookup(tok);
       if(!g){const k=rebNorm(tok);if(!k)return;if(!missing[k])missing[k]={name:tok,typ:wtyp,count:0};missing[k].count++;}
-      else if(!g.b||!String(g.b).trim()){if(!nodesc[g.id])nodesc[g.id]={name:g.n,id:g.id,count:0};nodesc[g.id].count++;}
+      else{if(!incomplete[g.id]){const miss=REB_REQ.filter(fp=>rebFieldEmpty(g,fp[0])).map(fp=>fp[1]);if(miss.length)incomplete[g.id]={name:g.n,id:g.id,count:0,miss:miss};}
+        if(incomplete[g.id])incomplete[g.id].count++;}
     });
   });
   const by=(a,b)=>b.count-a.count;
-  return {missing:Object.values(missing).sort(by),nodesc:Object.values(nodesc).sort(by)};
+  return {missing:Object.values(missing).sort(by),incomplete:Object.values(incomplete).sort(by)};
 }
 function openRebGaps(){
   if(isViewer)return;
-  document.getElementById('gapTitle').textContent='Fehlende Rebsorten';
-  const {missing,nodesc}=computeRebGaps();
+  document.getElementById('gapTitle').textContent='Rebsorten mit Lücken';
+  const {missing,incomplete}=computeRebGaps();
   GAP_ITEMS=[];let h='';
   missing.forEach(m=>{const i=GAP_ITEMS.push({kind:'reb-new',name:m.name,typ:m.typ})-1;h+=gapRow(m.name,wineCount(m.count),'miss','fehlt ganz','Anlegen',i);});
-  nodesc.forEach(m=>{const i=GAP_ITEMS.push({kind:'reb-edit',id:m.id})-1;h+=gapRow(m.name,wineCount(m.count),'nodesc','Beschreibung fehlt','Ergänzen',i);});
-  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine Lücken – alle Rebsorten aus deinen Weinen sind erfasst und beschrieben.</div>';
+  incomplete.forEach(m=>{const i=GAP_ITEMS.push({kind:'reb-edit',id:m.id})-1;const n=m.miss.length;h+=gapRow(m.name,wineCount(m.count)+' · fehlt: '+m.miss.join(', '),(n>=3?'miss':'nodesc'),n+' '+(n===1?'Lücke':'Lücken'),'Ergänzen',i);});
+  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine Lücken – alle Rebsorten aus deinen Weinen sind erfasst und vollständig.</div>';
   document.getElementById('gapModal').classList.add('open');
 }
 function wgNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
@@ -1363,25 +1366,28 @@ async function deleteWeingut(id){
     closeWgEdit();
   }catch(e){alert('Fehler beim L\u00f6schen: '+((e&&e.message)||e));}
 }
+const WG_REQ=[['beschreibung','Beschreibung'],['anbau','Anbau']];
+function wgFieldEmpty(g,k){const v=g[k];return v===null||v===undefined||String(v).trim()==='';}
 function computeWgGaps(){
-  const missing={},nodesc={};
+  const missing={},incomplete={};
   (wines||[]).forEach(w=>{
     const name=(w.weingut||'').trim();if(!name)return;
     const g=wgLookup(name);
     if(!g){const k=wgNorm(name);if(!k)return;if(!missing[k])missing[k]={name:name,count:0};missing[k].count++;}
-    else if(!g.beschreibung||!String(g.beschreibung).trim()){if(!nodesc[g.name])nodesc[g.name]={name:g.name,id:g.id,count:0};nodesc[g.name].count++;}
+    else{if(!incomplete[g.name]){const miss=WG_REQ.filter(fp=>wgFieldEmpty(g,fp[0])).map(fp=>fp[1]);if(miss.length)incomplete[g.name]={name:g.name,id:g.id,count:0,miss:miss};}
+      if(incomplete[g.name])incomplete[g.name].count++;}
   });
   const by=(a,b)=>b.count-a.count;
-  return {missing:Object.values(missing).sort(by),nodesc:Object.values(nodesc).sort(by)};
+  return {missing:Object.values(missing).sort(by),incomplete:Object.values(incomplete).sort(by)};
 }
 function openWgGaps(){
   if(isViewer)return;
-  document.getElementById('gapTitle').textContent='Fehlende Weing\u00fcter';
+  document.getElementById('gapTitle').textContent='Weing\u00fcter mit L\u00fccken';
   const g=computeWgGaps();
   GAP_ITEMS=[];let h='';
   g.missing.forEach(m=>{const i=GAP_ITEMS.push({kind:'wg-new',name:m.name})-1;h+=gapRow(m.name,wineCount(m.count),'miss','fehlt ganz','Anlegen',i);});
-  g.nodesc.forEach(m=>{const i=GAP_ITEMS.push({kind:'wg-edit',id:m.id})-1;h+=gapRow(m.name,wineCount(m.count),'nodesc','Beschreibung fehlt','Erg\u00e4nzen',i);});
-  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine L\u00fccken \u2013 alle Weing\u00fcter aus deinen Weinen sind erfasst und beschrieben.</div>';
+  g.incomplete.forEach(m=>{const i=GAP_ITEMS.push({kind:'wg-edit',id:m.id})-1;const n=m.miss.length;h+=gapRow(m.name,wineCount(m.count)+' \u00b7 fehlt: '+m.miss.join(', '),(n>=3?'miss':'nodesc'),n+' '+(n===1?'L\u00fccke':'L\u00fccken'),'Erg\u00e4nzen',i);});
+  document.getElementById('gapList').innerHTML=h||'<div class="gap-empty">Keine L\u00fccken \u2013 alle Weing\u00fcter aus deinen Weinen sind erfasst und vollst\u00e4ndig.</div>';
   document.getElementById('gapModal').classList.add('open');
 }
 const WINE_GAP_FIELDS=[['degustation','Degustation'],['eignung','Eignung'],['ausbau','Ausbau'],['boden','Boden'],['anbau','Anbau'],['sorte','Rebsorte'],['trinkreife_ab','Trinkreife ab'],['trinkreife','Trinkreife bis'],['trinktemperatur','Trinktemperatur'],['dekantierung','Dekantierung'],['gebiet','Gebiet'],['region','Region'],['marktpreis','Marktpreis']];
