@@ -1,0 +1,36 @@
+# Hält das Supabase-Free-Projekt wach, damit es nicht nach 7 Tagen
+# Inaktivität pausiert wird. Macht alle 3 Tage eine winzige Lese-Abfrage.
+#
+# Ablage im Repo:  .github/workflows/supabase-keep-alive.yml
+#
+# Der anon-Key unten ist öffentlich (steckt ohnehin in der index.html der
+# GitHub-Pages-App) – daher unbedenklich hier im Repo. NIEMALS den
+# service_role_key hierher kopieren.
+
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    - cron: "0 6 */3 * *"   # alle 3 Tage um 06:00 UTC
+  workflow_dispatch:         # erlaubt manuelles Auslösen im Actions-Tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Supabase pingen
+        run: |
+          SUPABASE_URL="https://vzsmjneerahucqwisouv.supabase.co"
+          ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6c21qbmVlcmFodWNxd2lzb3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTIxOTEsImV4cCI6MjA5NzY4ODE5MX0.5irEYhQBJpxAKsnYQ28Wrd9H4qlvvUSFQDioqvGTqmo"
+
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/rest/v1/wines?select=id&limit=1" \
+            -H "apikey: ${ANON_KEY}" \
+            -H "Authorization: Bearer ${ANON_KEY}")
+
+          echo "HTTP-Status: ${STATUS}"
+          if [ "${STATUS}" != "200" ]; then
+            echo "::error::Supabase-Ping fehlgeschlagen (Status ${STATUS})"
+            exit 1
+          fi
+          echo "Supabase ist wach."
