@@ -62,7 +62,7 @@
 
 <header class="top">
   <h1>🍷 Weinkeller-App</h1>
-  <div class="sub">Bedienungs- &amp; Installationsanleitung · Version 3.3 · Stand 20.07.2026</div>
+  <div class="sub">Bedienungs- &amp; Installationsanleitung · Version 3.3 · Stand 27.07.2026</div>
 </header>
 
 <p>Die Weinkeller-App ist eine mobile Web-App zur Verwaltung deines Weinkellers. Sie läuft im Browser
@@ -72,6 +72,14 @@ Daten zentral in der Cloud – dadurch sind sie auf allen Geräten gleich, sobal
 <p><strong>Aufbau dieser Anleitung:</strong> Die Teile A–D richten sich an alle Benutzer. Teil E ist rein
 technisch (Entwicklung/Betrieb) und nur nötig, wenn du die App selbst aufsetzt, aktualisierst oder die
 Skripte betreibst.</p>
+
+<div class="box tip"><div class="lbl">Neu: Vollständiges Backup</div>
+<strong>Vollständiges Backup:</strong> Neben dem schnellen CSV-/JSON-Export in der App (nur Weine) gibt es neu ein
+<strong>Voll-Backup</strong>, das <strong>alle Tabellen</strong> (Weine, Rebsorten, Weingüter) <strong>und alle
+Flaschenfotos</strong> als Dateien sichert. Das ist wichtig, weil Supabase auf der Gratis-Version <strong>keine
+automatischen Backups</strong> macht. Du startest es lokal per Doppelklick auf <code>Backup-starten.bat</code>
+(Details B10) oder lässt es monatlich automatisch über GitHub laufen (Teil E5). Ein <strong>Restore</strong> spielt
+ein Backup bei Bedarf wieder zurück. An der App selbst ändert sich nichts – die bisherigen Export-Buttons bleiben.</div>
 
 <div class="box tip"><div class="lbl">Neu in Version 3.3</div>
 <strong>Weinbilder:</strong> Zu jedem Wein lässt sich ein <strong>Foto der Flasche</strong> hinterlegen –
@@ -148,6 +156,7 @@ zurückgesetzt (Skalenwechsel).</div>
         <li><a href="#b7">Abbuchen, Bearbeiten, Duplizieren, Löschen</a></li>
         <li><a href="#b8">CSV-Export</a></li>
         <li><a href="#b9">Weinbilder (neu in v3.3)</a></li>
+        <li><a href="#b10">Backup &amp; Restore (neu)</a></li>
       </ol>
     </li>
     <li><a href="#teil-c">Teil C – Pflege & Wartung</a></li>
@@ -158,6 +167,7 @@ zurückgesetzt (Skalenwechsel).</div>
         <li><a href="#e2">Datenbank (Supabase)</a></li>
         <li><a href="#e3">App veröffentlichen / aktualisieren (GitHub Pages)</a></li>
         <li><a href="#e4">Skripte: Wein-, Rebsorten- & Weingut-Enricher</a></li>
+        <li><a href="#e5">Voll-Backup einrichten (lokal &amp; GitHub)</a></li>
       </ol>
     </li>
   </ol>
@@ -361,8 +371,13 @@ neben dem Weingut – zusammen mit dem 🌐 Globus-Icon für die Webseite.</div>
 </ul>
 
 <h3 id="b8">B8 · CSV-Export</h3>
-<p>Über die Export-Funktion lädst du alle Weine als Excel-kompatible CSV-Datei herunter – als Backup oder zur
-Weiterverarbeitung. Das empfiehlt sich regelmässig.</p>
+<p>Über die Export-Funktion (Symbol „Import/Export" in der Suchzeile) lädst du alle Weine als Excel-kompatible
+CSV-Datei herunter – zur Weiterverarbeitung oder als schnelle Zwischensicherung. Über denselben Dialog gibt es
+auch einen <strong>JSON-Export</strong> der Weine sowie den <strong>Import</strong> einer JSON-Datei.</p>
+<div class="box tip"><div class="lbl">Schnell-Export vs. Voll-Backup</div>
+Der Export in der App deckt nur die <strong>Weine</strong> ab – nicht Rebsorten, Weingüter oder die Fotos. Für eine
+vollständige Sicherung (alle Tabellen <em>und</em> alle Bilder) nutzt du das neue <strong>Voll-Backup</strong>
+(B10). Am besten beides: den App-Export für schnell zwischendurch, das Voll-Backup als kompletten Schutz.</div>
 
 <!-- ================= TEIL C ================= -->
 <h3 id="b9">B9 · Weinbilder <span class="pill">neu in v3.3</span></h3>
@@ -386,6 +401,23 @@ Flasche vor einen ruhigen, hellen Hintergrund stellen, hochkant fotografieren un
 Direktes Blitzlicht spiegelt auf dem Glas – seitliches Tageslicht gibt das beste Ergebnis. Weine ohne Foto
 funktionieren unverändert; das Bild ist immer freiwillig.</div>
 <p>Als <strong>Viewer</strong> (Demo-Zugang) sind die Bilder sichtbar, aber nicht änderbar.</p>
+
+<h3 id="b10">B10 · Backup &amp; Restore <span class="pill">neu</span></h3>
+<p>Deine Daten liegen zentral in der Cloud (Supabase). Weil Supabase auf der <strong>Gratis-Version keine
+automatischen Backups</strong> anlegt, gibt es das <strong>Voll-Backup</strong>: eine unabhängige Kopie
+<strong>aller Tabellen</strong> (Weine, Rebsorten, Weingüter) <strong>und aller Flaschenfotos</strong> auf deinem
+eigenen PC.</p>
+<div class="box tip"><div class="lbl">Backup starten (Doppelklick)</div>
+Im Ordner <code>backup</code> auf <strong><code>Backup-starten.bat</code></strong> doppelklicken. Beim ersten Mal
+richtet es sich kurz selbst ein, danach läuft die Sicherung. Ergebnis liegt in <code>backup\backups\JJJJ-MM\</code>:
+die JSON-Dateien der drei Tabellen, eine Wein-CSV für Excel und ein Ordner <code>bilder</code> mit allen Fotos.
+Voraussetzung ist einmalig <a href="https://nodejs.org">Node.js</a>; die Zugangsdaten sind bereits hinterlegt.</div>
+<div class="box tip"><div class="lbl">Wiederherstellen (Restore)</div>
+Auf <strong><code>Restore-starten.bat</code></strong> doppelklicken, den gewünschten Monat wählen. Es zeigt zuerst
+eine gefahrlose Vorschau und spielt erst nach Bestätigung mit „JA" zurück. Der Restore <strong>überschreibt</strong>
+Einträge mit gleicher Kennung und ergänzt neue – <strong>gelöscht wird nichts</strong>.</div>
+<p>Wer es lieber automatisch mag, lässt das Voll-Backup <strong>monatlich über GitHub</strong> laufen, ganz ohne
+Doppelklick – die Einrichtung dazu steht in <strong>Teil E5</strong>.</p>
 
 <h2 id="teil-c">Teil C – Pflege & Wartung</h2>
 
@@ -445,7 +477,10 @@ Supabase ein.</p>
 
 <h3>Backup & Updates</h3>
 <ul>
-  <li><strong>Backup:</strong> regelmässig den CSV-Export nutzen. Die Weine liegen zwar sicher in der Cloud, ein CSV ist aber eine unabhängige Kopie.</li>
+  <li><strong>Voll-Backup <span class="pill">neu</span>:</strong> sichert alle Tabellen und alle Fotos –
+  per Doppelklick auf <code>Backup-starten.bat</code> (B10) oder monatlich automatisch über GitHub (Teil E5).
+  Das ist die eigentliche Absicherung, da Supabase gratis keine automatischen Backups macht.</li>
+  <li><strong>Schnell-Export:</strong> für zwischendurch der CSV-/JSON-Export in der App – deckt nur die Weine ab (B8).</li>
   <li><strong>App-Update:</strong> neue <code>index.html</code> wie in Teil E3 auf GitHub hochladen.</li>
 </ul>
 
@@ -675,8 +710,36 @@ nach deiner Freigabe („j"/„n") in Supabase. Ablauf und Ergebnis sind identis
 manuelle Schritte. Für die Weinkombinationen gibt es den Skill <code>weinkeller-weinkombinationen</code>, der die
 gespeicherte Seite bei Bedarf direkt im Chat wieder anzeigt.</div>
 
+<h3 id="e5">E5 · Voll-Backup einrichten (lokal &amp; GitHub) <span class="pill dev">technisch</span></h3>
+<p>Das Voll-Backup liegt im Ordner <code>backup/</code> (getrennt von der App) und besteht aus zwei Node-Skripten
+plus Startdateien:</p>
+<table>
+  <tr><th>Datei</th><th>Zweck</th></tr>
+  <tr><td><code>scripts/backup.mjs</code></td><td>Liest alle Zeilen aus <code>wines</code>, <code>rebsorten</code>, <code>weingueter</code> (je als JSON), schreibt zusätzlich eine Wein-CSV (gleiche Spalten wie der App-Export) und lädt alle Dateien aus dem Storage-Bucket <code>weinbilder</code>. Ablage in <code>backups/JJJJ-MM/</code> inkl. <code>manifest.json</code>.</td></tr>
+  <tr><td><code>scripts/restore.mjs</code></td><td>Spielt einen Backup-Ordner per Upsert (Konflikt auf <code>id</code>) zurück und lädt die Bilder wieder in den Bucket. Löscht nichts. Optionen: <code>--dry</code> (nur Vorschau), <code>--no-bilder</code>.</td></tr>
+  <tr><td><code>Backup-starten.bat</code> / <code>Restore-starten.bat</code></td><td>Windows-Doppelklick-Starter (installiert beim ersten Lauf die Pakete, führt dann das Skript aus).</td></tr>
+</table>
+<div class="box dev"><div class="lbl">Lokaler Weg (empfohlen für den Alltag)</div>
+Einmalig <a href="https://nodejs.org">Node.js</a> (LTS) installieren. Im Ordner <code>backup</code> liegt eine
+<code>.env</code> mit <code>SUPABASE_URL</code> und <code>SUPABASE_SERVICE_ROLE_KEY</code> (aus <code>skript/.env</code>
+übernommen). Danach genügt Doppelklick auf <code>Backup-starten.bat</code>. Manuell im Terminal:
+<code>npm install</code> einmalig, dann <code>node scripts/backup.mjs</code> bzw.
+<code>node scripts/restore.mjs backups/2026-07</code>.</div>
+<div class="box dev"><div class="lbl">Automatischer Weg (GitHub Actions, monatlich)</div>
+Ein <strong>privates</strong> GitHub-Repo (z. B. <code>weinkeller-backups</code>) anlegen und den Inhalt von
+<code>backup/</code> hineinlegen. Der mitgelieferte Workflow <code>.github/workflows/weinkeller-backup.yml</code> läuft
+am 1. jedes Monats, erstellt das Backup und committet es ins Repo selbst. Nötig sind nur zwei <strong>Repo-Secrets</strong>
+(<em>Settings → Secrets and variables → Actions</em>): <code>SUPABASE_URL</code> und
+<code>SUPABASE_SERVICE_ROLE_KEY</code>. Private Repos und der monatliche Lauf sind im GitHub-Free-Plan kostenlos.</div>
+<div class="box warn"><div class="lbl">Wichtig zum service_role-Key</div>
+Der <code>service_role_key</code> umgeht die Zugriffsregeln und darf <strong>nur</strong> in die lokale
+<code>.env</code> bzw. in ein <strong>privates</strong> Repo-Secret – <strong>niemals</strong> in die
+<code>index.html</code>, ein öffentliches Repo oder die App. Die <code>.gitignore</code> im Ordner schliesst
+<code>.env</code> und <code>node_modules</code> vom Hochladen aus. Wegen der Kaufpreise, Notizen und Lieferanten
+gehört das Backup grundsätzlich nur in einen privaten Ablageort.</div>
+
 <footer>
-  Weinkeller-App · Bedienungs- & Installationsanleitung · Version 3.2 · Stand 19.07.2026<br>
+  Weinkeller-App · Bedienungs- & Installationsanleitung · Version 3.3 · Stand 27.07.2026<br>
   App-Code auf GitHub Pages, Daten in Supabase. Teile A–D für Benutzer, Teil E für Entwicklung/Betrieb.
   Diese Anleitung kannst du über den Button oben als PDF drucken.
 </footer>
