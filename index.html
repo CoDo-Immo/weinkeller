@@ -206,7 +206,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .struk-dots{font-size:12px;letter-spacing:1px;white-space:nowrap;}
 .typ-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
 .herk-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14px;margin-bottom:14px;padding:9px 2px 0;border-top:1px solid var(--bd);}
-.herk-item{display:flex;align-items:baseline;gap:5px;}
+.herk-item{display:flex;align-items:baseline;gap:6px;}
+.herk-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--tx);font-weight:400;opacity:.75;}
+.herk-val{font-size:14px;color:var(--tx);font-weight:600;}
 .arow{display:flex;gap:8px;margin-bottom:8px;}
 .abtn{flex:1;height:44px;border-radius:var(--br-md);font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--bd);background:var(--cs);color:var(--tx);display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .12s,transform .1s;}
 .abtn:active{opacity:.75;transform:scale(0.97);}
@@ -1116,7 +1118,7 @@ function strukLineVals(kv,sv,tv){
 }
 const TYP_BADGE={'Rotwein':['#FCEBEB','#A32D2D'],'Weisswein':['#FAEEDA','#854F0B'],'Rosé':['#FBEAF0','#993556'],'Rose':['#FBEAF0','#993556'],'Schaumwein':['#E6F1FB','#185FA5'],'Süsswein':['#F0E6C8','#7A5B12'],'Suesswein':['#F0E6C8','#7A5B12'],'Brandwein':['#EDE4DC','#5F4630']};
 function typBadge(t){if(!t)return '';const c=TYP_BADGE[t]||['var(--cs)','var(--tx)'];return `<span class="typ-badge" style="background:${c[0]};color:${c[1]};">${t}</span>`;}
-function herkLine(w){const items=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(x=>x[1]);if(!items.length)return '';return '<div class="dsec">Herkunft</div><div class="herk-line">'+items.map(x=>`<span class="herk-item"><span class="dl">${x[0]}</span><span class="dv">${x[1]}</span></span>`).join('')+'</div>';}
+function herkLine(w){const items=[['Land',w.land],['Gebiet',w.gebiet],['Region',w.region]].filter(x=>x[1]);if(!items.length)return '';return '<div class="dsec">Herkunft</div><div class="herk-line">'+items.map(x=>`<span class="herk-item"><span class="herk-lbl">${x[0]}</span><span class="herk-val">${x[1]}</span></span>`).join('')+'</div>';}
 function bewLine(w){const cell=(lbl,val,col)=>`<span class="struk-item"><span class="struk-lbl">${lbl}</span><span style="color:${col};letter-spacing:1px;font-size:14px;">${stars(val)}</span></span>`;if(!w.bewertung_jill&&!w.bewertung_gian)return '';let parts=[];if(w.bewertung_jill)parts.push(cell('Jill',w.bewertung_jill,'#4C9A5B'));if(w.bewertung_gian)parts.push(cell('Gian',w.bewertung_gian,'#C9971C'));return `<div class="struk-line">${parts.join('')}</div>`;}
 function topRow(lbl,val){return `<div class="struk-line"><span class="struk-lbl" style="font-size:13px;">${lbl}</span><span style="font-size:13px;">${val}</span></div>`;}
 function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('')}</div>`;}
