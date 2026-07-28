@@ -200,6 +200,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .drow .dl{color:var(--tm);white-space:nowrap;font-weight:500;}
 .drow .dv{color:var(--tx);text-align:right;}
 .dsec{font-size:11px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;}
+.struk-line{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--bd);}
+.struk-item{display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.struk-lbl{font-size:12px;color:var(--tm);}
+.struk-dots{font-size:12px;letter-spacing:1px;white-space:nowrap;}
+.typ-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.herk-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14px;margin-bottom:14px;padding:9px 2px 0;border-top:1px solid var(--bd);}
+.herk-item{display:flex;align-items:baseline;gap:5px;}
 .arow{display:flex;gap:8px;margin-bottom:8px;}
 .abtn{flex:1;height:44px;border-radius:var(--br-md);font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--bd);background:var(--cs);color:var(--tx);display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .12s,transform .1s;}
 .abtn:active{opacity:.75;transform:scale(0.97);}
@@ -267,7 +274,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v3.3</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v3.4</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -281,7 +288,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v3.3.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v3.4.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
       <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
@@ -386,7 +393,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v3.3</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v3.4</span></footer>
 </div>
 
 
@@ -484,6 +491,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-row">
         <div class="rebf-field"><label>Körper</label><input type="text" id="rebf-koerper" placeholder="z.B. mittel–kräftig"></div>
         <div class="rebf-field"><label>Säure</label><input type="text" id="rebf-saeure" placeholder="z.B. mittel"></div>
+        <div class="rebf-field"><label>Tannin</label><input type="text" id="rebf-tannin" placeholder="z.B. mittel–hoch (bei Rotwein)"></div>
       </div>
       <div class="rebf-field"><label>Passt zu (Eignung)</label><input type="text" id="rebf-eignung" placeholder="z.B. Pilzrisotto, Weichkäse"></div>
       <div class="rebf-field"><label>Charakter</label><input type="text" id="rebf-charakter" placeholder="z.B. rund, weich, zugänglich"></div>
@@ -605,6 +613,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="fg full"><label>Dekantierung</label><input id="f-dekantierung" type="text" placeholder="z.B. 90 Minuten, 60–90 Minuten, nicht empfohlen"></div>
       <div class="fg full"><label>Ausbau</label><input id="f-ausbau" type="text" placeholder="z.B. Barrique 18 Monate"></div>
       <div class="fg full"><label>Boden</label><input id="f-boden" type="text" placeholder="z.B. Kalkstein, Schiefer, Lehm"></div>
+      <div class="fg"><label>Körper</label><select id="f-koerper"><option value="">– keine Angabe –</option><option value="leicht">leicht</option><option value="leicht–mittel">leicht–mittel</option><option value="mittel">mittel</option><option value="mittel–kräftig">mittel–kräftig</option><option value="kräftig">kräftig</option></select></div>
+      <div class="fg"><label>Säure</label><select id="f-saeure"><option value="">– keine Angabe –</option><option value="niedrig">niedrig</option><option value="niedrig–mittel">niedrig–mittel</option><option value="mittel">mittel</option><option value="mittel–hoch">mittel–hoch</option><option value="hoch">hoch</option></select></div>
+      <div class="fg"><label>Tannin</label><select id="f-tannin"><option value="">– keine Angabe –</option><option value="niedrig">niedrig</option><option value="niedrig–mittel">niedrig–mittel</option><option value="mittel">mittel</option><option value="mittel–hoch">mittel–hoch</option><option value="hoch">hoch</option></select></div>
       <div class="fg full"><label>Anbau</label>
         <select id="f-anbau"><option value="">– keine Angabe –</option><option value="BIO">BIO</option><option value="NACHHALTIG">NACHHALTIG</option><option value="Biodynamisch">Biodynamisch</option><option value="Demeter">Demeter</option><option value="Konventionell">Konventionell</option></select>
       </div>
@@ -885,7 +896,7 @@ function setFormBew(who,n){
 }
 
 /* ── Form helpers ── */
-const TXT_F=['name','weingut','sorte','bild_url','bild_url_gross','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','notizen','lieferant'];
+const TXT_F=['name','weingut','sorte','bild_url','bild_url_gross','gebiet','region','degustation','eignung','trinktemperatur','dekantierung','ausbau','boden','koerper','saeure','tannin','notizen','lieferant'];
 const INT_F=['jahr','anzahl'];
 function clearForm(){
   TXT_F.forEach(f=>{const e=document.getElementById('f-'+f);if(e)e.value='';});
@@ -1088,6 +1099,26 @@ async function saveWine(){
 
 /* ── Detail View ── */
 function isDesktop(){return window.innerWidth>=768;}
+const STRUK_MAP={'leicht':1,'leicht-mittel':2,'mittel':3,'mittel-kraeftig':4,'mittel-kräftig':4,'kräftig':5,'kraeftig':5,'niedrig':1,'gering':1,'tief':1,'niedrig-mittel':2,'mittel-hoch':4,'mittel-niedrig':2,'hoch':5,'sehr-hoch':5,'keine':0,'kein':0,'ohne':0};
+function strukVal(v){
+  if(v==null||v==='')return 0;
+  if(typeof v==='number')return Math.max(0,Math.min(5,Math.round(v)));
+  let t=String(v).toLowerCase().trim().replace(/[–—]/g,'-').replace(/\s*-\s*/g,'-').replace(/\s+/g,'-');
+  if(STRUK_MAP[t]!=null)return STRUK_MAP[t];
+  const n=parseInt(t,10);if(!isNaN(n))return Math.max(0,Math.min(5,n));
+  return 0;
+}
+function strukDots(v,color){const n=strukVal(v);if(!n)return '';let s='';for(let i=1;i<=5;i++){s+=`<span style="color:${i<=n?color:'var(--tm)'};">${i<=n?'●':'○'}</span>`;}return s;}
+function strukLineVals(kv,sv,tv){
+  const items=[['Körper',kv,'#7F77DD'],['Säure',sv,'#1D9E75'],['Tannin',tv,'#D85A30']].filter(x=>strukVal(x[1])>0);
+  if(!items.length)return '';
+  return `<div class="struk-line">${items.map(x=>`<span class="struk-item"><span class="struk-lbl">${x[0]}</span><span class="struk-dots">${strukDots(x[1],x[2])}</span></span>`).join('')}</div>`;
+}
+const TYP_BADGE={'Rotwein':['#FCEBEB','#A32D2D'],'Weisswein':['#FAEEDA','#854F0B'],'Rosé':['#FBEAF0','#993556'],'Rose':['#FBEAF0','#993556'],'Schaumwein':['#E6F1FB','#185FA5'],'Süsswein':['#F0E6C8','#7A5B12'],'Suesswein':['#F0E6C8','#7A5B12'],'Brandwein':['#EDE4DC','#5F4630']};
+function typBadge(t){if(!t)return '';const c=TYP_BADGE[t]||['var(--cs)','var(--tx)'];return `<span class="typ-badge" style="background:${c[0]};color:${c[1]};">${t}</span>`;}
+function herkLine(w){const items=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(x=>x[1]);if(!items.length)return '';return '<div class="dsec">Herkunft</div><div class="herk-line">'+items.map(x=>`<span class="herk-item"><span class="dl">${x[0]}</span><span class="dv">${x[1]}</span></span>`).join('')+'</div>';}
+function bewLine(w){const cell=(lbl,val,col)=>`<span class="struk-item"><span class="struk-lbl">${lbl}</span><span style="color:${col};letter-spacing:1px;font-size:14px;">${stars(val)}</span></span>`;if(!w.bewertung_jill&&!w.bewertung_gian)return '';let parts=[];if(w.bewertung_jill)parts.push(cell('Jill',w.bewertung_jill,'#4C9A5B'));if(w.bewertung_gian)parts.push(cell('Gian',w.bewertung_gian,'#C9971C'));return `<div class="struk-line">${parts.join('')}</div>`;}
+function topRow(lbl,val){return `<div class="struk-line"><span class="struk-lbl" style="font-size:13px;">${lbl}</span><span style="font-size:13px;">${val}</span></div>`;}
 function mkRows(rows){return`<div class="drows">${rows.map(r=>`<div class="drow"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('')}</div>`;}
 /* ── Rebsorten-Info (Hilfe-Overlay) ── */
 /* Fallback-Liste (offline). Wird beim Start aus Supabase-Tabelle 'rebsorten' überschrieben, falls vorhanden. */
@@ -1132,7 +1163,7 @@ const REB_SYN={"garnacha":"grenache"};
 let REB_IDX={};
 function rebBuildIndex(){REB_IDX={};REBSORTEN.forEach(g=>{REB_IDX[rebNorm(g.n)]=g;(g.x||[]).forEach(a=>{REB_IDX[rebNorm(a)]=g;});});}
 rebBuildIndex();
-async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={id:x.id,n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,e:x.eignung,c:x.charakter,b:x.beschreibung,raw:x.aliase||''};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();if(document.getElementById('rebModal')&&document.getElementById('rebModal').classList.contains('open'))renderRebsorten();}catch(e){}}
+async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={id:x.id,n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,tn:x.tannin,e:x.eignung,c:x.charakter,b:x.beschreibung,raw:x.aliase||''};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();if(document.getElementById('rebModal')&&document.getElementById('rebModal').classList.contains('open'))renderRebsorten();}catch(e){}}
 function rebEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 let rebFilterTyp='all';
 function openRebsorten(){document.getElementById('rebModal').classList.add('open');renderRebsorten();}
@@ -1149,12 +1180,12 @@ function renderRebsorten(){
   box.innerHTML=list.map(g=>{
     const rot=(g.t||'').toLowerCase().startsWith('rot');
     const bar=rot?'#C25A7C':'#C9A227';
-    const tags=[g.k?['Körper',g.k]:null,g.s?['Säure',g.s]:null].filter(Boolean).map(p=>'<span class="reb-tag">'+p[0]+': <b>'+rebEsc(p[1])+'</b></span>').join('');
+    const tags=strukLineVals(g.k,g.s,g.tn);
     const alias=(g.x&&g.x.length)?'<div class="reb-line"><span class="reb-lbl">Alias: </span>'+rebEsc(g.x.join(', '))+'</div>':'';
     const acts=(!isViewer&&g.id!=null)?'<span class="reb-actions"><button class="reb-act" onclick="openRebEdit('+g.id+')" title="Bearbeiten"><i class="ti ti-pencil"></i></button><button class="reb-act reb-act-del" onclick="deleteRebsorte('+g.id+')" title="Löschen"><i class="ti ti-trash"></i></button></span>':'';
     return '<div class="reb-card" style="border-left-color:'+bar+'">'
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
-      +(tags?'<div class="reb-tags">'+tags+'</div>':'')
+      +tags
       +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+'</div>':'')
       +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebEsc(g.e)+'</span></div>':'')
       +alias
@@ -1176,6 +1207,7 @@ function openRebEdit(id, prefill){
   document.getElementById('rebf-herkunft').value=g?(g.h||''):'';
   document.getElementById('rebf-koerper').value=g?(g.k||''):'';
   document.getElementById('rebf-saeure').value=g?(g.s||''):'';
+  document.getElementById('rebf-tannin').value=g?(g.tn||''):'';
   document.getElementById('rebf-eignung').value=g?(g.e||''):'';
   document.getElementById('rebf-charakter').value=g?(g.c||''):'';
   document.getElementById('rebf-aliase').value=g?(g.raw||(g.x?g.x.join(', '):'')):'';
@@ -1192,7 +1224,7 @@ async function saveRebEdit(){
   if(!name){err.textContent='Name ist erforderlich.';return;}
   const id=document.getElementById('rebf-id').value;
   const val=x=>{const v=document.getElementById(x).value.trim();return v||null;};
-  const payload={name:name,typ:typ,herkunft:val('rebf-herkunft'),koerper:val('rebf-koerper'),saeure:val('rebf-saeure'),eignung:val('rebf-eignung'),charakter:val('rebf-charakter'),aliase:val('rebf-aliase'),beschreibung:val('rebf-beschreibung')};
+  const payload={name:name,typ:typ,herkunft:val('rebf-herkunft'),koerper:val('rebf-koerper'),saeure:val('rebf-saeure'),tannin:val('rebf-tannin'),eignung:val('rebf-eignung'),charakter:val('rebf-charakter'),aliase:val('rebf-aliase'),beschreibung:val('rebf-beschreibung')};
   const btn=document.getElementById('rebf-savebtn');if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
   try{
     if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
@@ -1462,11 +1494,10 @@ function showRebsorteInfo(id){
   tokens.forEach(tok=>{const g=rebLookup(tok);if(g){if(!seen.has(g.n)){seen.add(g.n);matched.push(g);}}else if(rebNorm(tok)!=='moelleux'){missing.push(tok);}});
   const cards=matched.map(g=>{const lbl=g.t==='rot'?'Rotwein':'Weisswein';return `<div class="rebi-card ${g.t}">
     <div class="rebi-top"><span class="rebi-name">${g.n}</span><span class="rebi-badge ${g.t}">${lbl}</span></div>
+    ${strukLineVals(g.k,g.s,g.tn)}
     <div class="rebi-row"><span>Herkunft</span><b>${g.h}</b></div>
-    <div class="rebi-row"><span>Körper</span><b>${g.k}</b></div>
-    <div class="rebi-row"><span>Säure</span><b>${g.s}</b></div>
     <div class="rebi-row"><span>Charakter</span><b>${g.c}</b></div>
-    <div class="rebi-row"><span>Veg. Eignung</span><b>${g.e}</b></div>
+    <div class="rebi-row"><span>Passt zu</span><b>${g.e}</b></div>
   </div>`;}).join('');
   const miss=missing.length?`<div class="rebi-miss">Keine Detailinfo zu: ${missing.join(', ')}</div>`:'';
   const body=matched.length?cards+miss:(miss||'<div class="rebi-miss">Keine Rebsorten-Info verfügbar.</div>');
@@ -1483,9 +1514,8 @@ function closeRebInfo(){const ov=document.getElementById('rebiOverlay');if(ov)ov
 function buildDetailHTML(id,w){
   const tLabel=w.trinkreife_ab&&w.trinkreife?`${w.trinkreife_ab} – ${w.trinkreife}`:w.trinkreife_ab?`ab ${w.trinkreife_ab}`:w.trinkreife?`bis ${w.trinkreife}`:null;
   const ts=trinkStatus(w),tl=trinkLabel(ts);
-  const wR=[['Typ',w.typ],['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden],['Bewertung',bewertungCell(w)]].filter(r=>r[1]);
-  const hR=[['Land',w.land?(flagOf(w.land)+' '+w.land):null],['Gebiet',w.gebiet],['Region',w.region]].filter(r=>r[1]);
-  const cR=[['Eignung',w.eignung],['Trinktemperatur',w.trinktemperatur],['Dekantierung',w.dekantierung]].filter(r=>r[1]);
+  const wR=[['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden]].filter(r=>r[1]);
+  const cR=[['Trinktemperatur',w.trinktemperatur],['Dekantierung',w.dekantierung]].filter(r=>r[1]);
   const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Marktpreis',w.marktpreis?'CHF '+Number(w.marktpreis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
   return`
     ${w.bild_url?`<img class="d-img" src="${w.bild_url}" alt="${w.name}" title="Antippen zum Vergrössern" onclick="openLightbox('${id}')" onerror="this.style.display='none'">`:''}
@@ -1493,7 +1523,7 @@ function buildDetailHTML(id,w){
       <div style="flex:1;min-width:0;">
         <div class="big-name">${w.name}</div>
         ${w.weingut?`<div class="big-gut">${w.weingut}${weingutInfoIcon(w)}${weingutLinkIcons(w,false)}</div>`:''}
-        <div class="big-sub">${[w.jahr,w.typ].filter(Boolean).join(' · ')}</div>
+        <div class="big-sub" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">${w.jahr?`<span>${w.jahr}</span>`:'<span></span>'}${typBadge(w.typ)}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px;">
         ${isViewer
@@ -1506,8 +1536,11 @@ function buildDetailHTML(id,w){
         }
       </div>
     </div>
+    ${w.eignung?topRow('Eignung',`<span style="color:#7A8B5A;">${w.eignung}</span>`):''}
+    ${bewLine(w)}
+    ${strukLineVals(w.koerper,w.saeure,w.tannin)}
     ${wR.length?'<div class="dsec">Wein</div>'+mkRows(wR):''}
-    ${hR.length?'<div class="dsec">Herkunft</div>'+mkRows(hR):''}
+    ${herkLine(w)}
     ${w.degustation?`<div class="dsec">Degustation</div><div style="font-size:13px;color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:11px 12px;margin-bottom:14px;line-height:1.6;">${w.degustation}</div>`:''}
     ${cR.length?mkRows(cR):''}
     ${kR.length?'<div class="dsec">Keller</div>'+mkRows(kR):''}
