@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weinkeller-App – Bedienungs- & Installationsanleitung (v3.5)</title>
+<style>
+  :root{
+    --red:#7b1e3b; --gold:#b8860b; --bg:#faf7f4; --card:#ffffff; --text:#2b2320;
+    --muted:#7a6f68; --line:#e7ddd4; --code-bg:#f3ece7; --tip:#eef5ea; --tip-b:#3b6d11;
+    --warn:#fdf3e7; --warn-b:#b7770d; --dev:#eef0f5; --dev-b:#3b4a7a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#1a1614;--card:#241f1c;--text:#efe7e0;--muted:#a89a90;--line:#3a322d;
+      --code-bg:#2b2523;--tip:#20291d;--tip-b:#8fbf5a;--warn:#2b2318;--warn-b:#e0a94a;
+      --red:#c76b7e;--gold:#d9b24e;--dev:#1e2230;--dev-b:#8fa0d6;}
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.65;}
+  .wrap{max-width:820px;margin:0 auto;padding:28px 20px 80px;}
+  header.top{border-bottom:2px solid var(--red);padding-bottom:16px;margin-bottom:8px;}
+  header.top h1{font-size:1.7rem;margin:0 0 4px;color:var(--red);}
+  header.top .sub{color:var(--muted);font-size:.95rem;}
+  h2{font-size:1.3rem;margin:2.2rem 0 .6rem;color:var(--red);border-bottom:1px solid var(--line);padding-bottom:5px;}
+  h2.dev{color:var(--dev-b);}
+  h3{font-size:1.08rem;margin:1.5rem 0 .4rem;}
+  p,li{font-size:.97rem;}
+  a{color:var(--red);}
+  code{background:var(--code-bg);padding:1px 6px;border-radius:5px;font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:.88em;}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:.86rem;}
+  pre code{background:none;padding:0;}
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:18px 0 6px;}
+  .toc h2{border:none;margin:0 0 8px;font-size:1.05rem;padding:0;color:var(--red);}
+  .toc ol{margin:0;padding-left:20px;}
+  .toc a{text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+  .box{border-radius:10px;padding:12px 16px;margin:14px 0;border-left:4px solid var(--line);background:var(--card);}
+  .box.tip{background:var(--tip);border-left-color:var(--tip-b);}
+  .box.warn{background:var(--warn);border-left-color:var(--warn-b);}
+  .box.dev{background:var(--dev);border-left-color:var(--dev-b);}
+  .box .lbl{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px;}
+  .box.tip .lbl{color:var(--tip-b);}
+  .box.warn .lbl{color:var(--warn-b);}
+  .box.dev .lbl{color:var(--dev-b);}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem;}
+  th,td{text-align:left;padding:7px 10px;border:1px solid var(--line);vertical-align:top;}
+  th{background:var(--code-bg);color:var(--red);}
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--code-bg);color:var(--red);}
+  .pill.dev{color:var(--dev-b);}
+  .steps{padding-left:22px;}
+  .steps li{margin-bottom:6px;}
+  .printbtn{position:fixed;top:14px;right:14px;background:var(--red);color:#fff;border:none;border-radius:8px;
+    padding:8px 14px;font-size:.85rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;}
+  @media print{.printbtn{display:none;} body{background:#fff;color:#000;} .toc{page-break-after:always;}}
+</style>
+</head>
+<body>
+<button class="printbtn" onclick="window.print()">🖨 Drucken / PDF</button>
+<div class="wrap">
+
+<header class="top">
+  <h1>🍷 Weinkeller-App</h1>
+  <div class="sub">Bedienungs- &amp; Installationsanleitung · Version 3.5 · Stand 09.08.2026</div>
+</header>
+
+<p>Die Weinkeller-App ist eine mobile Web-App zur Verwaltung deines Weinkellers. Sie läuft im Browser
+(Chrome/Android, Safari/iOS), lässt sich als Icon auf dem Homescreen installieren und speichert deine
+Daten zentral in der Cloud – dadurch sind sie auf allen Geräten gleich, sobald du dich anmeldest.</p>
+
+<p><strong>Aufbau dieser Anleitung:</strong> Die Teile A–D richten sich an alle Benutzer. Teil E ist rein
+technisch (Entwicklung/Betrieb) und nur nötig, wenn du die App selbst aufsetzt, aktualisierst oder die
+Skripte betreibst.</p>
+
+<div class="box tip"><div class="lbl">Neu: Vollständiges Backup</div>
+<strong>Vollständiges Backup:</strong> Neben dem schnellen CSV-/JSON-Export in der App (nur Weine) gibt es neu ein
+<strong>Voll-Backup</strong>, das <strong>alle Tabellen</strong> (Weine, Rebsorten, Weingüter) <strong>und alle
+Flaschenfotos</strong> als Dateien sichert. Das ist wichtig, weil Supabase auf der Gratis-Version <strong>keine
+automatischen Backups</strong> macht. Du startest es lokal per Doppelklick auf <code>Backup-starten.bat</code>
+(Details B10) oder lässt es monatlich automatisch über GitHub laufen (Teil E5). Ein <strong>Restore</strong> spielt
+ein Backup bei Bedarf wieder zurück. An der App selbst ändert sich nichts – die bisherigen Export-Buttons bleiben.</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.5</div>
+<strong>Neuer Weintyp «Alkoholfrei»:</strong> Entalkoholisierte Weine lassen sich jetzt als eigener Typ erfassen.
+Er steht im Typ-Dropdown des Bearbeiten-Formulars zur Auswahl, hat einen eigenen Filter-Chip (🌿 Alkoholfrei)
+im Filterpanel und eine eigene Farbe (Grün) – im Farbstreifen links auf der Weinkarte, beim Punkt vor dem
+Weinnamen und als Badge in der Detailansicht. Es ist <strong>keine Datenbank-Migration nötig</strong>, das Feld
+<code>typ</code> ist ein freies Textfeld.
+<strong>Enricher:</strong> <code>enricher.js</code> kennt den Typ und schlägt passende Werte vor – Entalkoholisierungs­verfahren
+beim Ausbau, kurze Trinkreife (alkoholfreie Weine sind nicht lagerfähig), «nicht empfohlen» bei der Dekantierung
+und eine kühlere Serviertemperatur.</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.4</div>
+<strong>Struktur-Werte Körper, Säure &amp; Tannin:</strong> Jeder Wein und jede Rebsorte zeigt neu die drei
+Geschmacksachsen als kompakte Punkte-Skala (●●●○○, 1–5). <strong>Körper</strong> = Fülle/Gewicht,
+<strong>Säure</strong> = Frische (Geschmack), <strong>Tannin</strong> = Gerbstoff/Adstringenz (Mundgefühl, v.a. Rotwein).
+Die drei sind bewusst getrennt von der ★-Gesamtbewertung – sie beschreiben die Ausprägung, nicht die Qualität.
+Erfasst wird im Bearbeiten-Formular (Wein: Auswahl leicht…kräftig bzw. niedrig…hoch; Rebsorte: Tannin-Feld);
+der Enricher füllt die Werte automatisch vor.
+<strong>Detailansicht neu geordnet:</strong> Weintyp als farbiges Badge oben rechts, Eignung zuoberst, danach
+Bewertung, Struktur, dann die übrigen Angaben; Herkunft (Land/Gebiet/Region) auf einer Zeile. «Veg. Eignung»
+heisst jetzt «Passt zu».
+<strong>Einmalig nötig:</strong> die Migration <code>add_struktur_columns.sql</code> in Supabase (Teil E2).</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.3</div>
+<strong>Weinbilder:</strong> Zu jedem Wein lässt sich ein <strong>Foto der Flasche</strong> hinterlegen –
+im Bearbeiten-Formular über das Kamera-Symbol (auf dem Handy direkt knipsen). In der Weinübersicht steht
+das Bild links auf der Karte, in der Detailansicht zuoberst; Weine ohne Foto zeigen eine graue
+Flaschen-Silhouette.
+<strong>Vergrössern mit Zoom:</strong> Ein Tipp auf das Bild öffnet es formatfüllend – zwei Finger zum
+Zoomen, Doppeltipp, Wischen nach unten zum Schliessen (Details B9).
+Aus jedem Foto entstehen automatisch zwei Grössen, damit die Liste schnell bleibt.
+<strong>Einmalig nötig:</strong> die Migration <code>add_bild_url_und_storage.sql</code> in Supabase
+(Teil E2).</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.2</div>
+<strong>Neuer Weinlücken-Finder:</strong> In der Suchzeile (neben Filter und Import/Export) gibt es ein
+<strong>🔍 Lücken-Symbol</strong>, das alle Weine mit fehlenden Angaben auflistet – pro Wein die konkret
+fehlenden Felder, mit direktem Sprung zum Bearbeiten (Details B2).
+<strong>Rebsorten- und Weingut-Ansicht aufgeräumt:</strong> Die Aktions-Symbole <strong>Neu</strong> und
+<strong>Lücken</strong> sitzen neu oben in der Titelzeile als farbige Symbol-Buttons (Weinrot-/Blau-Ton),
+das Schliessen-X daneben. Bei den <strong>Rebsorten</strong> öffnet <strong>«Auf Delinat»</strong> neu die
+passende Delinat-Rebsortenseite (statt Wikipedia); die Zeile <strong>«Passt zu»</strong> ist grün wie in der
+Weinübersicht, und das Synonym-Label heisst neu <strong>«Alias»</strong>. <strong>Weingüter</strong> zeigen
+Zeilen- und Absatzumbrüche in Beschreibung und Anbau. Ausserdem: grössere Schrift, grössere Bearbeiten-Fenster
+mit fixierter Kopfzeile und ein dezenterer Filter-Balken mit roter Schrift. Keine Datenbank-Migration nötig.</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.1</div>
+Weingüter haben neu ein Feld <strong>Webseite</strong>: In der Weinliste und im Weingut-Info-Fenster erscheint
+neben dem Weingut ein <strong>🌐 Globus-Icon</strong>, das die offizielle Weingut-Seite in einem neuen Tab öffnet.
+Der <strong>📍 Google-Maps-Link</strong> ist neu <strong>direkt in der Weinliste</strong> verfügbar (Pin-Icon
+neben dem Weingut), nicht mehr nur im Info-Fenster. Der farbige Balken der Weingut-Karten (Übersicht und
+Info-Fenster) ist neu <strong>grün</strong> statt weinrot. Einmalig ist die Migration
+<code>add_weingut_webseite.sql</code> nötig (Teil E2); die Webseiten der bestehenden Weingüter sind bereits erfasst.</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 3.0</div>
+<strong>Rebsorten- und Weingut-Übersicht sind neu bearbeitbar</strong>: beide lassen sich direkt in der App
+<strong>hinzufügen, bearbeiten und löschen</strong> (nur als Admin), je mit einem Freitextfeld
+<strong>Beschreibung</strong>. Ein <strong>«Lücken»-Button</strong> zeigt fehlende bzw. unbeschriebene Einträge
+aus deinen Weinen, und <strong>«Aus Wikipedia laden»</strong> füllt die Beschreibung als Entwurf. Weingüter
+erhalten dafür ein neues 🏰-Symbol im Header; deren bisheriges Feld «Charakter» wurde mit der Beschreibung
+zusammengeführt. Ausserdem steht die <strong>Versionsangabe</strong> neu in einer <strong>Fusszeile</strong>
+zusammen mit der <strong>Anzahl Weine</strong>. Details siehe B1, B5–B6 und Teil C. Einmalig sind zwei
+Datenbank-Migrationen nötig (Teil E2).</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 2.10</div>
+Zwei neue Header-Symbole. Das <strong>🍇 Rebsorten-Symbol</strong> (rechts vom Hilfe-Symbol) öffnet direkt in der App
+eine <strong>Übersicht aller Rebsorten</strong>, die im Keller erfasst und beschrieben sind – mit Suchfeld und
+Rot/Weiss-Filter. Das <strong>🍽 Weinkombinationen-Symbol</strong> öffnet eine separate Seite mit fertig
+zusammengestellten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü aus deinem Keller. Details siehe B1.</div>
+
+<div class="box tip"><div class="lbl">Neu in Version 2.9</div>
+Aus der einen <strong>Bewertung</strong> wurden zwei getrennte Bewertungen: <strong>Bewertung Jill</strong> (grün)
+und <strong>Bewertung Gian</strong> (gelb/gold), beide neu auf einer <strong>4-Sterne-Skala</strong> (vorher 5) und
+in der Übersicht immer sichtbar auf derselben Zeile wie der Weinname. Der Mindest-Bewertung-Filter berücksichtigt
+neu Jill <em>oder</em> Gian. Details siehe B1–B3. Wichtig: Beim Datenbank-Update wurden alle bisherigen Bewertungen
+zurückgesetzt (Skalenwechsel).</div>
+
+<div class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#teil-a">Teil A – Installation (für Benutzer)</a>
+      <ol>
+        <li><a href="#a1">Was ist die App?</a></li>
+        <li><a href="#a2">App installieren (Android / iPhone / Windows)</a></li>
+        <li><a href="#a3">Registrieren & Anmelden</a></li>
+      </ol>
+    </li>
+    <li><a href="#teil-b">Teil B – Bedienung</a>
+      <ol>
+        <li><a href="#b1">Übersicht & Statistik</a></li>
+        <li><a href="#b2">Suchen & Filtern</a></li>
+        <li><a href="#b3">Wein erfassen</a></li>
+        <li><a href="#b4">Detailansicht</a></li>
+        <li><a href="#b5">Rebsorten-Info (neu in v2.5)</a></li>
+        <li><a href="#b6">Weingut-Info (neu in v2.6)</a></li>
+        <li><a href="#b7">Abbuchen, Bearbeiten, Duplizieren, Löschen</a></li>
+        <li><a href="#b8">CSV-Export</a></li>
+        <li><a href="#b9">Weinbilder (neu in v3.3)</a></li>
+        <li><a href="#b10">Backup &amp; Restore (neu)</a></li>
+      </ol>
+    </li>
+    <li><a href="#teil-c">Teil C – Pflege & Wartung</a></li>
+    <li><a href="#teil-d">Teil D – Problemlösung</a></li>
+    <li><a href="#teil-e">Teil E – Entwicklung <span class="pill dev">technisch</span></a>
+      <ol>
+        <li><a href="#e1">Architektur & Voraussetzungen</a></li>
+        <li><a href="#e2">Datenbank (Supabase)</a></li>
+        <li><a href="#e3">App veröffentlichen / aktualisieren (GitHub Pages)</a></li>
+        <li><a href="#e4">Skripte: Wein-, Rebsorten- & Weingut-Enricher</a></li>
+        <li><a href="#e5">Voll-Backup einrichten (lokal &amp; GitHub)</a></li>
+      </ol>
+    </li>
+  </ol>
+</div>
+
+<!-- ================= TEIL A ================= -->
+<h2 id="teil-a">Teil A – Installation (für Benutzer)</h2>
+
+<h3 id="a1">A1 · Was ist die App?</h3>
+<p>Eine App für dein Smartphone, mit der du deinen Weinkeller verwaltest: Weine erfassen, suchen und filtern,
+Flaschen abbuchen, Bewertungen und Trinkreife im Blick behalten und zu jeder Rebsorte sowie jedem Weingut Infos
+abrufen. Du musst nichts aus einem App-Store laden – die App wird einmal im Browser geöffnet und als Icon auf dem
+Homescreen abgelegt.</p>
+
+<h3 id="a2">A2 · App installieren (Android / iPhone / Windows)</h3>
+<p>Die App-Adresse lautet: <code>https://DEIN-BENUTZERNAME.github.io/weinkeller</code>. Öffne sie im Browser und
+lege sie als App-Icon ab – so startet sie im eigenen Fenster/Vollbild und funktioniert nach dem ersten Laden auch offline.</p>
+
+<p><strong>📱 Android (Chrome)</strong></p>
+<ol class="steps">
+  <li>Adresse in <strong>Chrome</strong> öffnen.</li>
+  <li>Oben rechts auf das Menü <strong>⋮</strong> → <strong>App installieren</strong> (bzw. <strong>Zum Startbildschirm hinzufügen</strong>).</li>
+  <li>Bestätigen – das Icon erscheint auf dem Startbildschirm.</li>
+</ol>
+
+<p><strong>🍏 iPhone / iPad (Safari)</strong></p>
+<ol class="steps">
+  <li>Adresse in <strong>Safari</strong> öffnen. <em>Wichtig:</em> Auf iOS klappt das Ablegen nur mit Safari, nicht mit Chrome.</li>
+  <li>Auf das <strong>Teilen-Symbol</strong> tippen (Quadrat mit Pfeil nach oben).</li>
+  <li><strong>Zum Home-Bildschirm</strong> wählen → <strong>Hinzufügen</strong>. Das Icon erscheint auf dem Home-Bildschirm.</li>
+</ol>
+
+<p><strong>💻 Windows (Chrome oder Edge)</strong></p>
+<ol class="steps">
+  <li>Adresse in <strong>Chrome</strong> oder <strong>Edge</strong> öffnen.</li>
+  <li>Rechts in der Adressleiste auf das <strong>Installieren-Symbol</strong> (Monitor mit Pfeil) klicken – oder Menü <strong>⋮</strong> → <em>Apps</em> → <strong>Diese Website als App installieren</strong>.</li>
+  <li><strong>Installieren</strong> bestätigen. Die App öffnet sich in einem eigenen Fenster und lässt sich an Taskleiste/Startmenü anheften.</li>
+</ol>
+
+<div class="box tip"><div class="lbl">Dunkelmodus</div>Die App übernimmt automatisch den Hell-/Dunkelmodus deines Geräts – du musst nichts einstellen.</div>
+
+<h3 id="a3">A3 · Registrieren & Anmelden</h3>
+<p>Beim ersten Start registrierst du dich mit <strong>E-Mail und Passwort</strong> (<em>Registrieren</em>).
+Danach meldest du dich mit denselben Daten an (<em>Login</em>). Deine Weine werden zentral gespeichert und
+erscheinen auf jedem Gerät, auf dem du dich anmeldest. Zum Abmelden gibt es die Logout-Funktion.</p>
+
+<p><strong>Demo-Zugang (nur ansehen):</strong> Zum Ausprobieren oder um die App jemandem zu zeigen, gibt es einen
+<strong>Demo-Login</strong> mit reinem Lesezugriff. Damit sieht man alle Weine, kann aber nichts erfassen,
+bearbeiten, abbuchen oder löschen. Im Demo-Modus erscheint oben ein blauer <strong>👁 Viewer</strong>-Hinweis.</p>
+<table>
+  <tr><th>Feld</th><th>Wert</th></tr>
+  <tr><td>E-Mail</td><td><code>viewer@weinkeller.local</code></td></tr>
+  <tr><td>Passwort</td><td><code>weinkeller</code></td></tr>
+</table>
+
+<div class="box tip"><div class="lbl">Gut zu wissen</div>Deine Weindaten hängen an deinem Login-Konto. Meldest
+du dich auf einem neuen Gerät an, ist dein ganzer Keller sofort wieder da.</div>
+
+<!-- ================= TEIL B ================= -->
+<h2 id="teil-b">Teil B – Bedienung</h2>
+
+<h3 id="b1">B1 · Übersicht & Statistik</h3>
+<p>Nach dem Login siehst du deine Weine als Karten. Jede Karte zeigt Name, Weingut, Herkunft (mit Länderflagge)
+und Jahrgang, die Rebsorte, deine beiden Bewertungen (Jill grün, Gian gelb, je bis zu 4 ★), die Anzahl Flaschen
+sowie Status-Tags (z. B. Aktiv, Trinkbereit, BIO).
+Ein Tipp auf die Karte öffnet die Detailansicht. Am Ende der Liste findest du eine <strong>Statistikleiste</strong>
+mit Anzahl Weine, Anzahl Flaschen und geschätztem Kellerwert.</p>
+<div class="box tip"><div class="lbl">Fusszeile <span class="pill">neu in v3.0</span></div>
+Die <strong>Versionsangabe</strong> steht neu nicht mehr in der Kopfzeile, sondern ganz unten in einer schlichten
+<strong>Fusszeile</strong> – zusammen mit der aktuellen <strong>Anzahl Weine</strong> im Keller (z. B.
+«124 Weine · v3.0»). So bleibt in der Kopfzeile mehr Platz für die Symbole.</div>
+<div class="box tip"><div class="lbl">Hilfe-Symbol im Header <span class="pill">neu in v2.8</span></div>
+Oben rechts im Header findest du die Symbolgruppe; ganz links steht das <strong>❓ Hilfe-Symbol</strong>. Ein Tipp
+darauf öffnet diese Bedienungsanleitung in einem neuen Browser-Tab.</div>
+<div class="box tip"><div class="lbl">Rebsorten-Symbol im Header <span class="pill">neu in v2.10</span></div>
+Rechts vom Hilfe-Symbol findest du ein <strong>🍇 Rebsorten-Symbol</strong>. Ein Tipp darauf öffnet – direkt in der
+App, ohne neuen Tab – eine <strong>Übersicht aller Rebsorten</strong>, die im Weinkeller erfasst und beschrieben sind.
+Mit Suchfeld (Name, Herkunft, Charakter) und Filter nach Rot/Weiss; pro Sorte werden Herkunft, Körper, Säure,
+Charakter, passende (vegetarische) Gerichte und bekannte Synonyme angezeigt. Im Unterschied zum Trauben-Icon bei
+einem einzelnen Wein (B5) zeigt dieses Fenster <em>alle</em> Sorten auf einmal.
+<br><span class="pill">neu in v3.0</span> Als Admin kannst du hier Rebsorten direkt <strong>hinzufügen, bearbeiten
+und löschen</strong> – inklusive dem neuen Feld <strong>Beschreibung</strong>. Zusätzlich gibt es den
+<strong>«Lücken»-Button</strong> (fehlende oder in einzelnen Feldern unvollständige Sorten aus deinen Weinen – geprüft werden Typ, Herkunft, Körper, Säure, Eignung, Charakter und Beschreibung) und im Formular
+<strong>«Auf Delinat»</strong> (öffnet die passende Delinat-Rebsortenseite zum Nachlesen). <span class="pill">neu in v3.2</span> Die Symbole <strong>Neu</strong> und <strong>Lücken</strong> stehen jetzt oben in der Titelzeile. Details siehe B5 und Teil C.</div>
+<div class="box tip"><div class="lbl">Weingut-Symbol im Header <span class="pill">neu in v3.0</span></div>
+Rechts vom Rebsorten-Symbol findest du ein <strong>🏰 Weingut-Symbol</strong>. Es öffnet – analog zur
+Rebsortenübersicht – eine <strong>Übersicht aller Weingüter</strong> mit Suche. Als Admin kannst du hier
+Weingüter <strong>hinzufügen, bearbeiten und löschen</strong>, den <strong>«Lücken»-Button</strong> nutzen und
+die Beschreibung <strong>«Aus Wikipedia laden»</strong>. Pro Weingut werden Beschreibung, Anbau und – falls
+erfasst – ein <strong>🌐 Webseiten-Link</strong> angezeigt; der farbige Kartenbalken ist seit v3.1 <strong>grün</strong>.
+Details siehe B6 und Teil C.</div>
+<div class="box tip"><div class="lbl">Weinkombinationen-Symbol im Header <span class="pill">neu in v2.10</span></div>
+Zwischen Weingut- und Abmelde-Symbol findest du ein <strong>🍽 Weinkombinationen-Symbol</strong>. Ein Tipp darauf
+öffnet in einem neuen Tab eine Seite mit vorbereiteten Wein-Kombinationen für ein vegetarisches 4-Gänge-Menü
+aus deinem Keller (Gang, Wein, Bestand, Trinkreife-Status, Eigenschaft, passendes Gericht).</div>
+
+<h3 id="b2">B2 · Suchen & Filtern</h3>
+<p>Das <strong>Suchfeld</strong> durchsucht alle Felder (Name, Weingut, Sorte, Land, Gebiet, Region, Lieferant …).</p>
+<p>Das <strong>Filterpanel</strong> lässt sich kombinieren nach:</p>
+<ul>
+  <li><strong>Typ</strong> (Rotwein, Weisswein, Rosé, Schaumwein, Süsswein, Brandwein, Alkoholfrei)</li>
+  <li><strong>Status</strong> (Aktiv, Bestellt, Inaktiv)</li>
+  <li><strong>Trinkreife-Status</strong> (z. B. noch jung, trinkbereit)</li>
+  <li><strong>Mindest-Bewertung</strong> (Sterne, erfüllt sobald Jill <em>oder</em> Gian den Wert erreicht)</li>
+  <li><strong>Rebsorte</strong> (Freitext, z. B. „Pinot Noir")</li>
+  <li><strong>Anbau</strong> (BIO, NACHHALTIG …)</li>
+</ul>
+<p>Aktive Filter werden dir oben angezeigt und lassen sich mit einem Klick zurücksetzen.</p>
+<div class="box tip"><div class="lbl">Weinlücken-Finder <span class="pill">neu in v3.2</span></div>
+Rechts in der Suchzeile – neben dem <strong>Filter-Symbol</strong> und dem <strong>Import/Export-Symbol</strong> –
+findest du ein <strong>🔍 Lücken-Symbol</strong>. Ein Tipp darauf öffnet die Liste <strong>«Weine mit Lücken»</strong>:
+alle aktiven Weine, bei denen mindestens ein beschreibendes Feld leer ist. Pro Wein siehst du die konkret
+fehlenden Felder und deren Anzahl; <strong>«Ergänzen»</strong> öffnet den Wein direkt zum Bearbeiten. Geprüft
+werden dieselben Felder wie beim Wein-Enricher (Degustation, Eignung, Ausbau, Boden, Anbau, Rebsorte, Trinkreife,
+Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis); Degustation und Eignung gelten auch als Lücke, wenn
+sie sehr kurz sind. Nur als Admin sichtbar.</div>
+
+<h3 id="b3">B3 · Wein erfassen</h3>
+<p>Über das <strong>Plus</strong> öffnest du das Erfassungsformular, gegliedert in vier Abschnitte:</p>
+<table>
+  <tr><th>Abschnitt</th><th>Felder</th></tr>
+  <tr><td>Wein</td><td>Name, Weingut, Jahrgang, Typ, Rebsorte</td></tr>
+  <tr><td>Herkunft</td><td>Land (Dropdown), Gebiet, Region</td></tr>
+  <tr><td>Charakter</td><td>Degustation, Eignung, Trinktemperatur, Dekantierung, Ausbau, Anbau, Boden</td></tr>
+  <tr><td>Keller</td><td>Anzahl Flaschen, Kaufpreis (CHF), Marktpreis (CHF), Bewertung Jill (1–4 ★), Bewertung Gian (1–4 ★), Status, Trinkreife ab/bis, Notizen, Lieferant, Bild der Flasche</td></tr>
+</table>
+<div class="box tip"><div class="lbl">Bewertung Jill / Gian <span class="pill">neu in v2.9</span></div>
+Im Abschnitt Keller stehen zwei Bewertungsfelder nebeneinander in einer Zeile: <strong>Jill</strong> und
+<strong>Gian</strong> je als 4-Sterne-Auswahl (Tipp auf einen Stern setzt die Bewertung, das ✕ löscht sie). Beide sind optional.</div>
+<div class="box tip"><div class="lbl">Marktpreis vs. Kaufpreis <span class="pill">neu in v2.7</span></div>
+Der <strong>Kaufpreis</strong> ist, was du tatsächlich bezahlt hast. Der <strong>Marktpreis</strong> ist eine
+unverbindliche Einschätzung des aktuellen Werts (z. B. via Enricher) – bei kleineren Produzenten bleibt er oft leer,
+da er nicht zuverlässig bekannt ist.</div>
+<div class="box tip"><div class="lbl">Dekantierung <span class="pill">neu in v2.7</span></div>
+Freitextfeld für die Belüftungsempfehlung, z. B. <code>90 Minuten</code>, <code>60–90 Minuten</code> oder
+<code>nicht empfohlen</code>. Erscheint in der Detailansicht direkt nach der Trinktemperatur.</div>
+<div class="box tip"><div class="lbl">Bild der Flasche <span class="pill">neu in v3.3</span></div>
+Ganz unten im Abschnitt Keller stehen zwei Symbol-Buttons: die <strong>Kamera</strong> wählt ein Foto aus
+(auf dem Handy kannst du direkt knipsen), der <strong>Papierkorb</strong> entfernt es wieder. Während des
+Hochladens dreht sich das Kamera-Symbol. Sobald <em>«Bild bereit»</em> steht, mit dem Häkchen speichern –
+erst dann gehört das Bild zum Wein. Details in <a href="#b9">B9</a>.</div>
+<div class="box tip"><div class="lbl">Rebsorte richtig erfassen</div>
+Mehrere Sorten mit Komma trennen, z. B. <code>Grenache, Syrah, Mourvèdre</code>. So erkennt das
+Rebsorten-Overlay (B5) jede einzelne Sorte korrekt.</div>
+<div class="box tip"><div class="lbl">Weingut einheitlich schreiben</div>
+Schreibe ein Weingut immer gleich (z. B. immer „Paul Buecher"). Die Weingut-Info (B6) ordnet die Beschreibung
+über den Namen zu – kleine Abweichungen fängt die App über hinterlegte Schreibvarianten ab.</div>
+
+<h3 id="b4">B4 · Detailansicht</h3>
+<p>Ein Tipp auf eine Weinkarte zeigt alle Felder übersichtlich, gruppiert in Wein, Herkunft, Degustation und Keller.
+Oben findest du die Aktions-Symbole: Bearbeiten (Stift), Abbuchen (Minus), Duplizieren (Kopie), Löschen (Papierkorb) und Schliessen (X).
+In der Zeile <strong>Bewertung</strong> stehen Jill und Gian zusammengefasst (nur die vorhandenen Werte).
+Ist ein Bild hinterlegt, steht es zuoberst – ein Tipp darauf öffnet es formatfüllend (<a href="#b9">B9</a>).</p>
+
+<h3 id="b5">B5 · Rebsorten-Info <span class="pill">neu in v2.5</span></h3>
+<p>Neben jeder Rebsorte – sowohl in der Liste als auch in der Detailansicht – steht ein kleines
+<strong>Trauben-Icon</strong> 🍇. Ein Tipp darauf öffnet ein Fenster, das nur die Rebsorten <em>dieses</em> Weins
+zeigt, jeweils mit:</p>
+<ul>
+  <li><strong>Herkunft</strong>, <strong>Körper</strong> und <strong>Säure</strong></li>
+  <li><strong>Charakter</strong> (Kurzbeschreibung)</li>
+  <li><strong>Vegetarische Eignung</strong> (passende Gemüse-/Käsegerichte)</li>
+</ul>
+<p>Rotweine sind mit weinrotem, Weissweine mit goldenem Balken markiert. In der Liste öffnet das Icon nur das
+Info-Fenster, ohne die Detailansicht auszulösen. Das Fenster schliesst du mit dem X oder einem Tipp daneben.</p>
+<div class="box tip"><div class="lbl">Woher die Infos kommen</div>
+Die Sorten-Infos liegen in der Datenbank. Zusätzlich sind 34 Sorten fest in der App hinterlegt – das Overlay
+funktioniert also auch offline. Steht zu einer Sorte noch nichts hinterlegt, zeigt das Fenster dezent
+„Keine Detailinfo zu: …" (ergänzen: siehe Teil C).</div>
+
+<h3 id="b6">B6 · Weingut-Info <span class="pill">neu in v2.6</span></h3>
+<p>Neben dem <strong>Weingut-Namen</strong> – in der Übersichtsliste wie in der Detailansicht – steht, analog zur Rebsorten-Info, ein kleines
+<strong>Burg-Icon</strong> 🏰. Ein Tipp darauf öffnet ein Fenster mit einer Kurzbeschreibung des Weinguts:</p>
+<ul>
+  <li><strong>Beschreibung</strong> des Weinguts (Stil, Geschichte, Philosophie, Region)</li>
+  <li><strong>Anbau</strong> (z. B. biologisch/biodynamisch, Lage, Böden, Praktiken)</li>
+  <li><strong>🌐 Webseite öffnen</strong> <span class="pill">neu in v3.1</span> – öffnet die offizielle
+    Weingut-Seite in einem neuen Tab (sofern eine Webseite hinterlegt ist).</li>
+  <li><strong>📍 Auf Google Maps anzeigen</strong> <span class="pill">neu in v2.8</span> – öffnet Karten-App/Browser
+    deines Geräts mit der Umgebung des Weinguts.</li>
+</ul>
+<p>Der farbige Balken der Weingut-Karte ist seit v3.1 <strong>grün</strong> (vorher weinrot).</p>
+<p>Das Icon erscheint <em>nur dann</em>, wenn zum Weingut eine Beschreibung hinterlegt ist. Das Fenster schliesst
+du mit dem X oder einem Tipp daneben.</p>
+<div class="box tip"><div class="lbl">Woher die Infos kommen</div>
+Die Weingut-Infos liegen in der Datenbank-Tabelle <code>weingueter</code>. Beim Start werden sie geladen und dem
+Weingut-Namen zugeordnet – auch abweichende Schreibweisen werden über hinterlegte <em>Aliase</em> erkannt. Fehlt
+ein Weingut, ergänzt du es wie in Teil C beschrieben.</div>
+<div class="box tip"><div class="lbl">Google-Maps-Link <span class="pill">neu in v2.8</span></div>
+Der Link ist eine Namenssuche aus Weingut-Name + Region/Gebiet/Land des jeweiligen Weins – keine exakte Adresse,
+aber die Gegend wird zuverlässig gezeigt. Auf dem Handy öffnet sich meist direkt die Maps-App, am Computer der
+Browser. <strong>Seit v3.1</strong> erscheint das Pin-Icon zusätzlich <strong>direkt in der Weinliste</strong>
+neben dem Weingut – zusammen mit dem 🌐 Globus-Icon für die Webseite.</div>
+
+<h3 id="b7">B7 · Abbuchen, Bearbeiten, Duplizieren, Löschen</h3>
+<ul>
+  <li><strong>Abbuchen:</strong> reduziert die Flaschenzahl um eins (ein Tipp) – ideal, wenn du eine Flasche trinkst.</li>
+  <li><strong>Bearbeiten:</strong> öffnet das Formular mit den bestehenden Werten zum Ändern.</li>
+  <li><strong>Duplizieren:</strong> legt eine Kopie an – praktisch für einen weiteren Jahrgang desselben Weins.</li>
+  <li><strong>Löschen:</strong> entfernt den Wein endgültig.</li>
+</ul>
+
+<h3 id="b8">B8 · CSV-Export</h3>
+<p>Über die Export-Funktion (Symbol „Import/Export" in der Suchzeile) lädst du alle Weine als Excel-kompatible
+CSV-Datei herunter – zur Weiterverarbeitung oder als schnelle Zwischensicherung. Über denselben Dialog gibt es
+auch einen <strong>JSON-Export</strong> der Weine sowie den <strong>Import</strong> einer JSON-Datei.</p>
+<div class="box tip"><div class="lbl">Schnell-Export vs. Voll-Backup</div>
+Der Export in der App deckt nur die <strong>Weine</strong> ab – nicht Rebsorten, Weingüter oder die Fotos. Für eine
+vollständige Sicherung (alle Tabellen <em>und</em> alle Bilder) nutzt du das neue <strong>Voll-Backup</strong>
+(B10). Am besten beides: den App-Export für schnell zwischendurch, das Voll-Backup als kompletten Schutz.</div>
+
+<!-- ================= TEIL C ================= -->
+<h3 id="b9">B9 · Weinbilder <span class="pill">neu in v3.3</span></h3>
+<p>Zu jedem Wein lässt sich ein Foto der Flasche hinterlegen. In der <strong>Weinübersicht</strong> erscheint es
+links auf der Karte als schmales Bild; Weine ohne Foto zeigen an derselben Stelle eine graue Flaschen-Silhouette,
+damit die Liste ruhig bleibt.</p>
+<p><strong>Foto hinterlegen:</strong> Wein öffnen → Bearbeiten (Stift) → ganz unten <strong>Bild der Flasche</strong>
+→ Kamera-Symbol. Auf dem Handy kannst du direkt fotografieren, am Computer eine Datei wählen. Das Bild wird
+automatisch verkleinert und hochgeladen; danach mit dem <strong>Häkchen</strong> speichern.</p>
+<div class="box tip"><div class="lbl">Vergrössern wie in der Fotos-App</div>
+Ein Tipp auf das Bild in der Detailansicht zeigt es formatfüllend auf schwarzem Grund:
+<strong>zwei Finger</strong> zum Zoomen (bis 6-fach), <strong>Doppeltipp</strong> springt auf 2,5-fach und zurück,
+<strong>Ziehen</strong> verschiebt den Ausschnitt. Zum Schliessen nach <strong>unten wischen</strong>, neben das Bild
+tippen oder das ✕ oben rechts. Am Computer funktionieren <strong>Mausrad</strong> und <strong>Esc</strong>.</div>
+<div class="box tip"><div class="lbl">Warum zwei Bildgrössen?</div>
+Aus jedem Foto entstehen zwei Dateien: eine kleine (200 px) für Liste und Detailansicht und eine grosse (1400 px),
+die erst beim Vergrössern geladen wird. So bleibt das Blättern durch den Keller auch im Mobilnetz schnell,
+und trotzdem lässt sich das Etikett lesen.</div>
+<div class="box warn"><div class="lbl">Fotografier-Tipps</div>
+Flasche vor einen ruhigen, hellen Hintergrund stellen, hochkant fotografieren und das Etikett mittig halten.
+Direktes Blitzlicht spiegelt auf dem Glas – seitliches Tageslicht gibt das beste Ergebnis. Weine ohne Foto
+funktionieren unverändert; das Bild ist immer freiwillig.</div>
+<p>Als <strong>Viewer</strong> (Demo-Zugang) sind die Bilder sichtbar, aber nicht änderbar.</p>
+
+<h3 id="b10">B10 · Backup &amp; Restore <span class="pill">neu</span></h3>
+<p>Deine Daten liegen zentral in der Cloud (Supabase). Weil Supabase auf der <strong>Gratis-Version keine
+automatischen Backups</strong> anlegt, gibt es das <strong>Voll-Backup</strong>: eine unabhängige Kopie
+<strong>aller Tabellen</strong> (Weine, Rebsorten, Weingüter) <strong>und aller Flaschenfotos</strong> auf deinem
+eigenen PC.</p>
+<div class="box tip"><div class="lbl">Backup starten (Doppelklick)</div>
+Im Ordner <code>backup</code> auf <strong><code>Backup-starten.bat</code></strong> doppelklicken. Beim ersten Mal
+richtet es sich kurz selbst ein, danach läuft die Sicherung. Ergebnis liegt in <code>backup\backups\JJJJ-MM\</code>:
+die JSON-Dateien der drei Tabellen, eine Wein-CSV für Excel und ein Ordner <code>bilder</code> mit allen Fotos.
+Voraussetzung ist einmalig <a href="https://nodejs.org">Node.js</a>; die Zugangsdaten sind bereits hinterlegt.</div>
+<div class="box tip"><div class="lbl">Wiederherstellen (Restore)</div>
+Auf <strong><code>Restore-starten.bat</code></strong> doppelklicken, den gewünschten Monat wählen. Es zeigt zuerst
+eine gefahrlose Vorschau und spielt erst nach Bestätigung mit „JA" zurück. Der Restore <strong>überschreibt</strong>
+Einträge mit gleicher Kennung und ergänzt neue – <strong>gelöscht wird nichts</strong>.</div>
+<p>Wer es lieber automatisch mag, lässt das Voll-Backup <strong>monatlich über GitHub</strong> laufen, ganz ohne
+Doppelklick – die Einrichtung dazu steht in <strong>Teil E5</strong>.</p>
+
+<h2 id="teil-c">Teil C – Pflege & Wartung</h2>
+
+<h3>Neue Rebsorte ergänzen</h3>
+<p>Erfasst du einen Wein mit einer Rebsorte, zu der noch keine Info hinterlegt ist, zeigt das Overlay
+„Keine Detailinfo zu: …". So ergänzt du sie:</p>
+<p><strong>Variante A – direkt in der App <span class="pill">neu in v3.0, empfohlen</span>:</strong> Öffne die
+Rebsortenübersicht (🍇-Symbol im Header) und tippe auf <strong>+ Neu</strong>. Fülle Name und Typ (Pflicht) sowie
+optional Herkunft, Körper, Säure, Eignung, Charakter, Aliase und die <strong>Beschreibung</strong> aus und tippe auf
+<strong>Speichern</strong>. Zum Ändern oder Entfernen bestehender Sorten nutzt du die Symbole ✏️ und 🗑 auf der
+jeweiligen Karte. Über den <strong>«Lücken»-Button</strong> siehst du auf einen Blick, welche Sorten aus deinen
+Weinen noch <em>ganz fehlen</em> oder <em>keine Beschreibung</em> haben (mit Anzahl Weine) – ein Tipp öffnet die
+vorausgefüllte Maske. Der Button <strong>«Auf Delinat»</strong> beim Beschreibungsfeld öffnet die passende Delinat-Rebsortenseite
+in einem neuen Tab zum Nachlesen und Kopieren. Kein Terminal, keine Supabase-Anmeldung nötig. (Nur als Admin
+sichtbar – Viewer sehen die Liste nur lesend.)</p>
+<p><strong>Variante B – von Hand in Supabase (ohne App):</strong> In Supabase → <strong>Table Editor</strong> → Tabelle
+<code>rebsorten</code> → <strong>Insert row</strong>, Felder ausfüllen (name, typ <code>rot</code>/<code>weiss</code>,
+herkunft, koerper, saeure, eignung, charakter, aliase optional). Beim nächsten Laden erscheint die Info automatisch.</p>
+<p><strong>Variante C – automatisch via Enricher (Terminal):</strong> siehe Teil E4 (Einrichtung) bzw. den Ablauf unten.</p>
+<ol class="steps">
+  <li>OneDrive pausieren (Systray-Icon → „Synchronisierung anhalten" → 2 Stunden).</li>
+  <li>Terminal im Ordner <code>skript</code> öffnen (im Explorer in der Adressleiste <code>powershell</code> tippen).</li>
+  <li>Ausführen:<pre><code>node rebsorten_enricher.mjs</code></pre></li>
+  <li>Der geöffnete HTML-Bericht zeigt die Vorschläge. Zum Übernehmen im Terminal <code>j</code> eingeben.</li>
+  <li>OneDrive wieder fortsetzen.</li>
+</ol>
+<p><strong>Variante D – Claude Skill „weinkeller-rebsorten" <span class="pill">neu</span>:</strong> Kein Terminal
+nötig. Sag Claude im Chat (Cowork) einfach z. B. „Rebsorten ergänzen" oder „Rebsorten-Enricher laufen lassen" –
+der Skill übernimmt automatisch dieselben vier Schritte (Analyse, Vorschläge von Claude AI, Bericht zum Prüfen,
+Freigabe im Chat mit „j"/„n") und trägt die neuen Sorten nach deiner Bestätigung in Supabase ein. Praktisch direkt
+im Anschluss an einen Lauf des Wein-Enrichers, wenn neue Rebsorten dazugekommen sind.</p>
+
+<h3>Neues Weingut ergänzen <span class="pill">neu in v2.6</span></h3>
+<p>Erfasst du einen Wein mit einem Weingut, zu dem noch keine Beschreibung hinterlegt ist, fehlt beim
+Weingut-Namen das Info-Icon. So ergänzt du es:</p>
+<p><strong>Variante A – direkt in der App <span class="pill">neu in v3.0, empfohlen</span>:</strong> Öffne die
+Weingut-Übersicht (🏰-Symbol im Header) und tippe auf <strong>+ Neu</strong> – oder nutze den
+<strong>«Lücken»-Button</strong>, der dir fehlende oder unvollständige Weingüter aus deinen Weinen auflistet (geprüft werden Beschreibung und Anbau)
+(«Anlegen»/«Ergänzen»). Fülle Name (Pflicht) sowie Beschreibung, Anbau, Aliase und – neu in v3.1 – die
+<strong>Webseite</strong> (Link zur offiziellen Weingut-Seite) aus; <strong>«Aus Wikipedia
+laden»</strong> holt einen Beschreibungs-Entwurf. Ändern/Löschen über ✏️ und 🗑 auf der Karte. <em>Hinweis:</em> Das
+frühere Feld «Charakter» wurde mit der Beschreibung zusammengeführt – bestehende Charakter-Texte stehen automatisch
+in der Beschreibung.</p>
+<p><strong>Variante B – von Hand in Supabase:</strong> In Supabase → <strong>Table Editor</strong> → Tabelle
+<code>weingueter</code> → <strong>Insert row</strong>. Felder: <code>name</code> (exakt wie im Wein-Feld
+„Weingut"), <code>beschreibung</code>, <code>anbau</code>, <code>aliase</code> (optional, kommagetrennte
+Schreibvarianten). Beim nächsten Laden erscheint das Icon automatisch.</p>
+<p><strong>Variante C – automatisch via Enricher (Terminal):</strong> im Ordner <code>skript</code>
+<code>node weingut_enricher.mjs</code> ausführen. Ablauf wie beim Rebsorten-Enricher: OneDrive pausieren →
+HTML-Bericht prüfen → im Terminal mit <code>j</code> freigeben → OneDrive fortsetzen. Der Enricher findet
+selbstständig alle Weingüter, die noch nicht in <code>weingueter</code> stehen.</p>
+<p><strong>Variante D – Claude Skill „weinkeller-weingut" <span class="pill">neu</span>:</strong> Kein Terminal
+nötig. Sag Claude im Chat (Cowork) einfach z. B. „Weingüter ergänzen" oder „Weingut-Enricher laufen lassen" –
+der Skill übernimmt automatisch dieselben vier Schritte (Analyse, Vorschläge von Claude AI mit Herkunfts-Kontext,
+Bericht zum Prüfen, Freigabe im Chat mit „j"/„n") und trägt die neuen Weingüter nach deiner Bestätigung in
+Supabase ein.</p>
+
+<h3>Bilder für Weine ohne Foto finden <span class="pill">neu in v3.5</span></h3>
+<p>Das Skript <code>bilder_finder.mjs</code> im Ordner <code>skript</code> sucht Flaschenfotos für alle Weine,
+bei denen <code>bild_url</code> leer ist. Es liest die Weine aus Supabase, lässt Claude AI mit Web-Recherche
+und Seitenabruf nach Produktseiten von Produzenten und Händlern suchen und liest dort – wo möglich – die
+echte Bild-URL aus. Ergebnis ist ein HTML-Bericht mit Vorschaubildern, Quellenangabe, Sicherheitsstufe
+(hoch / mittel / tief) und Direktlinks.</p>
+<pre><code>node bilder_finder.mjs            # alle Weine ohne Bild
+LIMIT=5 OFFSET=0 node bilder_finder.mjs   # in Häppchen (empfohlen)
+MERGE=j node bilder_finder.mjs    # Häppchen zu einem Bericht zusammenführen
+NUR_GROSS=j node bilder_finder.mjs # nur Weine ohne grosse Bildvariante</code></pre>
+<p>Das Skript schreibt <strong>nichts</strong> in die Datenbank. Ein passendes Bild speicherst du lokal ab
+und lädst es in der App beim Wein hoch – dabei erzeugt die App automatisch beide Grössen (200 px für die
+Liste, 1400 px für die Vollansicht). Die Bilder bleiben so im eigenen Supabase-Storage und hängen nicht
+an fremden Shop-Links, die jederzeit verschwinden können.</p>
+
+<h3>Backup & Updates</h3>
+<ul>
+  <li><strong>Voll-Backup <span class="pill">neu</span>:</strong> sichert alle Tabellen und alle Fotos –
+  per Doppelklick auf <code>Backup-starten.bat</code> (B10) oder monatlich automatisch über GitHub (Teil E5).
+  Das ist die eigentliche Absicherung, da Supabase gratis keine automatischen Backups macht.</li>
+  <li><strong>Schnell-Export:</strong> für zwischendurch der CSV-/JSON-Export in der App – deckt nur die Weine ab (B8).</li>
+  <li><strong>App-Update:</strong> neue <code>index.html</code> wie in Teil E3 auf GitHub hochladen.</li>
+</ul>
+
+<!-- ================= TEIL D ================= -->
+<h2 id="teil-d">Teil D – Problemlösung</h2>
+<table>
+  <tr><th>Problem</th><th>Lösung</th></tr>
+  <tr><td>Nach dem Update fehlt die neue Funktion</td><td>Seite auf dem Handy neu laden, Browser-Cache leeren. In der <strong>Fusszeile</strong> prüfen, ob v3.0 aktiv ist.</td></tr>
+  <tr><td>Rebsorte lässt sich nicht speichern/löschen</td><td><code>add_beschreibung_und_crud_policies.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne Spalte <code>beschreibung</code> und Schreibrechte schlägt das Speichern fehl. Als Viewer sind Änderungen bewusst gesperrt.</td></tr>
+  <tr><td>Weingut lässt sich nicht speichern/löschen</td><td><code>add_weingut_beschreibung_und_crud_policies.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne Spalte <code>beschreibung</code> und Schreibrechte in <code>weingueter</code> schlägt das Speichern fehl. Als Viewer sind Änderungen bewusst gesperrt.</td></tr>
+  <tr><td>«Aus Wikipedia laden» (Weingut) bringt keinen Text</td><td>Zu diesem Namen gibt es keinen (deutschen/englischen) Wikipedia-Artikel – häufig bei kleinen Weingütern. Beschreibung dann von Hand erfassen. Bei ganz fehlender Reaktion Internetverbindung prüfen.</td></tr>
+  <tr><td>«Auf Delinat» öffnet eine Fehlerseite (Rebsorte)</td><td>Zu dieser Rebsorte gibt es keine eigene Delinat-Seite (bei sehr seltenen Sorten). Beschreibung dann von Hand oder aus einer anderen Quelle erfassen.</td></tr>
+  <tr><td>Hilfe-Symbol im Header führt zu einer 404-Seite</td><td><code>Weinkeller_Bedienungsanleitung_v3.5.html</code> wurde noch nicht mit exakt diesem Dateinamen ins GitHub-Repo hochgeladen (Teil E3).</td></tr>
+  <tr><td>Weinkombinationen-Symbol im Header führt zu einer 404-Seite</td><td><code>Weinkeller_weinkombinationen.html</code> wurde noch nicht mit exakt diesem Dateinamen ins GitHub-Repo hochgeladen (Teil E3).</td></tr>
+  <tr><td>Bewertungen sind plötzlich leer</td><td>Erwartet nach dem v2.9-Update: die Migration <code>add_bewertung_jill_falstaff.sql</code> setzt wegen des Skalenwechsels (5 → 4 Sterne) einmalig alle Bewertungen (Jill und Gian) zurück. Neu bewerten.</td></tr>
+  <tr><td>Bewertung Jill/Gian lässt sich nicht speichern</td><td><code>add_bewertung_jill_falstaff.sql</code> wurde noch nicht (oder nicht vollständig) in Supabase ausgeführt (Teil E2).</td></tr>
+  <tr><td>Google-Maps-Link zeigt einen anderen/ungenauen Ort</td><td>Der Link ist eine Namenssuche (Weingut + Region), keine exakte Koordinate. Bei sehr generischen Weingut-Namen kann Google Maps einen abweichenden Treffer anzeigen.</td></tr>
+  <tr><td>Körper/Säure/Tannin lassen sich nicht speichern</td><td><code>add_struktur_columns.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne die Spalten <code>koerper</code>/<code>saeure</code>/<code>tannin</code> (bei <code>wines</code>) bzw. <code>tannin</code> (bei <code>rebsorten</code>) schlägt das Speichern fehl.</td></tr>
+  <tr><td>Marktpreis oder Dekantierung lassen sich nicht speichern</td><td><code>add_dekantierung_column.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Marktpreis existiert als Spalte bereits seit dem Enricher-Ausbau.</td></tr>
+  <tr><td>Foto lässt sich nicht hochladen («Fehler: …»)</td><td><code>add_bild_url_und_storage.sql</code> wurde noch nicht in Supabase ausgeführt (Teil E2). Ohne die Spalten <code>bild_url</code>/<code>bild_url_gross</code> und den Bucket <code>weinbilder</code> schlägt der Upload fehl. Als Viewer sind Uploads bewusst gesperrt.</td></tr>
+  <tr><td>Bild bleibt nach dem Hochladen weg</td><td>Nach dem Upload muss der Wein noch mit dem <strong>Häkchen</strong> gespeichert werden – sonst wird die Bild-Adresse nicht in den Wein geschrieben.</td></tr>
+  <tr><td>Vergrössertes Bild ist unscharf</td><td>Das Foto stammt aus einer früheren Fassung ohne grosse Bildvariante. Einmal neu hochladen behebt es.</td></tr>
+  <tr><td>Login geht nach Registrierung nicht</td><td>In Supabase die Site-URL und Redirect-URLs auf die Pages-Adresse setzen (Teil E3).</td></tr>
+  <tr><td>Rebsorten-Overlay zeigt „Keine Detailinfo zu …"</td><td>Die Sorte ist noch nicht hinterlegt. Ergänzen via Teil C (Variante A oder B).</td></tr>
+  <tr><td>Weingut zeigt kein Info-Icon</td><td>Zu diesem Weingut ist noch keine Beschreibung hinterlegt (oder die Tabelle <code>weingueter</code> wurde noch nicht angelegt, Teil E2). Ergänzen via Teil C.</td></tr>
+  <tr><td>Weinliste ist leer</td><td>Bist du angemeldet? Die Daten hängen am Login-Konto.</td></tr>
+  <tr><td>Enricher: <code>permission denied for table</code></td><td>In Supabase → SQL Editor: <code>grant all on public.rebsorten to service_role;</code> (bzw. <code>… public.weingueter …</code>).</td></tr>
+  <tr><td>Enricher bricht mitten im Lauf ab</td><td>OneDrive war aktiv und hat das Skript überschrieben – zuerst OneDrive pausieren, dann erneut starten.</td></tr>
+</table>
+
+<!-- ================= TEIL E ================= -->
+<h2 id="teil-e" class="dev">Teil E – Entwicklung <span class="pill dev">technisch</span></h2>
+<div class="box dev"><div class="lbl">Für wen ist dieser Teil?</div>
+Nur relevant, wenn du die App selbst aufsetzt, aktualisierst oder die Enricher-Skripte betreibst. Für die
+reine Nutzung genügen die Teile A–D.</div>
+
+<h3 id="e1">E1 · Architektur & Voraussetzungen</h3>
+<p>Die App besteht aus drei Bausteinen:</p>
+<table>
+  <tr><th>Baustein</th><th>Zweck</th></tr>
+  <tr><td><code>index.html</code></td><td>Die App selbst (eine einzige HTML-Datei, reines HTML/CSS/JS ohne Framework), veröffentlicht über GitHub Pages.</td></tr>
+  <tr><td>Supabase</td><td>Datenbank in der Cloud: Tabellen <code>wines</code> (deine Weine), <code>rebsorten</code> (Sorten-Infos) und <code>weingueter</code> (Weingut-Infos). Login via Supabase Auth.</td></tr>
+  <tr><td><code>skript/</code></td><td>Node-Skripte (<code>enricher.js</code>, <code>rebsorten_enricher.mjs</code>, <code>weingut_enricher.mjs</code>) zum automatischen Anreichern via Claude.</td></tr>
+</table>
+<p>Voraussetzungen: kostenloser <strong>GitHub</strong>-Account, ein <strong>Supabase</strong>-Projekt und – für die
+Skripte – <strong>Node.js</strong> auf dem PC.</p>
+
+<h3 id="e2">E2 · Datenbank (Supabase)</h3>
+<p>Projekt <code>vzsmjneerahucqwisouv</code>. Die App liest die Weine mit dem <strong>Anon-Key</strong>; die Skripte
+schreiben mit dem <strong>Service-Role-Key</strong> (in <code>skript/.env</code>).</p>
+<p><strong>Tabelle <code>rebsorten</code> anlegen (einmalig):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>create_rebsorten_table.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Das legt die Tabelle an, setzt den Lesezugriff für den Anon-Key und füllt 34 Sorten ein. Die Datei ist
+    wiederholbar (Upsert) – ein erneuter Lauf schadet nicht.</li>
+</ol>
+<p>Kontrolle: <code>select typ, count(*) from public.rebsorten group by typ;</code> → <strong>rot 20, weiss 14</strong>.</p>
+<p><strong>Tabelle <code>weingueter</code> anlegen (einmalig, neu in v2.6):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>create_weingueter_table.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Tabelle an (Felder name, charakter, anbau, aliase), setzt den Lesezugriff für den Anon-Key und
+    füllt 34 Weingüter ein. Wiederholbar (Upsert).</li>
+</ol>
+<p>Kontrolle: <code>select count(*) from public.weingueter;</code> → <strong>34</strong>. Erst nach diesem Schritt
+erscheint das Weingut-Info-Icon in der App.</p>
+<p><strong>Spalte <code>dekantierung</code> anlegen (einmalig, neu in v2.7):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_dekantierung_column.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalte <code>dekantierung</code> in <code>wines</code> an (falls noch nicht vorhanden).</li>
+</ol>
+<p><strong>Neu in v2.8:</strong> keine neue Tabelle/Spalte nötig – der Google-Maps-Link wird zur Laufzeit aus
+bestehenden Feldern (<code>weingut</code>, <code>region</code>, <code>gebiet</code>, <code>land</code>) gebaut.</p>
+<p><strong>Bewertung Jill / Gian anlegen (einmalig, neu in v2.9):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_bewertung_jill_falstaff.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Benennt die Spalte <code>bewertung</code> in <code>bewertung_gian</code> um, legt <code>bewertung_jill</code>
+    an, entfernt eine allfällig vorhandene Spalte <code>falstaff</code> (Feature wurde wieder verworfen) und setzt
+    die Check-Constraints auf 1–4.</li>
+</ol>
+<div class="box warn"><div class="lbl">Achtung: setzt alle Bewertungen zurück</div>
+Das Skript setzt <code>bewertung_gian</code> und <code>bewertung_jill</code> für <strong>alle</strong> Weine auf
+leer, weil die alte 5-Sterne-Skala nicht verlustfrei auf die neue 4-Sterne-Skala übertragbar ist. Das Skript ist
+nicht wiederholbar ohne erneuten Reset – nur einmal ausführen.</div>
+<p><strong>Neu in v2.10:</strong> keine neue Tabelle/Spalte nötig – die Weinkombinationen-Seite ist eine statische,
+separat gehostete HTML-Datei ohne eigenen Datenbankzugriff.</p>
+<p><strong>Spalte <code>beschreibung</code> + Schreibrechte anlegen (einmalig, neu in v3.0):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_beschreibung_und_crud_policies.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalte <code>beschreibung</code> in <code>rebsorten</code> an und erteilt eingeloggten Nutzern
+    (ausser Viewer) Schreibrechte per RLS – nötig, damit das Bearbeiten/Hinzufügen/Löschen in der App funktioniert.
+    Idempotent (mehrfach ausführbar).</li>
+</ol>
+<p>Kontrolle: <code>select column_name from information_schema.columns where table_name='rebsorten';</code> → enthält
+<strong>beschreibung</strong>. Ohne diesen Schritt schlägt das Speichern von Rebsorten in der App fehl.</p>
+<p><strong>Weingut: Spalte <code>beschreibung</code> + Schreibrechte + Charakter-Übernahme (einmalig, neu in v3.0):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_weingut_beschreibung_und_crud_policies.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalte <code>beschreibung</code> in <code>weingueter</code> an, <strong>übernimmt bestehende
+    <code>charakter</code>-Texte in die Beschreibung</strong> (Zusammenführung) und erteilt Schreibrechte (ausser
+    Viewer). Idempotent.</li>
+</ol>
+<p>Kontrolle: <code>select column_name from information_schema.columns where table_name='weingueter';</code> → enthält
+<strong>beschreibung</strong>. Ohne diesen Schritt schlägt das Speichern von Weingütern in der App fehl.</p>
+<p><strong>Weingut: Spalte <code>webseite</code> (einmalig, neu in v3.1):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_weingut_webseite.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalte <code>webseite</code> in <code>weingueter</code> an – Grundlage für den 🌐 Webseiten-Link
+    in Weinliste und Weingut-Info. Idempotent.</li>
+</ol>
+<p><strong>Weinbilder: Spalten + Storage-Bucket (einmalig, neu in v3.3):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_bild_url_und_storage.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalten <code>bild_url</code> (kleines Bild, 200 px) und <code>bild_url_gross</code>
+    (1400 px) in <code>wines</code> an, erstellt den öffentlich lesbaren Storage-Bucket
+    <code>weinbilder</code> (max. 2 MB pro Datei, nur JPEG/PNG/WebP) und setzt die Rechte: lesen dürfen alle,
+    hochladen, ändern und löschen nur eingeloggte Nutzer ausser Viewer. Idempotent.</li>
+</ol>
+<p>Kontrolle: <code>select id, public from storage.buckets where id='weinbilder';</code> → eine Zeile mit
+<strong>public = true</strong>. Ohne diesen Schritt schlägt das Hochladen von Fotos in der App fehl.</p>
+<p>Die Dateien heissen <code>&lt;wein-id&gt;-&lt;zeitstempel&gt;-thumb.jpg</code> bzw. <code>…-gross.jpg</code>.
+Beim Ersetzen eines Bildes bleibt die alte Datei im Bucket liegen – sie wird nicht mehr verwendet und kann bei
+Bedarf in Supabase → Storage von Hand gelöscht werden.</p>
+
+<p><strong>Struktur-Spalten Körper/Säure/Tannin (einmalig, neu in v3.4):</strong></p>
+<ol class="steps">
+  <li>Supabase → <strong>SQL Editor</strong> → <strong>New query</strong>.</li>
+  <li>Inhalt von <code>add_struktur_columns.sql</code> einfügen → <strong>Run</strong>.</li>
+  <li>Legt die Textspalten <code>koerper</code>, <code>saeure</code> und <code>tannin</code> in <code>wines</code> an
+    sowie <code>tannin</code> in <code>rebsorten</code> (<code>koerper</code>/<code>saeure</code> existieren dort bereits).
+    Werte im 5-Stufen-Vokabular (leicht…kräftig bzw. niedrig…hoch), Anzeige in der App als Punkte-Skala. Idempotent (<code>if not exists</code>).</li>
+</ol>
+<p>Ohne diesen Schritt schlägt das Speichern von Weinen mit Struktur-Werten fehl. Danach den Enricher laufen lassen,
+um die Bestandsweine automatisch zu füllen.</p>
+
+<h3 id="e3">E3 · App veröffentlichen / aktualisieren (GitHub Pages)</h3>
+<p><strong>Erstveröffentlichung:</strong></p>
+<ol class="steps">
+  <li>Auf <a href="https://github.com">github.com</a> anmelden → <strong>+</strong> → <strong>New repository</strong>.</li>
+  <li>Name <code>weinkeller</code>, <strong>Public</strong> → <strong>Create repository</strong>.</li>
+  <li><strong>Add file → Upload files</strong> → <code>index.html</code> hineinziehen → <strong>Commit changes</strong>.</li>
+  <li><strong>Settings → Pages</strong> → Source <em>Deploy from a branch</em>, Branch <code>main</code>, <code>/ (root)</code> → <strong>Save</strong>.</li>
+  <li>Nach 1–2 Minuten erreichbar unter <code>https://DEIN-BENUTZERNAME.github.io/weinkeller</code>.</li>
+</ol>
+<div class="box warn"><div class="lbl">Wichtig für den Login</div>
+In Supabase → <strong>Authentication → URL Configuration</strong> bei <strong>Site URL</strong> und
+<strong>Redirect URLs</strong> jeweils die Pages-Adresse eintragen, sonst funktioniert die Anmeldung nach der
+Registrierung nicht.</div>
+<p><strong>Update einspielen (z. B. auf v3.0):</strong></p>
+<ol class="steps">
+  <li>Warte, bis OneDrive fertig synchronisiert hat (grünes Häkchen) – so hast du die neuste <code>index.html</code>.</li>
+  <li>Repo <code>weinkeller</code> → <code>index.html</code> → <strong>Stift-Symbol</strong>.</li>
+  <li>Alten Inhalt löschen (Strg+A), neue <code>index.html</code> öffnen, alles kopieren und einfügen.</li>
+  <li><strong>Commit changes</strong> – GitHub Pages baut in ca. 1 Minute neu. Danach auf dem Handy neu laden.</li>
+</ol>
+<div class="box warn"><div class="lbl">Bei v2.6 zusätzlich nötig</div>
+Vor dem App-Update einmalig <code>create_weingueter_table.sql</code> in Supabase ausführen (E2), sonst bleibt die
+neue Weingut-Info leer.</div>
+<div class="box warn"><div class="lbl">Bei v2.7 zusätzlich nötig</div>
+Vor dem App-Update einmalig <code>add_dekantierung_column.sql</code> in Supabase ausführen (E2), sonst lässt sich
+das neue Feld Dekantierung nicht speichern.</div>
+<div class="box warn"><div class="lbl">Bei v2.8 zusätzlich nötig</div>
+Zusätzlich zur <code>index.html</code> auch <code>Weinkeller_Bedienungsanleitung_v2.8.html</code> mit exakt
+diesem Dateinamen auf Root-Ebene des Repos hochladen (<strong>Add file → Upload files</strong>) – sonst führt
+das neue Hilfe-Symbol ❓ im Header ins Leere (404-Seite). Erreichbar danach unter
+<code>https://DEIN-BENUTZERNAME.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.8.html</code>. Bei
+künftigen Anleitungs-Updates jeweils die neue Version mit demselben Namensschema hochladen und den
+Header-Link in <code>index.html</code> anpassen.</div>
+<div class="box warn"><div class="lbl">Bei v2.9 zusätzlich nötig</div>
+Zuerst <code>add_bewertung_jill_falstaff.sql</code> in Supabase ausführen (E2, setzt alle Bewertungen zurück).
+Danach wie gewohnt <code>index.html</code> aktualisieren und zusätzlich <code>Weinkeller_Bedienungsanleitung_v2.9.html</code>
+mit exakt diesem Dateinamen hochladen.</div>
+<div class="box warn"><div class="lbl">Bei v2.10 zusätzlich nötig</div>
+Keine Datenbank-Migration nötig. Zusätzlich zur <code>index.html</code> auch <code>Weinkeller_Bedienungsanleitung_v2.10.html</code>
+und <code>Weinkeller_weinkombinationen.html</code> mit exakt diesen Dateinamen auf Root-Ebene des Repos hochladen
+(<strong>Add file → Upload files</strong>) – sonst führen Hilfe-Symbol und/oder 🍽-Symbol im Header ins Leere
+(404-Seite). Die Links in <code>index.html</code> sind bereits auf
+<code>https://DEIN-BENUTZERNAME.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v2.10.html</code> bzw.
+<code>https://DEIN-BENUTZERNAME.github.io/weinkeller/Weinkeller_weinkombinationen.html</code> gesetzt.</div>
+<div class="box warn"><div class="lbl">Bei v3.0 zusätzlich nötig</div>
+Zuerst einmalig <strong>beide</strong> SQL-Dateien in Supabase ausführen (E2): <code>add_beschreibung_und_crud_policies.sql</code>
+(Rebsorten) und <code>add_weingut_beschreibung_und_crud_policies.sql</code> (Weingüter, inkl. Übernahme der
+Charakter-Texte in die Beschreibung). Ohne diese Schritte schlägt das Bearbeiten/Hinzufügen/Löschen von Rebsorten
+bzw. Weingütern fehl. Danach wie gewohnt <code>index.html</code> (v3.0) aktualisieren und zusätzlich
+<code>Weinkeller_Bedienungsanleitung_v3.0.html</code> mit exakt diesem Dateinamen hochladen – der Hilfe-Link in
+<code>index.html</code> zeigt neu auf diese Datei.</div>
+<div class="box warn"><div class="lbl">Bei v3.1 zusätzlich nötig</div>
+Zuerst einmalig <code>add_weingut_webseite.sql</code> in Supabase ausführen (E2) – legt die Spalte
+<code>webseite</code> in <code>weingueter</code> an. Danach wie gewohnt <code>index.html</code> (v3.1) aktualisieren
+und zusätzlich <code>Weinkeller_Bedienungsanleitung_v3.1.html</code> mit exakt diesem Dateinamen hochladen – der
+Hilfe-Link in <code>index.html</code> zeigt neu auf diese Datei. Die Webseiten der bestehenden Weingüter sind
+bereits in <code>weingueter</code> erfasst.</div>
+<div class="box warn"><div class="lbl">Bei v3.3 zusätzlich nötig</div>
+Zuerst <code>add_bild_url_und_storage.sql</code> im SQL-Editor ausführen (legt die Spalten
+<code>bild_url</code> und <code>bild_url_gross</code> sowie den Storage-Bucket <code>weinbilder</code> mit
+Rechten an, siehe E2). Danach wie gewohnt <code>index.html</code> (v3.3) aktualisieren und zusätzlich
+<code>Weinkeller_Bedienungsanleitung_v3.3.html</code> mit exakt diesem Dateinamen hochladen – der Hilfe-Link in
+<code>index.html</code> zeigt neu auf diese Datei.</div>
+<div class="box warn"><div class="lbl">Bei v3.2 zusätzlich nötig</div>
+Keine Datenbank-Migration nötig. Wie gewohnt <code>index.html</code> (v3.2) aktualisieren und zusätzlich
+<code>Weinkeller_Bedienungsanleitung_v3.2.html</code> mit exakt diesem Dateinamen hochladen – der Hilfe-Link in
+<code>index.html</code> zeigt neu auf diese Datei.</div>
+
+<h3 id="e4">E4 · Skripte: Wein-, Rebsorten- & Weingut-Enricher</h3>
+<p>Alle Skripte liegen im Ordner <code>skript/</code> und nutzen dieselbe <code>.env</code>
+(<code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>ANTHROPIC_API_KEY</code>) sowie dieselben
+Pakete.</p>
+<div class="box dev"><div class="lbl">Einmalige Einrichtung</div>
+Node.js von <a href="https://nodejs.org">nodejs.org</a> installieren. Dann im Ordner <code>skript</code> ein
+Terminal öffnen und <code>npm install</code> ausführen (lädt die Pakete). <code>.env</code> mit den drei
+Schlüsseln ausfüllen (Service-Role- und Anon-Keys aus Supabase → API Keys).</div>
+<table>
+  <tr><th>Skript</th><th>Zweck</th><th>Aufruf (im Ordner <code>skript</code>)</th></tr>
+  <tr><td><code>enricher.js</code></td><td>Ergänzt leere/kurze Felder der Weine (Eignung, Ausbau, Boden, Anbau, Sorte, Trinkreife, Trinktemperatur, Dekantierung, Gebiet, Region, Marktpreis). Zieht seit 24.07.2026 nach den Weinfeldern automatisch auch die Rebsorten- und Weingut-Detailbeschreibungen nach (Kombilauf; <code>NUR_WEINE=j</code> nur Weine).</td><td><code>node enricher.js</code></td></tr>
+  <tr><td><code>rebsorten_enricher.mjs</code></td><td>Findet Rebsorten in den Weinen, die noch nicht in <code>rebsorten</code> stehen, und schlägt Attribute vor.</td><td><code>node rebsorten_enricher.mjs</code></td></tr>
+  <tr><td><code>weingut_enricher.mjs</code></td><td>Findet Weingüter in den Weinen, die noch nicht in <code>weingueter</code> stehen, und schlägt Charakter, Anbau und Aliase vor (mit Herkunfts-Kontext aus dem Weinkeller).</td><td><code>node weingut_enricher.mjs</code></td></tr>
+</table>
+<p>Alle drei Enricher <strong>recherchieren standardmässig im Netz</strong> (Anthropic <code>web_search</code>), statt nur aus dem Modellwissen zu antworten – genauere Rebsorten, Herkunft, Ausbau, Boden und Preise. Abschalten mit <code>OHNE_WEBSUCHE=j</code>. Web-Suche ist langsamer, daher in kleinen Batches fahren (<code>BATCH_SIZE</code>/<code>LIMIT</code>).</p>
+<p>Ablauf jeweils: OneDrive pausieren → Skript ausführen → HTML-Bericht prüfen → im Terminal mit <code>j</code>
+freigeben → OneDrive fortsetzen. Optionen ohne Rückfrage und mit schnellerem Modell:</p>
+<pre><code>MODEL=claude-haiku-4-5-20251001 AUTO_APPLY=j node weingut_enricher.mjs</code></pre>
+<div class="box warn"><div class="lbl">OneDrive zwingend pausieren</div>
+Die Skripte schreiben nach <code>skript/output/</code>. Läuft OneDrive dabei, kann es das Skript während der
+Ausführung überschreiben und der Lauf schlägt fehl.</div>
+
+<div class="box tip"><div class="lbl">Alternative: Claude Skills <span class="pill">neu</span></div>
+Für alle drei Skripte gibt es passende <strong>Claude Skills</strong> (<code>weinkeller-enricher</code>,
+<code>weinkeller-rebsorten</code>, <code>weinkeller-weingut</code>), die Claude in Cowork direkt ausführen kann –
+ohne dass du selbst ein Terminal öffnest. Du sagst z. B. „Weine anreichern", „Rebsorten ergänzen" oder „Weingüter
+ergänzen", Claude führt das passende Skript aus, zeigt dir Bericht und SQL-Backup zum Prüfen und schreibt erst
+nach deiner Freigabe („j"/„n") in Supabase. Ablauf und Ergebnis sind identisch zur Terminal-Variante, nur ohne
+manuelle Schritte. Für die Weinkombinationen gibt es den Skill <code>weinkeller-weinkombinationen</code>, der die
+gespeicherte Seite bei Bedarf direkt im Chat wieder anzeigt.</div>
+
+<h3 id="e5">E5 · Voll-Backup einrichten (lokal &amp; GitHub) <span class="pill dev">technisch</span></h3>
+<p>Das Voll-Backup liegt im Ordner <code>backup/</code> (getrennt von der App) und besteht aus zwei Node-Skripten
+plus Startdateien:</p>
+<table>
+  <tr><th>Datei</th><th>Zweck</th></tr>
+  <tr><td><code>scripts/backup.mjs</code></td><td>Liest alle Zeilen aus <code>wines</code>, <code>rebsorten</code>, <code>weingueter</code> (je als JSON), schreibt zusätzlich eine Wein-CSV (gleiche Spalten wie der App-Export) und lädt alle Dateien aus dem Storage-Bucket <code>weinbilder</code>. Ablage in <code>backups/JJJJ-MM/</code> inkl. <code>manifest.json</code>.</td></tr>
+  <tr><td><code>scripts/restore.mjs</code></td><td>Spielt einen Backup-Ordner per Upsert (Konflikt auf <code>id</code>) zurück und lädt die Bilder wieder in den Bucket. Löscht nichts. Optionen: <code>--dry</code> (nur Vorschau), <code>--no-bilder</code>.</td></tr>
+  <tr><td><code>Backup-starten.bat</code> / <code>Restore-starten.bat</code></td><td>Windows-Doppelklick-Starter (installiert beim ersten Lauf die Pakete, führt dann das Skript aus).</td></tr>
+</table>
+<div class="box dev"><div class="lbl">Lokaler Weg (empfohlen für den Alltag)</div>
+Einmalig <a href="https://nodejs.org">Node.js</a> (LTS) installieren. Im Ordner <code>backup</code> liegt eine
+<code>.env</code> mit <code>SUPABASE_URL</code> und <code>SUPABASE_SERVICE_ROLE_KEY</code> (aus <code>skript/.env</code>
+übernommen). Danach genügt Doppelklick auf <code>Backup-starten.bat</code>. Manuell im Terminal:
+<code>npm install</code> einmalig, dann <code>node scripts/backup.mjs</code> bzw.
+<code>node scripts/restore.mjs backups/2026-07</code>.</div>
+<div class="box dev"><div class="lbl">Automatischer Weg (GitHub Actions, monatlich)</div>
+Ein <strong>privates</strong> GitHub-Repo (z. B. <code>weinkeller-backups</code>) anlegen und den Inhalt von
+<code>backup/</code> hineinlegen. Der mitgelieferte Workflow <code>.github/workflows/weinkeller-backup.yml</code> läuft
+am 1. jedes Monats, erstellt das Backup und committet es ins Repo selbst. Nötig sind nur zwei <strong>Repo-Secrets</strong>
+(<em>Settings → Secrets and variables → Actions</em>): <code>SUPABASE_URL</code> und
+<code>SUPABASE_SERVICE_ROLE_KEY</code>. Private Repos und der monatliche Lauf sind im GitHub-Free-Plan kostenlos.</div>
+<div class="box warn"><div class="lbl">Wichtig zum service_role-Key</div>
+Der <code>service_role_key</code> umgeht die Zugriffsregeln und darf <strong>nur</strong> in die lokale
+<code>.env</code> bzw. in ein <strong>privates</strong> Repo-Secret – <strong>niemals</strong> in die
+<code>index.html</code>, ein öffentliches Repo oder die App. Die <code>.gitignore</code> im Ordner schliesst
+<code>.env</code> und <code>node_modules</code> vom Hochladen aus. Wegen der Kaufpreise, Notizen und Lieferanten
+gehört das Backup grundsätzlich nur in einen privaten Ablageort.</div>
+
+<footer>
+  Weinkeller-App · Bedienungs- & Installationsanleitung · Version 3.5 · Stand 09.08.2026<br>
+  App-Code auf GitHub Pages, Daten in Supabase. Teile A–D für Benutzer, Teil E für Entwicklung/Betrieb.
+  Diese Anleitung kannst du über den Button oben als PDF drucken.
+</footer>
+
+</div>
+</body>
+</html>

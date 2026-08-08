@@ -1,3 +1,46 @@
+# Mein Weinkeller – Release Notes v3.5
+
+**Datum:** 09.08.2026
+**Vorherige Version:** v3.4
+
+---
+
+## Übersicht v3.5
+
+Version 3.5 ergänzt den **Weintyp «Alkoholfrei»** für entalkoholisierte Weine – als vollwertiger Typ mit
+eigenem Filter-Chip, eigener Farbe und eigenem Badge. **Keine Datenbank-Migration nötig** (`typ` ist ein
+freies Textfeld). Dazu kommt das neue Hilfsskript `skript/bilder_finder.mjs`, das Flaschenfotos für Weine
+ohne Bild recherchiert.
+
+### 🌿 Neuer Weintyp «Alkoholfrei»
+
+- **Formular:** neuer Eintrag im Typ-Dropdown (nach Brandwein).
+- **Filter:** neuer Chip 🌿 Alkoholfrei im Filterpanel, kombinierbar wie alle anderen Filter.
+- **Farbe:** Grün `#5FA37E` – als Streifen links auf der Weinkarte (`.c-alk`), als Punkt vor dem Weinnamen
+  (`.d-alk`) und in `dotColor()`; Badge in der Detailansicht hellgrün auf dunkelgrün (`#E3F1E9` / `#1F6B4A`).
+- **Enricher:** `enricher.js` kennt den Typ und schlägt passende Werte vor – Entalkoholisierungsverfahren
+  beim Ausbau, kurze Trinkreife (nicht lagerfähig), «nicht empfohlen» bei der Dekantierung, kühlere
+  Serviertemperatur, Tannin nur bei entalkoholisierten Rotweinen.
+- **Lückenfinder und Statistik** ziehen automatisch mit, da sie typunabhängig arbeiten.
+
+### 📷 Neu: `skript/bilder_finder.mjs`
+
+Sucht für alle Weine ohne `bild_url` Flaschenfotos: liest die Weine aus Supabase, lässt Claude AI mit
+Web-Recherche **und Seitenabruf** (`web_search` + `web_fetch`) Produktseiten von Produzenten und Händlern
+finden und liest dort die echte Bild-URL aus. Ergebnis ist ein HTML-Bericht mit Vorschau, Quelle,
+Sicherheitsstufe (hoch/mittel/tief) und Direktlinks. Das Skript schreibt **nichts** in die Datenbank –
+das gewählte Bild wird in der App hochgeladen, damit beide Grössen entstehen und die Datei im eigenen
+Storage liegt statt an einem fremden Shop-Link zu hängen.
+
+```
+node bilder_finder.mjs              # alle Weine ohne Bild
+LIMIT=5 OFFSET=0 node bilder_finder.mjs   # in Häppchen (empfohlen)
+MERGE=j node bilder_finder.mjs      # Häppchen zu einem Bericht zusammenführen
+NUR_GROSS=j node bilder_finder.mjs  # nur Weine ohne grosse Bildvariante
+```
+
+---
+
 # Mein Weinkeller – Release Notes v3.3
 
 **Datum:** 20.07.2026
