@@ -1,6 +1,34 @@
+# Mein Weinkeller – Release Notes v3.6
+
+**Datum:** 20.08.2026
+**Vorherige Version:** v3.5
+
+---
+
+## Übersicht v3.6
+
+Version 3.6 ergänzt das bestehende Rebsorten-Info-Fenster (🍇-Symbol, Weinliste und Detailansicht) um eine
+**zweite Ebene**: Neben jeder Rebsorte steht jetzt ein **ℹ️-Symbol**, das ein Detailfenster mit der
+ausführlichen Beschreibung und bekannten Alias-Namen dieser einen Sorte öffnet. Schliessen führt zurück zur
+Rebsorten-Übersicht des Weins, nicht zur Weinliste. **Keine Datenbank-Migration nötig.**
+
+### ℹ️ Rebsorten-Detailfenster
+
+- **Trigger:** neues ℹ️-Symbol neben jedem Rebsortennamen im bestehenden Rebsorten-Fenster
+  (`showRebsorteInfo()`), sowohl beim Icon in der Weinliste als auch beim Icon in der Detailansicht.
+- **Inhalt:** Struktur (Körper/Säure/Tannin), Herkunft, Passt zu, Alias-Namen und die vollständige
+  Beschreibung (`rebsorten.beschreibung`) der einzelnen Sorte.
+- **Navigation:** eigenes Overlay `#rebiDetailOverlay` über dem bestehenden Rebsorten-Fenster; Schliessen
+  (X, „Zurück", Klick daneben oder Escape) schliesst nur diese Ebene – die Rebsorten-Übersicht des Weins
+  bleibt darunter offen.
+- Fehlt zu einer Sorte die ausführliche Beschreibung, zeigt das Fenster einen entsprechenden Hinweistext
+  statt eines leeren Felds.
+
+---
+
 # Mein Weinkeller – Release Notes v3.5
 
-**Datum:** 09.08.2026
+**Datum:** 14.08.2026
 **Vorherige Version:** v3.4
 
 ---
