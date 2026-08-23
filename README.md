@@ -1,3 +1,39 @@
+# Mein Weinkeller – Release Notes v4.0
+
+**Datum:** 23.08.2026
+**Vorherige Version:** v3.6
+
+---
+
+## Übersicht v4.0
+
+Version 4.0 ergänzt die allgemeine **Rebsorten-Übersicht** (🍇-Symbol im Header) um einen **Cuvée-Beitrag**
+je Sorte: ein neuer «Cuvées»-Button auf der Charakter-Zeile jeder Rebsorten-Karte öffnet ein Fenster mit zwei
+Abschnitten – welche Sorten diese Rebsorte typischerweise verschneiden (unabhängig vom eigenen Keller, freier
+Text) und in welchen eigenen Weinen sie tatsächlich mitverschnitten ist. **Datenbank-Migration nötig**
+(`add_cuvee_partner_column.sql`, bereits ausgeführt).
+
+### 🍷 Cuvée-Beitrag je Rebsorte
+
+- **Trigger:** neuer «Cuvées»-Button auf der Charakter-Zeile jeder Sorte in der Rebsorten-Übersicht
+  (`renderRebsorten()`), mit Badge für die Anzahl passender eigener Weine.
+- **Abschnitt „Typisch · unabhängig von deinem Keller":** liest das neue Freitextfeld `cuvee_partner` der
+  Rebsorte (Format `Name → Beitrag`, zeilenweise). Erkannte Rebsorten-Namen erscheinen als klickbare Chips,
+  die direkt ins Rebsorten-Fenster der jeweils anderen Sorte springen. Ist das Feld leer, zeigt ein
+  Beispieltext das erwartete Format.
+- **Abschnitt „In deinem Keller":** durchsucht die eigenen Weine (`wines[].sorte`) nach der gewählten Sorte
+  und zeigt die jeweils mitverschnittenen Sorten als Balken pro Wein. Optionales Format `Name NN%` im Feld
+  `Rebsorte` eines Weins zeigt echte Anteile; ohne %-Angabe werden die Sorten gleich gewichtet dargestellt.
+- **Neues Formularfeld:** «Cuvée-Partner» (Freitext) beim Bearbeiten einer Rebsorte, unterhalb der
+  Beschreibung.
+- **Migration:** `add_cuvee_partner_column.sql` legt die Spalte `cuvee_partner` in `rebsorten` an
+  (idempotent).
+- Mehrere Prototyp-Runden mit Gian nötig, bis Einstiegspunkt (allgemeine Rebsorten-Übersicht, nicht die
+  Weinliste), Aufbau (zwei getrennte Abschnitte) und Datenquelle (freies Textfeld statt automatischer
+  Text-Extraktion) passten – Details siehe `ENTSCHEIDE.md`.
+
+---
+
 # Mein Weinkeller – Release Notes v3.6
 
 **Datum:** 20.08.2026

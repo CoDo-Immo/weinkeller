@@ -277,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v3.6</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v4.0</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -291,7 +291,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v3.6.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.0.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
       <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
@@ -397,7 +397,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v3.6</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.0</span></footer>
 </div>
 
 
@@ -501,6 +501,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rebf-field"><label>Charakter</label><input type="text" id="rebf-charakter" placeholder="z.B. rund, weich, zugänglich"></div>
       <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="rebf-aliase" placeholder="z.B. blauburgunder"></div>
       <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="rebf-wikibtn" onclick="delinatOpen()"><i class="ti ti-external-link"></i> Auf Delinat</button></label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
+      <div class="rebf-field"><label>Cuvée-Partner (frei, für die Cuvée-Übersicht)</label><textarea id="rebf-cuvee" placeholder="In einer Cuvée balancieren andere Sorten das aus:&#10;- Syrah → Farbe, Tannin, Pfeffer, Struktur&#10;- Mourvèdre → Würze, Tannin, Lagerfähigkeit&#10;- Carignan → Säure, Frische, rustikale Struktur"></textarea></div>
     </div>
     <div class="rebf-err" id="rebf-err"></div>
   </div>
@@ -1132,7 +1133,7 @@ let REBSORTEN=[
   {n:"Cabernet Sauvignon",t:"rot",h:"Bordeaux (FR)",k:"kräftig",s:"mittel",e:"Pilzschmorgerichte, gereifter Hartkäse",c:"tanninstark, ernst, langlebig"},
   {n:"Carignan",t:"rot",h:"Südfrankreich/Spanien",k:"mittel–kräftig",s:"mittel–hoch",e:"Ratatouille, Linseneintopf, Grillgemüse",c:"herb, würzig, rustikal"},
   {n:"Cornalin",t:"rot",h:"Wallis (CH)",k:"mittel–kräftig",s:"mittel",e:"Raclette/Alpkäse, Pilze, Rösti",c:"wild, pfeffrig, eigenständig"},
-  {n:"Grenache",t:"rot",h:"Südrhône/Spanien",k:"kräftig",s:"niedrig",e:"Gemüsetajine, Ratatouille, Bohneneintopf",c:"warm, fruchtsüss, alkoholreich"},
+  {n:"Grenache",t:"rot",h:"Südrhône/Spanien",k:"kräftig",s:"niedrig",e:"Gemüsetajine, Ratatouille, Bohneneintopf",c:"warm, fruchtsüss, alkoholreich",cp:"In einer Cuvée balancieren andere Sorten das aus:\n- Syrah → Farbe, Tannin, Pfeffer, Struktur\n- Mourvèdre → Würze, Tannin, Lagerfähigkeit\n- Carignan → Säure, Frische, rustikale Struktur"},
   {n:"Humagne Rouge",t:"rot",h:"Wallis (CH)",k:"mittel",s:"mittel",e:"Pilze, Alpkäse, Randen",c:"rustikal, herbal, erdig"},
   {n:"Merlot",t:"rot",h:"Bordeaux (FR)",k:"mittel–kräftig",s:"mittel",e:"Melanzane-Parmigiana, Pilzrisotto, Weichkäse",c:"rund, weich, zugänglich"},
   {n:"Mourvèdre",t:"rot",h:"Südfrankreich/Spanien",k:"kräftig",s:"mittel",e:"Schmorgemüse, Linsen, kräftiger Käse",c:"dunkel, ledrig, wild"},
@@ -1167,7 +1168,7 @@ const REB_SYN={"garnacha":"grenache"};
 let REB_IDX={};
 function rebBuildIndex(){REB_IDX={};REBSORTEN.forEach(g=>{REB_IDX[rebNorm(g.n)]=g;(g.x||[]).forEach(a=>{REB_IDX[rebNorm(a)]=g;});});}
 rebBuildIndex();
-async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={id:x.id,n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,tn:x.tannin,e:x.eignung,c:x.charakter,b:x.beschreibung,raw:x.aliase||''};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();if(document.getElementById('rebModal')&&document.getElementById('rebModal').classList.contains('open'))renderRebsorten();}catch(e){}}
+async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={id:x.id,n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,tn:x.tannin,e:x.eignung,c:x.charakter,b:x.beschreibung,cp:x.cuvee_partner||'',raw:x.aliase||''};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();if(document.getElementById('rebModal')&&document.getElementById('rebModal').classList.contains('open'))renderRebsorten();}catch(e){}}
 function rebEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 let rebFilterTyp='all';
 function openRebsorten(){document.getElementById('rebModal').classList.add('open');renderRebsorten();}
@@ -1190,7 +1191,7 @@ function renderRebsorten(){
     return '<div class="reb-card" style="border-left-color:'+bar+'">'
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
       +tags
-      +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+'</div>':'')
+      +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+' '+cuveeBtn(g.n)+'</div>':'<div class="reb-line">'+cuveeBtn(g.n)+'</div>')
       +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebEsc(g.e)+'</span></div>':'')
       +alias
       +(g.b?'<div class="reb-line reb-desc"><span class="reb-lbl">Beschreibung: </span>'+rebEsc(g.b)+'</div>':'')
@@ -1216,6 +1217,7 @@ function openRebEdit(id, prefill){
   document.getElementById('rebf-charakter').value=g?(g.c||''):'';
   document.getElementById('rebf-aliase').value=g?(g.raw||(g.x?g.x.join(', '):'')):'';
   document.getElementById('rebf-beschreibung').value=g?(g.b||''):'';
+  document.getElementById('rebf-cuvee').value=g?(g.cp||''):'';
   if(isNew&&prefill){if(prefill.n)document.getElementById('rebf-name').value=prefill.n;if(prefill.t)document.getElementById('rebf-typ').value=prefill.t;}
   document.getElementById('rebEditModal').classList.add('open');
 }
@@ -1228,7 +1230,7 @@ async function saveRebEdit(){
   if(!name){err.textContent='Name ist erforderlich.';return;}
   const id=document.getElementById('rebf-id').value;
   const val=x=>{const v=document.getElementById(x).value.trim();return v||null;};
-  const payload={name:name,typ:typ,herkunft:val('rebf-herkunft'),koerper:val('rebf-koerper'),saeure:val('rebf-saeure'),tannin:val('rebf-tannin'),eignung:val('rebf-eignung'),charakter:val('rebf-charakter'),aliase:val('rebf-aliase'),beschreibung:val('rebf-beschreibung')};
+  const payload={name:name,typ:typ,herkunft:val('rebf-herkunft'),koerper:val('rebf-koerper'),saeure:val('rebf-saeure'),tannin:val('rebf-tannin'),eignung:val('rebf-eignung'),charakter:val('rebf-charakter'),aliase:val('rebf-aliase'),beschreibung:val('rebf-beschreibung'),cuvee_partner:val('rebf-cuvee')};
   const btn=document.getElementById('rebf-savebtn');if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i>';}
   try{
     if(typeof db==='undefined'||!db)throw new Error('Keine Verbindung');
@@ -1255,6 +1257,219 @@ async function deleteRebsorte(id){
     closeRebEdit();
   }catch(e){alert('Fehler beim Löschen: '+((e&&e.message)||e));}
 }
+/* ── Cuvée-Beitrag pro Rebsorte (v4.0) ── */
+function parseSorteTokens(sorteStr){
+  return (sorteStr||'').split(',').map(t=>t.trim()).filter(Boolean).map(tok=>{
+    const m=tok.match(/^(.*?)\s*(\d{1,3})\s*%$/);
+    if(m)return {raw:tok,name:m[1].trim(),pct:parseInt(m[2],10)};
+    return {raw:tok,name:tok,pct:null};
+  });
+}
+function rebFindCuvees(grapeName){
+  const target=rebNorm(grapeName);
+  const out=[];
+  (wines||[]).forEach(w=>{
+    const toks=parseSorteTokens(w.sorte);
+    if(!toks.length)return;
+    const resolved=[],seen=new Set();
+    toks.forEach(t=>{
+      const g=rebLookup(t.name);
+      const canon=g?rebNorm(g.n):rebNorm(t.name);
+      if(seen.has(canon))return;
+      seen.add(canon);
+      resolved.push({canon,label:g?g.n:t.name,pct:t.pct});
+    });
+    if(resolved.length<2)return;
+    if(!resolved.some(r=>r.canon===target))return;
+    out.push({wine:w,parts:resolved});
+  });
+  return out;
+}
+function cuveeBtn(name){
+  if(!name)return '';
+  const n=(typeof wines!=='undefined'&&wines&&wines.length)?rebFindCuvees(name).length:0;
+  const esc=String(name).replace(/'/g,"\\'");
+  return n
+    ? `<button class="reb-cuvee-btn" onclick="event.stopPropagation();openCv('${esc}')" title="Cuvée-Varianten anzeigen"><i class="ti ti-chart-pie" aria-hidden="true"></i>Cuvées<span class="cnt">${n}</span></button>`
+    : `<button class="reb-cuvee-btn empty" onclick="event.stopPropagation();openCv('${esc}')" title="Cuvée-Varianten anzeigen"><i class="ti ti-chart-pie" aria-hidden="true"></i>Cuvées</button>`;
+}
+const CV_SEG_COLORS=['#8B2E4A','#C9A227','#3B6D11','#185FA5','#B45309','#6B21A8','#0F6E56','#A32D2D'];
+(function(){if(document.getElementById('cvStyle'))return;const st=document.createElement('style');st.id='cvStyle';st.textContent=`
+  #cvOverlay{position:fixed;inset:0;z-index:99999;display:none;}
+  #cvOverlay .rebi-back{position:absolute;inset:0;background:rgba(0,0,0,.55);}
+  #cvOverlay .rebi-sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86vh;display:flex;flex-direction:column;background:#fffdfb;color:#2b2320;border:1px solid #e7ddd4;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+  #cvOverlay .rebi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:700;font-size:15px;color:#6b2737;border-bottom:1px solid #eadfd8;}
+  #cvOverlay .rebi-scroll{padding:14px 16px;overflow-y:auto;}
+  #cvOverlay .rebi-card{background:#ffffff;border:1px solid #eadfd8;border-left:5px solid #cbb8a8;border-radius:12px;padding:12px 14px;}
+  #cvOverlay .rebi-name{font-size:16px;font-weight:700;color:#2b2320;}
+  @media (prefers-color-scheme: dark){
+    #cvOverlay .rebi-sheet{background:#241f1c;color:#efe7e0;border-color:#3a322d;}
+    #cvOverlay .rebi-head{color:#e8b3bf;border-bottom-color:#3a322d;}
+    #cvOverlay .rebi-card{background:#2b2523;border-color:#3a322d;border-left-color:#5a4a44;}
+    #cvOverlay .rebi-name{color:#f3ede7;}
+  }
+  .reb-cuvee-btn{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--wr);background:var(--wrl);border:1px solid var(--wrm);border-radius:20px;padding:4px 11px 4px 9px;cursor:pointer;}
+  .reb-cuvee-btn:active{transform:scale(.96);opacity:.85;}
+  .reb-cuvee-btn i{font-size:14px;}
+  .reb-cuvee-btn .cnt{background:var(--wr);color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;min-width:16px;text-align:center;}
+  .reb-cuvee-btn.empty{color:var(--ts);background:var(--cs);border-color:var(--bd);}
+  .reb-cuvee-btn.empty .cnt{display:none;}
+  .cv-sec-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8a7d76;margin:0 0 8px;display:flex;align-items:center;gap:6px;}
+  .cv-sec-lbl i{font-size:14px;}
+  .cv-section{margin-bottom:20px;}
+  .cv-section:last-child{margin-bottom:0;}
+  .cv-general-intro{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#2b2320;}
+  .cv-general-text{margin:0;font-size:13.5px;line-height:1.65;color:#2b2320;white-space:pre-line;background:#fff;border:1px solid #eadfd8;border-radius:12px;padding:12px 14px;}
+  .cv-partner-list{display:flex;flex-direction:column;gap:7px;}
+  .cv-partner-row{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #eadfd8;border-radius:10px;padding:7px 11px;}
+  .cv-partner-desc{font-size:12.5px;color:#5f5650;}
+  .cv-chip{font-size:13px;font-weight:600;background:#faebef;border:1px solid #C96080;border-radius:20px;padding:3px 11px;color:#8B2E4A;cursor:pointer;flex:none;}
+  .cv-chip:hover{background:#8B2E4A;color:#fff;}
+  .cv-chip:active{transform:scale(.96);}
+  .cv-chip-plain{font-size:13px;font-weight:600;background:#f5f0ec;border:1px solid #eadfd8;border-radius:20px;padding:3px 11px;color:#2b2320;flex:none;}
+  .cv-sub{font-size:12.5px;color:#8a7d76;margin:0 0 12px;line-height:1.55;}
+  .cv-sub b{color:#2b2320;}
+  .cv-empty{text-align:center;padding:24px 12px;color:#8a7d76;background:#fff;border:1px dashed #eadfd8;border-radius:12px;}
+  .cv-empty i{font-size:30px;display:block;margin-bottom:8px;color:#c9bbb3;}
+  .cv-empty p{font-size:13px;line-height:1.55;margin:0;white-space:pre-line;}
+  .cv-card{margin-bottom:12px;}
+  .cv-card:last-child{margin-bottom:0;}
+  .cv-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .cv-gut{font-size:12.5px;color:#8a7d76;margin:1px 0 8px;}
+  .cv-bar{display:flex;height:20px;border-radius:7px;overflow:hidden;margin:2px 0 8px;border:1px solid #eadfd8;}
+  .cv-bar.unknown{opacity:.55;}
+  .cv-seg{display:block;font-size:0;border-right:1px solid rgba(255,255,255,.5);}
+  .cv-seg:last-child{border-right:none;}
+  .cv-legend{display:flex;flex-wrap:wrap;gap:5px 10px;font-size:12.5px;}
+  .cv-leg-item{display:flex;align-items:center;gap:5px;color:#8a7d76;}
+  .cv-leg-item.self{color:#2b2320;font-weight:700;}
+  .cv-dot{width:9px;height:9px;border-radius:3px;flex:none;}
+  .cv-contrib{margin-top:8px;font-size:13px;padding:7px 10px;background:#f5f0ec;border-radius:8px;color:#2b2320;}
+  .cv-contrib b{color:#8B2E4A;}
+  .cv-unknown-note{margin-top:8px;font-size:11.5px;color:#8a7d76;}
+  @media (prefers-color-scheme: dark){
+    .cv-sec-lbl{color:#b3a79f;}
+    .cv-general-intro{color:#efe7e0;}
+    .cv-general-text{background:#2b2523;border-color:#3a322d;color:#efe7e0;}
+    .cv-partner-row{background:#2b2523;border-color:#3a322d;}
+    .cv-partner-desc{color:#b3a79f;}
+    .cv-chip{background:rgba(139,46,74,.22);border-color:#c76b7e;color:#eab8c2;}
+    .cv-chip:hover{background:#c76b7e;color:#241f1c;}
+    .cv-chip-plain{background:#2b2523;border-color:#3a322d;color:#efe7e0;}
+    .cv-sub{color:#b3a79f;}
+    .cv-sub b{color:#f3ede7;}
+    .cv-empty{background:#2b2523;border-color:#3a322d;color:#b3a79f;}
+    .cv-gut{color:#b3a79f;}
+    .cv-bar{border-color:#3a322d;}
+    .cv-leg-item{color:#b3a79f;}
+    .cv-leg-item.self{color:#f3ede7;}
+    .cv-contrib{background:#2b2523;color:#efe7e0;}
+    .cv-contrib b{color:#eab8c2;}
+    .cv-unknown-note{color:#b3a79f;}
+  }
+`;document.head.appendChild(st);})();
+function parseCuveePartnerText(text){
+  const lines=(text||'').split('\n').map(l=>l.trim()).filter(l=>l.length);
+  const intro=[],items=[];
+  lines.forEach(line=>{
+    const bulletMatch=line.match(/^[-*•]\s*(.+)$/);
+    const content=bulletMatch?bulletMatch[1]:line;
+    const arrowMatch=content.match(/^(.+?)\s*(?:→|->|=>)\s*(.+)$/);
+    if(arrowMatch){
+      items.push({name:arrowMatch[1].trim(),desc:arrowMatch[2].trim()});
+    } else if(bulletMatch){
+      items.push({name:content.trim(),desc:''});
+    } else {
+      intro.push(line);
+    }
+  });
+  return {intro,items};
+}
+function cvCard(m,name){
+  const w=m.wine,parts=m.parts,target=rebNorm(name);
+  const hasPct=parts.some(p=>p.pct!=null);
+  const total=hasPct?(parts.reduce((s,p)=>s+(p.pct||0),0)||100):null;
+  const segs=parts.map((p,i)=>{
+    const wpct=hasPct?Math.max((p.pct||0)/total*100,2):100/parts.length;
+    const isSelf=p.canon===target;
+    const col=isSelf?'var(--wr)':CV_SEG_COLORS[(i+2)%CV_SEG_COLORS.length];
+    return `<span class="cv-seg" style="width:${wpct}%;background:${col};" title="${rebEsc(p.label)}${p.pct!=null?' '+p.pct+'%':''}"></span>`;
+  }).join('');
+  const legend=parts.map((p,i)=>{
+    const isSelf=p.canon===target;
+    const col=isSelf?'var(--wr)':CV_SEG_COLORS[(i+2)%CV_SEG_COLORS.length];
+    return `<span class="cv-leg-item${isSelf?' self':''}"><span class="cv-dot" style="background:${col};"></span>${rebEsc(p.label)}${p.pct!=null?' '+p.pct+'%':''}</span>`;
+  }).join('');
+  const self=parts.find(p=>p.canon===target);
+  const contrib=hasPct
+    ? `<div class="cv-contrib">Beitrag von <b>${rebEsc(name)}</b>: <b>${self.pct}%</b></div>`
+    : `<div class="cv-unknown-note"><i class="ti ti-info-circle" aria-hidden="true"></i> Anteile nicht erfasst – optional im Feld «Rebsorte» ergänzen, z. B. «${rebEsc(self.label)} 60%, ...»</div>`;
+  return `<div class="rebi-card cv-card">
+    <div class="cv-top"><span class="rebi-name">${rebEsc(w.name)}</span>${typBadge(w.typ)}</div>
+    <div class="cv-gut">${rebEsc(w.weingut||'')}${w.jahr?' · '+w.jahr:''}</div>
+    <div class="cv-bar${hasPct?'':' unknown'}">${segs}</div>
+    <div class="cv-legend">${legend}</div>
+    ${contrib}
+  </div>`;
+}
+function cvGeneralSection(name){
+  const g=rebLookup(name);
+  const raw=(g&&g.cp)?g.cp.trim():'';
+  let body;
+  if(raw){
+    const {intro,items}=parseCuveePartnerText(raw);
+    const introHtml=intro.length?`<p class="cv-general-intro">${intro.map(rebEsc).join('<br>')}</p>`:'';
+    let itemsHtml='';
+    if(items.length){
+      itemsHtml=`<div class="cv-partner-list">${items.map(it=>{
+        const known=rebLookup(it.name);
+        const nm=known?known.n:it.name;
+        const nameHtml=known
+          ? `<button class="cv-chip" onclick="openCv('${known.n.replace(/'/g,"\\'")}')">${rebEsc(known.n)}</button>`
+          : `<span class="cv-chip-plain">${rebEsc(it.name)}</span>`;
+        return `<div class="cv-partner-row">${nameHtml}${it.desc?`<span class="cv-partner-desc">${rebEsc(it.desc)}</span>`:''}</div>`;
+      }).join('')}</div>`;
+    }
+    body=(introHtml+itemsHtml)||`<div class="cv-general-text">${rebEsc(raw)}</div>`;
+  } else {
+    body=`<div class="cv-empty"><i class="ti ti-note-off" aria-hidden="true"></i><p>Noch kein Text hinterlegt. Trag ihn bei ${rebEsc(name)} im Bearbeitungsmodus im Feld «Cuvée-Partner» ein, z.\u00a0B.:\n\nIn einer Cuvée balancieren andere Sorten das aus:\n- Syrah → Farbe, Tannin, Pfeffer, Struktur\n- Mourvèdre → Würze, Tannin, Lagerfähigkeit</p></div>`;
+  }
+  return `<div class="cv-section">
+    <div class="cv-sec-lbl"><i class="ti ti-world" aria-hidden="true"></i> Typisch &middot; unabh&auml;ngig von deinem Keller</div>
+    ${body}
+  </div>`;
+}
+function cvCellarSection(name){
+  const matches=rebFindCuvees(name);
+  let inner;
+  if(!matches.length){
+    inner=`<div class="cv-empty"><i class="ti ti-glass-off" aria-hidden="true"></i><p>In deinem Keller kommt <b>${rebEsc(name)}</b> aktuell nur sortenrein vor – (noch) keine Cuv&eacute;e erfasst.</p></div>`;
+  }else{
+    const tally={};
+    matches.forEach(mm=>mm.parts.forEach(p=>{if(p.canon!==rebNorm(name))tally[p.label]=(tally[p.label]||0)+1;}));
+    const top=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]+' ('+e[1]+'×)').join(', ');
+    const sub=`<b>${rebEsc(name)}</b> wird in <b>${matches.length}</b> Cuvée${matches.length===1?'':'s'} assembliert.${top?' Häufigste Partner: '+rebEsc(top)+'.':''}`;
+    inner=`<p class="cv-sub">${sub}</p>`+matches.map(mm=>cvCard(mm,name)).join('');
+  }
+  return `<div class="cv-section">
+    <div class="cv-sec-lbl"><i class="ti ti-bottle" aria-hidden="true"></i> In deinem Keller</div>
+    ${inner}
+  </div>`;
+}
+function openCv(name){
+  let ov=document.getElementById('cvOverlay');
+  if(!ov){ov=document.createElement('div');ov.id='cvOverlay';document.body.appendChild(ov);}
+  const body=cvGeneralSection(name)+cvCellarSection(name);
+  ov.innerHTML=`<div class="rebi-back" onclick="closeCv()"></div>
+    <div class="rebi-sheet" role="dialog" aria-label="Cuvée-Varianten">
+      <div class="rebi-head"><span>Cuvée-Varianten &middot; ${rebEsc(name)}</span><i class="ti ti-x" onclick="closeCv()" style="cursor:pointer;font-size:20px;"></i></div>
+      <div class="rebi-scroll">${body}</div>
+    </div>`;
+  ov.style.display='block';document.body.style.overflow='hidden';
+}
+function closeCv(){const ov=document.getElementById('cvOverlay');if(ov)ov.style.display='none';document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const cv=document.getElementById('cvOverlay');if(cv&&cv.style.display==='block')closeCv();}});
+
 /* ── Wikipedia-Vorabfüllung ── */
 async function wikiSummary(title){
   const t=String(title||'').trim();if(!t)return null;
