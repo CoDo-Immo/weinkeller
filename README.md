@@ -1,3 +1,34 @@
+# Mein Weinkeller – Release Notes v4.1
+
+**Datum:** 25.08.2026
+**Vorherige Version:** v4.0
+
+---
+
+## Übersicht v4.1
+
+Version 4.1 bringt zwei Verbesserungen rund um Vollständigkeit und Suche: die Lücken-Prüfung für Körper,
+Säure und Tannin ist jetzt an allen vier Stellen (Rebsorten Enricher, App-Rebsorten-Lücken, Wein-Enricher,
+App-Wein-Lücken) konsistent, und die Weinliste lässt sich neu direkt nach der Degustationsbeschreibung
+filtern. **Keine Datenbank-Migration nötig.**
+
+### 🔍 Struktur-Felder-Lücken vereinheitlicht
+
+- Befund: `rebsorten_enricher.mjs` (`REQUIRED`) und der App-Rebsorten-Lücken-Screen (`REB_REQ`) prüften Körper
+  und Säure, aber nicht Tannin; der App-Wein-Lücken-Screen (`WINE_GAP_FIELDS`, „Weine mit Lücken") prüfte
+  Körper, Säure und Tannin gar nicht, obwohl der Wein-Enricher (`enricher.js`) alle drei längst befüllt.
+- Fix: Tannin gilt jetzt überall dort, wo es sinnvoll ist, als Pflichtfeld – bei Rebsorten nur bei roten
+  Sorten (`typ==='rot'`), bei Weinen nur bei Rotwein/Brandwein (wie schon im Wein-Enricher). Körper und Säure
+  sind jetzt auch im App-Wein-Lücken-Screen Pflichtfelder.
+
+### 🔎 Degustation-Filter
+
+- Neues Textfeld **«Degustation»** im Filterpanel, direkt nach der Rebsorte. Mehrere Suchbegriffe
+  (Komma-/Leerzeichen-getrennt) filtern auf Weine, deren Degustationsbeschreibung mindestens einen der
+  Begriffe enthält (gleiches Muster wie der bestehende Eignungs-Filter).
+
+---
+
 # Mein Weinkeller – Release Notes v4.0
 
 **Datum:** 23.08.2026
