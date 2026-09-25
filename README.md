@@ -9,6 +9,7 @@
   Apéro & Dessert), Zutat + Zubereitungsart in Klammern, nur vegetarisch. Datenfeld bleibt `text`, Trennung per Zeilenumbruch.
 - Rebsorten-Formular: `#rebf-eignung` ist jetzt ein `<textarea>` (vorher `input`, das Zeilenumbrüche beim Speichern verlor).
 - 🍇-Fenster (`#rebiOverlay .rebi-row b`): `white-space:pre-line`.
+- Weindetailansicht: Zeile «Eignung» ebenfalls `white-space:pre-line` (mehrzeilige Wein-Eignung, z. B. Cigalus).
 - Rebsorten-Übersicht: Label «Passt zu:» auf eigener Zeile; Treffer-Hervorhebung zeilenweise (`rebHl` pro Zeile,
   da `rebHl` bei Zeilenumbrüchen sonst nicht markiert).
 - Versionsbadge, Footer und Hilfe-Link auf v4.3. **Keine Datenbank-Migration nötig.**

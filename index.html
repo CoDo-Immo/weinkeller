@@ -1830,7 +1830,7 @@ function buildDetailHTML(id,w){
         }
       </div>
     </div>
-    ${w.eignung?topRow('Eignung',`<span style="color:#7A8B5A;">${w.eignung}</span>`):''}
+    ${w.eignung?topRow('Eignung',`<span style="color:#7A8B5A;white-space:pre-line;">${w.eignung}</span>`):''}
     ${bewLine(w)}
     ${strukLineVals(w.koerper,w.saeure,w.tannin)}
     ${wR.length?'<div class="dsec">Wein</div>'+mkRows(wR):''}
