@@ -277,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v4.2</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v4.3</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -291,7 +291,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.2.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.3.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
       <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
@@ -401,7 +401,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.2</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.3</span></footer>
 </div>
 
 
@@ -502,7 +502,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="rebf-field"><label>Säure</label><input type="text" id="rebf-saeure" placeholder="z.B. mittel"></div>
         <div class="rebf-field"><label>Tannin</label><input type="text" id="rebf-tannin" placeholder="z.B. mittel–hoch (bei Rotwein)"></div>
       </div>
-      <div class="rebf-field"><label>Passt zu (Eignung)</label><input type="text" id="rebf-eignung" placeholder="z.B. Pilzrisotto, Weichkäse"></div>
+      <div class="rebf-field"><label>Passt zu (Eignung)</label><textarea id="rebf-eignung" style="min-height:140px;" placeholder="Eine Gruppe pro Zeile:&#10;Gemüse: Pilze (gebraten), Kürbis (im Ofen)&#10;Hülsenfrüchte: Linsen (als Eintopf)&#10;Getreide: Risotto (mit Pilzen)&#10;Teigwaren: Tagliatelle (an Rahmsauce)&#10;Käse: Gruyère (mittelalt)&#10;Apéro &amp; Dessert: Quiche (warm)"></textarea></div>
       <div class="rebf-field"><label>Charakter</label><input type="text" id="rebf-charakter" placeholder="z.B. rund, weich, zugänglich"></div>
       <div class="rebf-field"><label>Aliase (kommagetrennt)</label><input type="text" id="rebf-aliase" placeholder="z.B. blauburgunder"></div>
       <div class="rebf-field"><label class="rebf-lblrow"><span>Beschreibung</span><button type="button" class="wiki-btn" id="rebf-wikibtn" onclick="delinatOpen()"><i class="ti ti-external-link"></i> Auf Delinat</button></label><textarea id="rebf-beschreibung" placeholder="Ausführliche Beschreibung (kann später erfasst werden) …"></textarea></div>
@@ -1202,7 +1202,7 @@ function renderRebsorten(){
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
       +tags
       +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+' '+cuveeBtn(g.n)+'</div>':'<div class="reb-line">'+cuveeBtn(g.n)+'</div>')
-      +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebHl(g.e,eqTerms)+'</span></div>':'')
+      +(g.e?'<div class="reb-line"><span class="reb-lbl" style="display:block;">Passt zu:</span><span style="color:#7A8B5A;">'+String(g.e).split('\n').map(l=>rebHl(l,eqTerms)).join('\n')+'</span></div>':'')
       +alias
       +(g.b?'<div class="reb-line reb-desc"><span class="reb-lbl">Beschreibung: </span>'+rebEsc(g.b)+'</div>':'')
       +'</div>';
@@ -1690,7 +1690,7 @@ function rebsorteCell(id,sorte){if(!sorte)return sorte;return `<span>${sorte}</s
   #rebiOverlay .rebi-badge.weiss{background:#f2e7c8;color:#7a5c12;}
   #rebiOverlay .rebi-row{display:flex;gap:10px;font-size:14px;padding:2px 0;line-height:1.45;}
   #rebiOverlay .rebi-row span{color:#8a7d76;min-width:96px;flex-shrink:0;}
-  #rebiOverlay .rebi-row b{font-weight:600;color:#2b2320;}
+  #rebiOverlay .rebi-row b{font-weight:600;color:#2b2320;white-space:pre-line;}
   #rebiOverlay .rebi-miss{font-size:12px;color:#8a7d76;padding:6px 2px;}
   @media (prefers-color-scheme: dark){
     #rebiOverlay .rebi-sheet{background:#241f1c;color:#efe7e0;border-color:#3a322d;}
