@@ -277,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="login-card">
     <div class="login-logo">🍷</div>
     <h2>Mein Weinkeller</h2>
-    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v4.1</span></div>
+    <div style="text-align:center;margin-top:-12px;margin-bottom:16px;"><span class="version-badge">v4.2</span></div>
     <div class="login-field"><label>E-Mail</label><input type="email" id="loginEmail" placeholder="name@beispiel.ch" autocomplete="email"></div>
     <div class="login-field"><label>Passwort</label><input type="password" id="loginPw" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Einloggen</button>
@@ -291,7 +291,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.1.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.2.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
       <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
@@ -401,7 +401,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.1</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.2</span></footer>
 </div>
 
 
@@ -469,6 +469,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <h2><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg> Rebsorten <span id="rebCount" style="font-size:12px;font-weight:400;color:var(--tm);"></span> <span style="margin-left:auto;display:flex;gap:6px;align-items:center;"><button class="icon-btn fn-new" id="rebNewBtn" onclick="openRebEdit(null)" style="display:none;" title="Neue Rebsorte" aria-label="Neue Rebsorte"><i class="ti ti-plus"></i></button><button class="icon-btn fn-gap" id="rebGapBtn" onclick="openRebGaps()" style="display:none;" title="Lücken" aria-label="Lücken"><i class="ti ti-file-search"></i></button><button class="icon-btn fn-close" onclick="closeRebsorten()" title="Schliessen" aria-label="Schliessen"><i class="ti ti-x"></i></button></span></h2>
     <div class="reb-toolbar">
       <input type="text" id="rebSearch" class="reb-search" placeholder="Sorte, Herkunft oder Charakter suchen ..." oninput="renderRebsorten()">
+      <input type="text" id="rebEignung" class="reb-search" placeholder="Passt zu … (z.B. Pilze, Käse, Apéro)" oninput="renderRebsorten()">
       <div class="reb-chips">
         <button class="reb-chip active" data-t="all" onclick="setRebFilter('all')">Alle</button>
         <button class="reb-chip" data-t="rot" onclick="setRebFilter('rot')"><span style="color:#8B2E4A;">&#9679;</span> Rot</button>
@@ -1175,6 +1176,7 @@ let REB_IDX={};
 function rebBuildIndex(){REB_IDX={};REBSORTEN.forEach(g=>{REB_IDX[rebNorm(g.n)]=g;(g.x||[]).forEach(a=>{REB_IDX[rebNorm(a)]=g;});});}
 rebBuildIndex();
 async function loadRebsorten(){try{if(typeof db==='undefined'||!db)return;const r=await db.from('rebsorten').select('*');if(r.error||!r.data||!r.data.length)return;REBSORTEN=r.data.map(x=>{const o={id:x.id,n:x.name,t:x.typ,h:x.herkunft,k:x.koerper,s:x.saeure,tn:x.tannin,e:x.eignung,c:x.charakter,b:x.beschreibung,cp:x.cuvee_partner||'',raw:x.aliase||''};if(x.aliase)o.x=String(x.aliase).split(',').map(a=>a.trim()).filter(Boolean);return o;});rebBuildIndex();if(document.getElementById('rebModal')&&document.getElementById('rebModal').classList.contains('open'))renderRebsorten();}catch(e){}}
+function rebHl(txt,terms){const esc=rebEsc(txt);if(!terms||!terms.length)return esc;const src=String(txt==null?'':txt);const n=rebNorm(src);if(n.length!==src.toLowerCase().replace(/\s+/g,' ').trim().length||src!==src.replace(/\s+/g,' ').trim())return esc;const mark=new Array(src.length).fill(false);terms.forEach(t=>{let i=n.indexOf(t);while(i>-1){for(let k=i;k<i+t.length;k++)mark[k]=true;i=n.indexOf(t,i+t.length);}});let out='',on=false;for(let i=0;i<src.length;i++){if(mark[i]&&!on){out+='<b>';on=true;}if(!mark[i]&&on){out+='</b>';on=false;}out+=rebEsc(src[i]);}if(on)out+='</b>';return out;}
 function rebEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 let rebFilterTyp='all';
 function openRebsorten(){document.getElementById('rebModal').classList.add('open');renderRebsorten();}
@@ -1185,6 +1187,8 @@ function renderRebsorten(){
   let list=(REBSORTEN||[]).slice().sort((a,b)=>(a.n||'').localeCompare(b.n||'','de'));
   if(rebFilterTyp!=='all')list=list.filter(g=>{const t=(g.t||'').toLowerCase();return rebFilterTyp==='rot'?t.startsWith('rot'):t.startsWith('weis');});
   if(q)list=list.filter(g=>[g.n,g.h,g.c,g.e,(g.x||[]).join(' ')].map(x=>rebNorm(x||'')).join(' ').includes(q));
+  const eqTerms=rebNorm((document.getElementById('rebEignung')||{}).value||'').split(/[\s,;]+/).filter(Boolean);
+  if(eqTerms.length)list=list.filter(g=>{const e=rebNorm(g.e||'');return eqTerms.some(t=>e.includes(t));});
   const cnt=document.getElementById('rebCount');if(cnt)cnt.textContent=list.length+' Sorten';
   const box=document.getElementById('rebList');if(!box)return;
   if(!list.length){box.innerHTML='<div style="text-align:center;color:var(--tm);padding:24px;font-size:13px;">Keine Rebsorte gefunden.</div>';return;}
@@ -1198,7 +1202,7 @@ function renderRebsorten(){
       +'<div class="reb-head"><span class="reb-name">'+rebEsc(g.n)+'</span>'+(g.h?'<span class="reb-herk">· '+rebEsc(g.h)+'</span>':'')+acts+'</div>'
       +tags
       +(g.c?'<div class="reb-line"><span class="reb-lbl">Charakter: </span>'+rebEsc(g.c)+' '+cuveeBtn(g.n)+'</div>':'<div class="reb-line">'+cuveeBtn(g.n)+'</div>')
-      +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebEsc(g.e)+'</span></div>':'')
+      +(g.e?'<div class="reb-line"><span class="reb-lbl">Passt zu: </span><span style="color:#7A8B5A;">'+rebHl(g.e,eqTerms)+'</span></div>':'')
       +alias
       +(g.b?'<div class="reb-line reb-desc"><span class="reb-lbl">Beschreibung: </span>'+rebEsc(g.b)+'</div>':'')
       +'</div>';

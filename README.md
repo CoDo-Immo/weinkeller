@@ -1,3 +1,19 @@
+# Mein Weinkeller – Release Notes v4.2
+
+**Datum:** 25.09.2026
+**Vorherige Version:** v4.1
+
+### 🍽 «Passt zu»-Filter in der Rebsorten-Übersicht
+
+- Neues Textfeld `#rebEignung` («Passt zu …») unter dem Suchfeld der Rebsorten-Übersicht.
+- Mehrere Begriffe (Komma/Leerzeichen/Semikolon) werden ODER-verknüpft gegen das Feld `eignung` der Rebsorte
+  geprüft, akzent-/umlautunabhängig (`rebNorm`). Kombinierbar mit Freitextsuche und Rot/Weiss-Chips.
+- Treffer werden in der «Passt zu»-Zeile fett hervorgehoben (`rebHl`).
+- Versionsbadge, Footer und Hilfe-Link auf v4.2. **Keine Datenbank-Migration nötig.**
+- Rollback-Punkt: `weinkeller_v4.1.html` (unverändert).
+
+---
+
 # Mein Weinkeller – Release Notes v4.1
 
 **Datum:** 25.08.2026
