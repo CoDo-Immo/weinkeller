@@ -4,7 +4,7 @@
 
 - Lücken-Fenster «Weine mit Lücken» und «Rebsorten mit Lücken»: Fusszeile mit Link, der in Claude (claude.ai/new) den Skill `weinkeller-enricher` bzw. `weinkeller-rebsorten` per vorbefülltem Prompt startet. «Weingüter mit Lücken» ohne Link (kein Skill).
 - `Weinkeller_weinkombinationen.html`: Link in der Fusszeile für `weinkeller-weinkombinationen` (Aktualisierung mit aktuellem Bestand).
-- Voraussetzung: Anmeldung bei claude.ai mit aktivierten Skills. Keine Datenbank-Migration. Die Bedienungsanleitung bleibt auf v4.3.
+- Voraussetzung: Anmeldung bei claude.ai mit aktivierten Skills. Keine Datenbank-Migration. Bedienungsanleitung v4.4 (HTML + PDF) nachgeführt, Hilfe-Link der App zeigt darauf.
 
 ---
 
