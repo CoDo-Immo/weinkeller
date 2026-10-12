@@ -1,3 +1,30 @@
+# Mein Weinkeller – Release Notes v4.4
+
+**Datum:** 12.10.2026 · **Vorherige Version:** v4.3 (Rollback-Punkt `weinkeller_v4.3.html`)
+
+- Lücken-Fenster «Weine mit Lücken» und «Rebsorten mit Lücken»: Fusszeile mit Link, der in Claude (claude.ai/new) den Skill `weinkeller-enricher` bzw. `weinkeller-rebsorten` per vorbefülltem Prompt startet. «Weingüter mit Lücken» ohne Link (kein Skill).
+- `Weinkeller_weinkombinationen.html`: Link in der Fusszeile für `weinkeller-weinkombinationen` (Aktualisierung mit aktuellem Bestand).
+- Voraussetzung: Anmeldung bei claude.ai mit aktivierten Skills. Keine Datenbank-Migration. Die Bedienungsanleitung bleibt auf v4.3.
+
+---
+
+# Nachtrag 03.10.2026 – Backup & Restore für das ganze Projekt (App bleibt v4.3)
+
+**Keine neue App-Version, keine Datenbank-Migration an der App.**
+
+- Das Voll-Backup in [`backup/`](file:///C:/Users/gianc/OneDrive/Documente/LLM_Projekte/projekte/Weinkeller%20APP/outputs/backup) sichert jetzt das **ganze Supabase-Projekt Gourmet-Adlemsried**: alle Tabellen
+  (`wines`, `rebsorten`, `weingueter`, `warenvorrat`, `einheiten`, `rezepte`, `kategorien`; automatisch erkannt) und beide Bildbereiche
+  (`weinbilder`, `rezeptbilder`). Es gilt gemeinsam für Weinkeller, Rezepte und Warenvorrat.
+- Pro Tabelle wird die Zeilenzahl gegen die Datenbank geprüft. Ablage: `backup/backups/JJJJ-MM/` (JSON je Tabelle, Wein-CSV, `manifest.json`, `storage/<bucket>/`).
+- Der Restore läuft über eine direkte Datenbankverbindung (`SUPABASE_DB_URL` in `backup/.env`), weil sechs Tabellen eine `GENERATED ALWAYS`-ID haben.
+  Er schreibt in einer Transaktion und löscht nichts. Backups im alten Format (`2026-07`) bleiben lesbar.
+- Supabase-Migration `grant_service_role_backup_tables`: `service_role` erhält Rechte auf `einheiten`, `kategorien`, `rezepte`, `warenvorrat`.
+- Umbenennung auf «Gourmet-Adlemsried» (Paketname, Titel, GitHub-Workflow `gourmet-adlemsried-backup.yml`). Ordner `backup` und `.bat`-Namen bleiben.
+- Bedienungsanleitung v4.3 aktualisiert (B10, neu B11 Projektordner, Teil C, E5).
+- Nicht im Backup: Datenbankschema und Benutzerkonten.
+
+---
+
 # Mein Weinkeller – Release Notes v4.3
 
 **Datum:** 25.09.2026
