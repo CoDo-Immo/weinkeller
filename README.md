@@ -1,3 +1,23 @@
+# Mein Weinkeller – Release Notes v4.6
+
+**Datum:** 24.10.2026 · **Vorherige Version:** v4.5 (Rollback-Punkt `weinkeller_v4.5.html`)
+
+- **Knopf «Inventar bestätigen»** (grüner Haken) in der Detailansicht (nicht für Viewer): setzt `inventardatum` auf heute und speichert nur dieses Feld; Detailansicht und Liste werden aktualisiert.
+- **Filter «Inventardatum»** im Filterpanel: Knöpfe für alle vorhandenen Daten (neueste zuerst, mit Anzahl) plus «Ohne Datum», Mehrfachauswahl (ODER). Eingebunden in Filterleiste und «Alle Filter zurücksetzen».
+- Keine Datenbank-Migration. Bedienungsanleitung v4.6 (HTML) nachgeführt.
+
+---
+
+# Mein Weinkeller – Release Notes v4.5
+
+**Datum:** 24.10.2026 · **Vorherige Version:** v4.4 (Rollback-Punkt `weinkeller_v4.4.html`)
+
+- Neues Feld **Inventardatum** (Bereich «Keller»): Datumsfeld mit Knopf «Heute». Neue Weine starten mit dem heutigen Datum als Vorschlag (änderbar/leerbar), bestehende Weine bleiben leer, Duplizieren setzt heute.
+- Anzeige in der Detailansicht (TT.MM.JJJJ) und im CSV-Export (Spalte «Inventardatum», ISO-Format JJJJ-MM-TT).
+- **Datenbank-Migration:** `add_inventardatum_column.sql` (`wines.inventardatum date`, nullable) – am 24.10.2026 in Supabase ausgeführt. Bedienungsanleitung v4.5 (HTML) nachgeführt.
+
+---
+
 # Mein Weinkeller – Release Notes v4.4
 
 **Datum:** 12.10.2026 · **Vorherige Version:** v4.3 (Rollback-Punkt `weinkeller_v4.3.html`)
