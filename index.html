@@ -1850,7 +1850,7 @@ function buildDetailHTML(id,w){
   const ts=trinkStatus(w),tl=trinkLabel(ts);
   const wR=[['Rebsorte',rebsorteCell(id,w.sorte)],['Jahrgang',w.jahr],['Ausbau',w.ausbau],['Anbau',w.anbau?anbauDV(w.anbau):null],['Boden',w.boden]].filter(r=>r[1]);
   const cR=[['Trinktemperatur',w.trinktemperatur],['Dekantierung',w.dekantierung]].filter(r=>r[1]);
-  const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Marktpreis',w.marktpreis?'CHF '+Number(w.marktpreis).toFixed(2):null],['Inventardatum',fmtDatum(w.inventardatum)],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant]].filter(r=>r[1]);
+  const kR=[['Status',statusDV(w.status||'Aktiv')],['Flaschen',w.anzahl],['Kaufpreis',w.preis?'CHF '+Number(w.preis).toFixed(2):null],['Marktpreis',w.marktpreis?'CHF '+Number(w.marktpreis).toFixed(2):null],['Trinkreife',tLabel],['Trinkreife-Status',tl],['Notizen',w.notizen],['Lieferant',w.lieferant],['Inventardatum',fmtDatum(w.inventardatum)]].filter(r=>r[1]);
   return`
     ${w.bild_url?`<img class="d-img" src="${w.bild_url}" alt="${w.name}" title="Antippen zum Vergrössern" onclick="openLightbox('${id}')" onerror="this.style.display='none'">`:''}
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px;">

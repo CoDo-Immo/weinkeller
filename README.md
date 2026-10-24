@@ -4,6 +4,7 @@
 
 - **Knopf «Inventar bestätigen»** (grüner Haken) in der Detailansicht (nicht für Viewer): setzt `inventardatum` auf heute und speichert nur dieses Feld; Detailansicht und Liste werden aktualisiert.
 - **Filter «Inventardatum»** im Filterpanel: Knöpfe für alle vorhandenen Daten (neueste zuerst, mit Anzahl) plus «Ohne Datum», Mehrfachauswahl (ODER). Eingebunden in Filterleiste und «Alle Filter zurücksetzen».
+- Detailansicht: Inventardatum steht im Abschnitt «Keller» als letzte Zeile, nach Lieferant.
 - Keine Datenbank-Migration. Bedienungsanleitung v4.6 (HTML) nachgeführt.
 
 ---
