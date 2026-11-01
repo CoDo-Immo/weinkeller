@@ -1,3 +1,13 @@
+# Mein Weinkeller – Release Notes v4.7
+
+**Datum:** 01.11.2026 · **Vorherige Version:** v4.6 (Rollback-Punkt `weinkeller_v4.6.html`)
+
+- **Notizen** stehen in der Detailansicht (Bereich «Keller») direkt nach «Flaschen» (bisher nach Trinkreife-Status). Das Feld `wines.notizen` und das Formularfeld bestanden bereits.
+- **Weinübersicht:** Icons Weingut-Info, Google Maps und Webseite grösser (Schrift 22 px, Tippfläche 36 × 36 px, Zeilenhöhe unverändert).
+- Keine Datenbank-Migration. Bedienungsanleitung v4.7 (HTML) nachgeführt.
+
+---
+
 # Mein Weinkeller – Release Notes v4.6
 
 **Datum:** 24.10.2026 · **Vorherige Version:** v4.5 (Rollback-Punkt `weinkeller_v4.5.html`)
