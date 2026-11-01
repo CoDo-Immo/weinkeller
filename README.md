@@ -4,6 +4,7 @@
 
 - **Notizen** stehen in Detailansicht und Formular (Bereich «Keller») direkt nach «Flaschen» (bisher weiter unten). Das Feld `wines.notizen` und das Formularfeld bestanden bereits.
 - **Weinübersicht und Detailansicht:** Icons Weingut-Info, Google Maps und Webseite grösser (Schrift 22 px, Tippfläche 36 × 36 px, Zeilenhöhe unverändert).
+- **Weinübersicht:** Jahrgang fett direkt nach dem Weinnamen (erste Zeile); Land · Gebiet · Region auf eigener Zeile; Rebsorten-Icon ebenfalls grösser. **Detailansicht:** Jahrgang (fett, zuerst), Weingut, Icons und Weintyp in einer Zeile über die ganze Breite.
 - Keine Datenbank-Migration. Bedienungsanleitung v4.7 (HTML) nachgeführt.
 
 ---
