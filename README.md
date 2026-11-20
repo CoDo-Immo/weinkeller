@@ -1,3 +1,16 @@
+# Mein Weinkeller – Release Notes v5.0
+
+**Datum:** 20.11.2026 · **Vorherige Version:** v4.7 (Rollback-Punkt `weinkeller_v4.7.html`)
+
+- **Kachelübersicht als Startseite** nach dem Login, 3 Spalten: *Nach Typ* (Rotwein, Weisswein, Andere), *Nach Lager* (Trinkbereit, Überfällig, Sonstige), *Nach Land* (dynamisch aus dem Bestand, nach Anzahl Weine sortiert, Flaggen als eingebettete SVG statt Emoji, damit sie auch unter Windows erscheinen). Anzahl Weine · Flaschen pro Kachel.
+- **Lager-Logik:** Trinkbereit/Überfällig = Trinkreife-Status *und* Status nicht Bestellt/Bestellen/Inaktiv; Sonstige = alles übrige (noch lagern, ohne Trinkreife, Status Bestellt/Bestellen/Inaktiv). Die drei Lager-Kacheln schliessen sich gegenseitig aus.
+- **Liste zur Kachel:** gleiches Layout wie bisher; Kachel = feste Grundmenge, Suche und Filterpanel wirken innerhalb. Kachelleiste über der Liste (auch Desktop) mit Knopf «Übersicht». Land-Auswahl im Filterpanel zeigt nur Länder der Kachel.
+- **Navigation:** Zurück-Pfeil im Header, Zurück-Taste/Wischgeste (Browser-History): schliesst zuerst offene Fenster, dann zurück zur Übersicht. Neues Header-Symbol **«Heutige Weinliste»** (bisheriger Start: alle Weine, Trinkbereit vorgewählt). Suche auf der Übersicht springt in die Liste über alle Weine.
+- Header-Symbole auf schmalen Handys (< 480 px) etwas kleiner; unter 420 px wird der Titel in der Liste ausgeblendet, damit alle Symbole Platz haben.
+- Keine Datenbank-Migration. Bedienungsanleitung v5.0 (HTML) nachgeführt, Hilfe-Link zeigt darauf.
+
+---
+
 # Mein Weinkeller – Release Notes v4.7
 
 **Datum:** 01.11.2026 · **Vorherige Version:** v4.6 (Rollback-Punkt `weinkeller_v4.6.html`)

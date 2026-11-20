@@ -269,6 +269,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .wine-card.selected{border-color:var(--wrm);box-shadow:0 0 0 2px rgba(139,46,74,0.12);}
   .detail-actions{flex-wrap:wrap;}
 }
+/* ── v5.0 Kachelübersicht ── */
+#backBtn{display:none;margin-right:8px;}
+body.view-list #backBtn{display:flex;}
+body.view-list .topbar h1 .ti-bottle{display:none;}
+.tile-view{display:none;padding:12px 16px 100px;max-width:760px;margin:0 auto;width:100%;box-sizing:border-box;}
+body.view-tiles .tile-view{display:block;}
+body.view-tiles .app-layout{display:none!important;}
+.kt-lbl{font-size:12px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin:14px 2px 8px;}
+.kt-lbl:first-child{margin-top:4px;}
+.kt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.kt{background:var(--cb);border:1px solid var(--bd);border-radius:var(--br-lg,12px);padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;cursor:pointer;font-family:inherit;color:var(--tx);box-shadow:var(--shadow-sm);transition:border-color .15s,transform .1s;min-width:0;}
+.kt:hover{border-color:var(--wrm);}
+.kt:active{transform:scale(.97);}
+.kt-ic{font-size:28px;line-height:1;height:28px;display:flex;align-items:center;}
+.kt-name{font-size:13px;font-weight:700;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kt-cnt{font-size:11.5px;color:var(--tm);white-space:nowrap;}
+.kt-flag{width:36px;height:24px;border-radius:3px;box-shadow:0 0 0 1px var(--bd);display:block;}
+.kt-flag.sq{width:24px;}
+.kt-emoji{font-size:24px;}
+.kt-empty{text-align:center;color:var(--tm);padding:40px 10px;font-size:14px;}
+.kachel-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--cs);border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;color:var(--wr);}
+.kachel-bar .kb-lbl{flex:1;display:flex;align-items:center;gap:6px;min-width:0;}
+.kachel-bar .kb-lbl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kachel-bar .kt-flag{width:24px;height:16px;}.kachel-bar .kt-flag.sq{width:16px;}
+@media(max-width:479px){
+  .topbar-title .icon-btn{width:34px;height:34px;font-size:18px;margin-left:4px!important;}
+  .topbar-title .icon-btn[title="Heutige Weinliste"]{margin-left:auto!important;}
+  #backBtn{margin-left:0!important;margin-right:6px;}
+  .topbar h1{font-size:16px;gap:6px;}
+}
+@media(max-width:419px){body.view-list .topbar h1{display:none;}}
+.kb-btn{font-size:12px;font-weight:600;color:var(--wr);border:1px solid #E4C4CE;border-radius:8px;padding:4px 10px;background:var(--cb);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;}
+@media(min-width:768px){
+  .tile-view{flex:1;overflow-y:auto;max-width:none;padding:20px max(24px,calc((100% - 760px)/2)) 60px;}
+  .kt{padding:18px 8px 14px;}
+  .kt-ic{font-size:34px;height:34px;}
+  .kt-name{font-size:15px;}
+  .kt-cnt{font-size:12.5px;}
+}
 </style>
 </head>
 <body>
@@ -290,23 +329,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="app" style="display:none;">
   <div class="topbar">
     <div class="topbar-title">
+      <button class="icon-btn" id="backBtn" onclick="backToTiles()" title="Zurück zur Übersicht" aria-label="Zurück zur Übersicht"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
       <h1><i class="ti ti-bottle" aria-hidden="true"></i> Mein Weinkeller</h1>
       <span id="viewerBadge" style="display:none;font-size:10px;font-weight:700;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:2px 7px;letter-spacing:.02em;">👁 Viewer</span>
-      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v4.7.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:auto;"><i class="ti ti-help" aria-hidden="true"></i></a>
+      <button class="icon-btn" onclick="openToday()" title="Heutige Weinliste" aria-label="Heutige Weinliste" style="margin-left:auto;"><i class="ti ti-list-details" aria-hidden="true"></i></button>
+      <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_Bedienungsanleitung_v5.0.html" target="_blank" rel="noopener" title="Bedienungsanleitung" style="margin-left:6px;"><i class="ti ti-help" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="openRebsorten()" title="Rebsorten" style="margin-left:6px;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v2.4"/><path d="M12.2 6c1.5 -1.4 3.6 -.7 3.4 1.2"/><circle cx="8.6" cy="9.8" r="2"/><circle cx="12" cy="9.8" r="2"/><circle cx="15.4" cy="9.8" r="2"/><circle cx="10.3" cy="13.3" r="2"/><circle cx="13.7" cy="13.3" r="2"/><circle cx="12" cy="16.8" r="2"/></svg></button>
       <button class="icon-btn" onclick="openWeingueter()" title="Weingüter" style="margin-left:6px;"><i class="ti ti-building-castle" aria-hidden="true"></i></button>
       <a class="icon-btn" href="https://codo-immo.github.io/weinkeller/Weinkeller_weinkombinationen.html" target="_blank" rel="noopener" title="Weinkombinationen" style="margin-left:6px;"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i></a>
       <button class="icon-btn" onclick="doLogout()" title="Ausloggen" style="margin-left:6px;"><i class="ti ti-logout"></i></button>
     </div>
     <div class="search-row">
-      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="renderList()" style="width:100%;height:38px;flex:none;">
+      <input type="text" id="f-name-filter" placeholder="Name / Weingut …" oninput="onTopSearch()" style="width:100%;height:38px;flex:none;">
       <div style="display:flex;gap:8px;">
-        <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="renderList()" style="flex:1;">
+        <input type="text" id="f-eignung-filter" placeholder="Eignung … (z.B. Fleisch, Fisch, Käse)" oninput="onTopSearch()" style="flex:1;">
         <button class="icon-btn" id="filterToggle" onclick="toggleFilter()" title="Filter"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i></button>
         <button class="icon-btn" onclick="openSync()" title="Import / Export"><i class="ti ti-arrows-transfer-down" aria-hidden="true"></i></button><button class="icon-btn" id="wineGapBtn" onclick="openWineGaps()" title="Weinlücken"><i class="ti ti-file-search" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
+
+  <div class="tile-view" id="tileView"><div class="kt-empty">Weine werden geladen…</div></div>
 
   <div class="app-layout">
   <div class="filter-panel" id="filterPanel">
@@ -389,6 +432,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="mid-col">
+  <div class="kachel-bar" id="kachelBar"><div class="kb-lbl" id="kachelBarLbl"></div><button class="kb-btn" onclick="backToTiles()"><i class="ti ti-layout-grid" aria-hidden="true"></i> Übersicht</button></div>
   <div class="filter-active-bar" id="activeBar">
     <span id="activeBarText"></span>
     <button class="fab-clear" onclick="clearAllFilters()">Zurücksetzen</button>
@@ -406,7 +450,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   </div><!-- /app-layout -->
   <button class="fab" id="fab" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i></button>
-  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v4.7</span></footer>
+  <footer class="app-footer"><span id="footCount">0 Weine</span> · <span class="foot-version">v5.0</span></footer>
 </div>
 
 
@@ -764,6 +808,7 @@ function showApp(){
   document.getElementById('fab').style.display=isViewer?'none':'flex';
   {const _wg=document.getElementById('wineGapBtn');if(_wg)_wg.style.display=isViewer?'none':'flex';}
   if(isViewer)document.getElementById('migrationSection').style.display='none';
+  if(!appViewInit){appViewInit=true;showTiles(true);}
 }
 let authMode='login';
 function toggleAuthMode(){
@@ -793,15 +838,15 @@ async function doLogin(){
     errEl.textContent='Verbindungsfehler: '+e.message;
   }
 }
-async function doLogout(){await db.auth.signOut();wines=[];showLogin();}
+async function doLogout(){await db.auth.signOut();wines=[];appViewInit=false;showLogin();}
 
 /* ── Data Layer ── */
 async function loadWines(){loadRebsorten();loadWeingueter();
   const el=document.getElementById('wineList');
   el.innerHTML='<div class="empty"><i class="ti ti-loader-2" style="display:inline-block;animation:spin 1s linear infinite;"></i><p style="margin-top:8px;">Weine werden geladen…</p></div>';
   const {data,error}=await db.from('wines').select('*').order('name');
-  if(error){el.innerHTML='<div class="empty"><i class="ti ti-wifi-off"></i><p>Verbindungsfehler.<br>Bitte Seite neu laden.</p></div>';return;}
-  wines=data||[];
+  if(error){el.innerHTML='<div class="empty"><i class="ti ti-wifi-off"></i><p>Verbindungsfehler.<br>Bitte Seite neu laden.</p></div>';{const tv=document.getElementById('tileView');if(tv)tv.innerHTML='<div class="kt-empty">Verbindungsfehler. Bitte Seite neu laden.</div>';}return;}
+  wines=data||[];winesLoaded=true;
   populateLandFilter();
   if(!wines.length)document.getElementById('migrationSection').style.display='block';
   renderList();
@@ -855,7 +900,126 @@ function setMinBew(n){fMinBew=n;for(let i=1;i<=4;i++)document.getElementById('sb
 function clearAllFilters(){fTyp='';fStatus='';fTrink='';fMinBew=0;fAnbau='';fEignung='';fLand='';fInv.clear();document.getElementById('f-eignung-filter').value='';document.getElementById('f-name-filter').value='';document.getElementById('fc-land-select').value='';document.getElementById('f-sorte-filter').value='';document.getElementById('f-degustation-filter').value='';['fc-typ','fc-status','fc-trink','fc-anbau'].forEach(id=>{document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('on',i===0));});for(let i=1;i<=4;i++)document.getElementById('sb'+i).classList.remove('on');renderList();}
 function hasActiveFilters(){return fInv.size>0||fTyp||fStatus||fTrink||fMinBew>0||fAnbau||fEignung||fLand||document.getElementById('f-sorte-filter').value||document.getElementById('f-degustation-filter').value;}
 
-function populateLandFilter(){var sel=document.getElementById("fc-land-select");var prev=sel.value;var lands=[...new Set(wines.map(function(w){return w.land||""}).filter(function(l){return l}))].sort(function(a,b){return a.localeCompare(b,"de")});sel.innerHTML="<option value=\"\">(Alle)</option>"+lands.map(function(l){return "<option value=\""+l+"\">"+(FLAGS[l]||"")+" "+l+"</option>"}).join("");if(lands.indexOf(prev)>=0)sel.value=prev;}
+function populateLandFilter(){var sel=document.getElementById("fc-land-select");var prev=sel.value;var lands=[...new Set(wines.filter(function(w){return !kachel||kachel.test(w)}).map(function(w){return w.land||""}).filter(function(l){return l}))].sort(function(a,b){return a.localeCompare(b,"de")});sel.innerHTML="<option value=\"\">(Alle)</option>"+lands.map(function(l){return "<option value=\""+l+"\">"+(FLAGS[l]||"")+" "+l+"</option>"}).join("");if(lands.indexOf(prev)>=0)sel.value=prev;}
+/* ── v5.0 Kachelübersicht ── */
+let appView='tiles',appViewInit=false,kachel=null,winesLoaded=false;
+const STATUS_SONST=['Bestellen','Inaktiv','Bestellt'];
+function lagerOk(w){return !STATUS_SONST.includes(w.status||'Aktiv');}
+const KACHELN={
+  rot:{label:'Rotwein',icon:'<i class="ti ti-bottle" style="color:#8B2E4A"></i>',test:w=>w.typ==='Rotwein'},
+  weiss:{label:'Weisswein',icon:'<i class="ti ti-bottle" style="color:#BA7517"></i>',test:w=>w.typ==='Weisswein'},
+  andere:{label:'Andere',icon:'<i class="ti ti-bottle" style="color:#888780"></i>',test:w=>w.typ!=='Rotwein'&&w.typ!=='Weisswein'},
+  trink:{label:'Trinkbereit',icon:'<i class="ti ti-building-warehouse" style="color:#3B6D11"></i>',test:w=>lagerOk(w)&&trinkStatus(w)==='ok'},
+  over:{label:'Überfällig',icon:'<i class="ti ti-building-warehouse" style="color:#A32D2D"></i>',test:w=>lagerOk(w)&&trinkStatus(w)==='over'},
+  sonst:{label:'Sonstige',icon:'<i class="ti ti-building-warehouse" style="color:#185FA5"></i>',test:w=>!lagerOk(w)||(trinkStatus(w)!=='ok'&&trinkStatus(w)!=='over')}
+};
+const FLAG_SVG=(()=>{
+  const v=(a,b,c)=>`<svg class="kt-flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="${a}"/><rect x="1" width="1" height="2" fill="${b}"/><rect x="2" width="1" height="2" fill="${c}"/></svg>`;
+  const h=(a,b,c)=>`<svg class="kt-flag" viewBox="0 0 3 3" preserveAspectRatio="none" aria-hidden="true"><rect width="3" height="1" fill="${a}"/><rect y="1" width="3" height="1" fill="${b}"/><rect y="2" width="3" height="1" fill="${c}"/></svg>`;
+  return{
+    'Frankreich':v('#0055A4','#fff','#EF4135'),
+    'Italien':v('#009246','#fff','#CE2B37'),
+    'Spanien':'<svg class="kt-flag" viewBox="0 0 4 4" preserveAspectRatio="none" aria-hidden="true"><rect width="4" height="4" fill="#AA151B"/><rect y="1" width="4" height="2" fill="#F1BF00"/></svg>',
+    'Schweiz':'<svg class="kt-flag sq" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#DA291C"/><rect x="13" y="6" width="6" height="20" fill="#fff"/><rect x="6" y="13" width="20" height="6" fill="#fff"/></svg>',
+    'Portugal':'<svg class="kt-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#DA291C"/><rect width="12" height="20" fill="#046A38"/><circle cx="12" cy="10" r="4" fill="#FFE900"/></svg>',
+    'Bulgarien':h('#fff','#00966E','#D62612'),
+    'Deutschland':h('#000','#DD0000','#FFCE00'),
+    'Österreich':h('#C8102E','#fff','#C8102E'),
+    'Ungarn':h('#CE2939','#fff','#477050'),
+    'Rumänien':v('#002B7F','#FCD116','#CE1126'),
+    'Kroatien':h('#FF0000','#fff','#171796'),
+    'Slowenien':h('#fff','#005DA4','#ED1C24'),
+    'Argentinien':h('#74ACDF','#fff','#74ACDF'),
+    'England':'<svg class="kt-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#CE1124"/><rect y="8" width="30" height="4" fill="#CE1124"/></svg>',
+    'Georgien':'<svg class="kt-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#FF0000"/><rect y="8" width="30" height="4" fill="#FF0000"/></svg>',
+    'Griechenland':'<svg class="kt-flag" viewBox="0 0 27 18" aria-hidden="true"><rect width="27" height="18" fill="#0D5EAF"/><g fill="#fff"><rect y="2" width="27" height="2"/><rect y="6" width="27" height="2"/><rect y="10" width="27" height="2"/><rect y="14" width="27" height="2"/></g><rect width="10" height="10" fill="#0D5EAF"/><rect x="4" width="2" height="10" fill="#fff"/><rect y="4" width="10" height="2" fill="#fff"/></svg>',
+    'Chile':'<svg class="kt-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#D52B1E"/><rect width="30" height="10" fill="#fff"/><rect width="10" height="10" fill="#0039A6"/></svg>'
+  };
+})();
+function flagHtml(land){return FLAG_SVG[land]||`<span class="kt-emoji">${FLAGS[land]||'🍷'}</span>`;}
+function landKachel(land){return{label:land,icon:flagHtml(land),test:w=>(w.land||'')===land};}
+function ktCount(test){const l=wines.filter(test);return{n:l.length,fl:l.reduce((a,w)=>a+(w.anzahl||0),0)};}
+function ktHtml(onclick,k){const c=ktCount(k.test);return`<button class="kt" onclick="${onclick}"><span class="kt-ic">${k.icon}</span><span class="kt-name">${k.label}</span><span class="kt-cnt">${c.n} · ${c.fl} Fl.</span></button>`;}
+function renderTiles(){
+  const el=document.getElementById('tileView');if(!el)return;
+  if(!wines.length){el.innerHTML=`<div class="kt-empty">${winesLoaded?'Keine Weine vorhanden':'Weine werden geladen…'}</div>`;return;}
+  const cnt={};wines.forEach(w=>{if(w.land)cnt[w.land]=(cnt[w.land]||0)+1;});
+  const lands=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||a.localeCompare(b,'de'));
+  const grp=(t,keys)=>`<div class="kt-lbl">${t}</div><div class="kt-grid">${keys.map(k=>ktHtml(`enterKachel('${k}')`,KACHELN[k])).join('')}</div>`;
+  el.innerHTML=grp('Nach Typ',['rot','weiss','andere'])+grp('Nach Lager',['trink','over','sonst'])
+    +(lands.length?`<div class="kt-lbl">Nach Land</div><div class="kt-grid">${lands.map((l,i)=>ktHtml(`enterLand(${i})`,landKachel(l))).join('')}</div>`:'');
+  el.dataset.lands=JSON.stringify(lands);
+}
+function setView(v){appView=v;document.body.classList.toggle('view-tiles',v==='tiles');document.body.classList.toggle('view-list',v==='list');}
+function updateKachelBar(){
+  const lbl=document.getElementById('kachelBarLbl');if(!lbl)return;
+  lbl.innerHTML=kachel?`${kachel.icon}<span>${kachel.label}</span>`:'<i class="ti ti-list-details"></i><span>Heutige Weinliste</span>';
+}
+function showTiles(init){
+  kachel=null;
+  if(isDesktop())closeDetail();
+  clearAllFilters();
+  populateLandFilter();
+  setView('tiles');
+  renderTiles();
+  if(init){try{history.replaceState({wk:'tiles'},'');}catch(e){}}
+  window.scrollTo(0,0);
+}
+function enterList(k){
+  kachel=k;
+  clearAllFilters();
+  populateLandFilter();
+  updateKachelBar();
+  const wasList=appView==='list';
+  setView('list');
+  if(!wasList){try{history.pushState({wk:'list'},'');}catch(e){}}
+  renderList();
+  window.scrollTo(0,0);
+  const wl=document.getElementById('wineList');if(wl)wl.scrollTop=0;
+}
+function enterKachel(key){enterList(KACHELN[key]);}
+function enterLand(i){const lands=JSON.parse(document.getElementById('tileView').dataset.lands||'[]');if(lands[i])enterList(landKachel(lands[i]));}
+function openToday(){
+  enterList(null);
+  const chip=document.querySelector('#fc-trink .chip[onclick*="\'ok\'"]');
+  if(chip)toggleChip(chip,'trink','ok');
+}
+function onTopSearch(){
+  if(appView==='tiles'){
+    const n=document.getElementById('f-name-filter').value,e=document.getElementById('f-eignung-filter').value;
+    enterList(null);
+    document.getElementById('f-name-filter').value=n;document.getElementById('f-eignung-filter').value=e;
+  }
+  renderList();
+}
+function backToTiles(){
+  if(history.state&&history.state.wk==='list')history.back();
+  else showTiles();
+}
+function visible(id){const el=document.getElementById(id);return !!el&&getComputedStyle(el).display!=='none';}
+function isOpen(id){const el=document.getElementById(id);return !!el&&el.classList.contains('open');}
+function closeTopOverlay(){
+  if(isOpen('lightbox')){closeLightbox();return true;}
+  if(isOpen('confirmModal')){closeConfirm();return true;}
+  if(visible('rebiDetailOverlay')){closeRebDetail();return true;}
+  if(visible('rebiOverlay')){closeRebInfo();return true;}
+  if(visible('cvOverlay')){closeCv();return true;}
+  if(isOpen('gapModal')){closeGaps();return true;}
+  if(isOpen('rebEditModal')){closeRebEdit();return true;}
+  if(isOpen('wgEditModal')){closeWgEdit();return true;}
+  if(isOpen('rebModal')){closeRebsorten();return true;}
+  if(isOpen('wgModal')){closeWeingueter();return true;}
+  if(isOpen('syncModal')){closeSync();return true;}
+  if(isOpen('addModal')){closeAdd();return true;}
+  if(isOpen('detailModal')){closeDetail();return true;}
+  return false;
+}
+window.addEventListener('popstate',()=>{
+  if(appView!=='list')return;
+  if(closeTopOverlay()){try{history.pushState({wk:'list'},'');}catch(e){}return;}
+  showTiles();
+});
+
 /* ── Render List ── */
 function renderInvChips(){
   const el=document.getElementById('fc-inv');if(!el)return;
@@ -880,6 +1044,7 @@ function renderList(){
   const degF=(document.getElementById('f-degustation-filter').value||'').toLowerCase().trim();
   fEignung=(document.getElementById('f-eignung-filter').value||'').toLowerCase().trim();const fName=(document.getElementById('f-name-filter').value||'').toLowerCase().trim();
   let list=wines.filter(w=>{
+    if(kachel&&!kachel.test(w))return false;
     if(q&&!`${w.name} ${w.weingut} ${w.sorte} ${w.land} ${w.gebiet} ${w.region} ${w.typ} ${w.lieferant}`.toLowerCase().includes(q))return false;if(fName&&!`${w.name} ${w.weingut}`.toLowerCase().includes(fName))return false;if(fLand&&(w.land||"")!==fLand)return false;
     if(fTyp&&w.typ!==fTyp)return false;
     if(fStatus&&(w.status||'Aktiv')!==fStatus)return false;
@@ -900,6 +1065,7 @@ function renderList(){
   const bar=document.getElementById('activeBar');
   if(hasActiveFilters()){const parts=[];if(fTyp)parts.push(fTyp);if(fStatus)parts.push(fStatus);if(fTrink)parts.push(trinkLabel(fTrink));if(fMinBew)parts.push('ab '+fMinBew+'★');if(sorteF)parts.push(sorteF);if(fAnbau)parts.push(fAnbau);if(fLand)parts.push(fLand);if(fEignung)parts.push('Eignung: '+fEignung);if(degF)parts.push('Degustation: '+degF);if(fInv.size)parts.push('Inventar: '+[...fInv].sort().reverse().map(d=>d==='none'?'ohne Datum':fmtDatum(d)).join(', '));document.getElementById('activeBarText').textContent=parts.length?'Filter: '+parts.join(' · '):'Filter aktiv';bar.classList.add('show');}else{bar.classList.remove('show');}
   renderInvChips();
+  if(appView==='tiles')renderTiles();
   document.getElementById('statTotal').textContent=list.length;
   {const fc=document.getElementById('footCount');if(fc)fc.textContent=(wines?wines.length:0)+' Weine';}
   document.getElementById('statFlaschen').textContent=list.reduce((a,w)=>a+(w.anzahl||0),0);
